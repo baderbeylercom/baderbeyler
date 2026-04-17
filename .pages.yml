@@ -67,3 +67,111 @@ content:
       - { name: relatedEventSlug, label: "İlgili Etkinlik (slug)", type: string }
       - { name: featured, label: Öne Çıkar, type: boolean }
       - { name: body, label: Detaylar, type: rich-text }
+
+  - name: site-config
+    label: Site Genel Ayarları
+    type: file
+    path: src/data/site-config.json
+    fields:
+      - { name: brandName, label: Marka Adı, type: string }
+      - { name: defaultTitle, label: "Site Başlığı (SEO)", type: string }
+      - { name: defaultDescription, label: "Site Açıklaması (SEO)", type: text }
+
+  - name: hero
+    label: Hero Bölümü
+    type: file
+    path: src/data/hero.json
+    fields:
+      - { name: eyebrow, label: Üst Etiket, type: string }
+      - { name: title, label: "Başlık (HTML: <em>, <br/>)", type: string }
+      - { name: description, label: Alt Başlık, type: text }
+      - { name: ctaLabel, label: Buton Metni, type: string }
+      - { name: rightTitle, label: Sağ Panel Başlık, type: string }
+      - { name: rightText, label: "Sağ Panel Metin (HTML)", type: text }
+      - name: stats
+        label: İstatistikler
+        type: list
+        fields:
+          - { name: value, label: Değer, type: string }
+          - { name: label, label: Etiket, type: string }
+
+  - name: about
+    label: Hakkımda Bölümü
+    type: file
+    path: src/data/about.json
+    fields:
+      - { name: eyebrow, label: Üst Etiket, type: string }
+      - { name: title, label: Başlık, type: string }
+      - name: paragraphs
+        label: Paragraflar
+        type: list
+      - name: stats
+        label: İstatistikler
+        type: list
+        fields:
+          - { name: value, label: Değer, type: string }
+          - { name: label, label: Etiket, type: string }
+
+  - name: services
+    label: Hizmetler Bölümü
+    type: file
+    path: src/data/services.json
+    fields:
+      - { name: eyebrow, label: Üst Etiket, type: string }
+      - { name: title, label: Başlık, type: string }
+      - { name: description, label: Açıklama, type: text }
+      - name: items
+        label: Hizmetler
+        type: list
+        fields:
+          - { name: icon, label: "İkon (sembol)", type: string }
+          - { name: title, label: Başlık, type: string }
+          - { name: description, label: Açıklama, type: text }
+
+  - name: contact
+    label: İletişim Bilgileri
+    type: file
+    path: src/data/contact.json
+    fields:
+      - { name: eyebrow, label: Üst Etiket, type: string }
+      - { name: title, label: Başlık, type: string }
+      - { name: intro, label: Giriş Metni, type: text }
+      - { name: address, label: Adres, type: string }
+      - { name: email, label: E-posta, type: string }
+      - { name: phone, label: Telefon, type: string }
+      - { name: hours, label: Çalışma Saatleri, type: string }
+      - name: socialLinks
+        label: Sosyal Medya Linkleri
+        type: list
+        fields:
+          - { name: label, label: "Platform (Instagram vs.)", type: string }
+          - { name: shortLabel, label: "Kısa Etiket (ig/yt/in)", type: string }
+          - { name: href, label: URL, type: string }
+      - name: formTopics
+        label: Form Konuları
+        type: list
+
+  - name: footer
+    label: Footer
+    type: file
+    path: src/data/footer.json
+    fields:
+      - { name: copyright, label: Telif Metni, type: string }
+      - name: links
+        label: Linkler
+        type: list
+        fields:
+          - { name: label, label: Etiket, type: string }
+          - { name: href, label: URL, type: string }
+
+  - name: nav-links
+    label: Navigasyon Linkleri
+    type: file
+    path: src/data/nav-links.json
+    fields:
+      - name: links
+        label: Menü Linkleri
+        type: list
+        fields:
+          - { name: label, label: Etiket, type: string }
+          - { name: href, label: URL, type: string }

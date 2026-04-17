@@ -1,0 +1,22 @@
+{
+  "eyebrow": "İletişim",
+  "title": "Benimle <em>iletişime</em> geçin",
+  "intro": "Bireysel danışmanlık, seminer, klinik iş birliği veya kurumsal eğitim talepleriniz için doğrudan iletişime geçebilirsiniz.",
+  "address": "Nişantaşı, İstanbul, Türkiye",
+  "email": "iletisim@baderbeyler.com",
+  "phone": "+90 555 123 45 67",
+  "hours": "Pazartesi - Cuma: 09:00 - 18:00",
+  "socialLinks": [
+    { "href": "#", "label": "Instagram", "shortLabel": "ig" },
+    { "href": "#", "label": "YouTube", "shortLabel": "yt" },
+    { "href": "#", "label": "LinkedIn", "shortLabel": "in" },
+    { "href": "#", "label": "X", "shortLabel": "x" }
+  ],
+  "formTopics": [
+    "Bireysel Danışmanlık",
+    "Online Danışmanlık",
+    "Kurumsal Seminer",
+    "İş Birliği Teklifi",
+    "Diğer"
+  ]
+}

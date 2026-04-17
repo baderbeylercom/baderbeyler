@@ -1,0 +1,23 @@
+{
+  "eyebrow": "Hizmetlerimiz",
+  "title": "Genetik temelli <em>uzmanlık alanları</em>",
+  "description": "Bireysel danışmanlıktan profesyonel eğitimlere kadar uzanan, bilimsel temelli ve uygulanabilir hizmet çerçevesi.",
+  "items": [
+    {
+      "icon": "✦",
+      "title": "BB Nutrigenetik Danışmanlık",
+      "description": "Genetik verinin günlük yaşam, beslenme ve sağlık kararlarına nasıl çevrileceğini gösteren kişiselleştirilmiş danışmanlık modeli.",
+      "link": "/assets/pdfs/genetik%20panel.pdf"
+    },
+    {
+      "icon": "◈",
+      "title": "Seminer ve Eğitim Programları",
+      "description": "Kurumsal ekipler, topluluklar ve sağlık profesyonelleri için hazırlanan; bilimsel içeriği sade ve güçlü bir yapıda sunan eğitimler."
+    },
+    {
+      "icon": "❖",
+      "title": "Klinik İş Birlikleri",
+      "description": "Hekim ve diyetisyenlerle birlikte ilerleyen, vaka yönetimini destekleyen ve kişiselleştirilmiş değerlendirmeyi güçlendiren iş ortaklığı yapısı."
+    }
+  ]
+}

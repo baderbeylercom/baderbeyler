@@ -1,0 +1,10 @@
+{
+  "links": [
+    { "href": "/#about", "label": "Hakkımda" },
+    { "href": "/#services", "label": "Hizmetler" },
+    { "href": "/#collaborations", "label": "İş Birlikleri" },
+    { "href": "/bilim-dunyasinda-sesimiz", "label": "Bilim Dünyasında Sesimiz" },
+    { "href": "/#events", "label": "Etkinlikler" },
+    { "href": "/#blog", "label": "Blog" }
+  ]
+}
