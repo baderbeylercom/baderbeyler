@@ -15,7 +15,7 @@ content:
       - { name: excerpt, label: Kısa Özet, type: text }
       - { name: category, label: Kategori, type: string }
       - { name: date, label: Yayın Tarihi, type: date }
-      - { name: featuredImage, label: Kapak Görseli URL, type: string }
+      - { name: featuredImage, label: Kapak Görseli, type: image }
       - { name: featuredImageAlt, label: Görsel Alt Metni, type: string }
       - { name: draft, label: Taslak, type: boolean }
       - { name: featured, label: Öne Çıkar, type: boolean }
