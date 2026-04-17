@@ -1,0 +1,327 @@
+<script>
+  const nav = document.getElementById('nav');
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const snapSections = [...document.querySelectorAll('.snap-section')];
+  const pageDots = [...document.querySelectorAll('.page-dot')];
+  const heroPerson = document.getElementById('heroPerson');
+  const heroFocusPortrait = document.getElementById('heroFocusPortrait');
+  const hero = document.getElementById('home');
+  const root = document.documentElement;
+  const motionStories = [...document.querySelectorAll('.motion-story')];
+  const hasSnapSections = snapSections.length > 0;
+
+  if (nav) {
+    window.addEventListener('scroll', () =>
+      nav.classList.toggle('scrolled', window.scrollY > 60),
+    );
+  }
+
+  const closeMenu = () => {
+    if (!navLinks || !navToggle) return;
+
+    navLinks.classList.remove('open');
+    navToggle.querySelectorAll('span').forEach((span) => {
+      span.style.transform = '';
+      span.style.opacity = '';
+    });
+  };
+
+  navToggle?.addEventListener('click', () => {
+    if (!navLinks) return;
+
+    navLinks.classList.toggle('open');
+    const spans = navToggle.querySelectorAll('span');
+
+    if (navLinks.classList.contains('open')) {
+      spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+      return;
+    }
+
+    spans.forEach((span) => {
+      span.style.transform = '';
+      span.style.opacity = '';
+    });
+  });
+
+  document.querySelectorAll('[data-close-menu]').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  let snapLock = false;
+  let wheelAccumulator = 0;
+  let wheelResetTimer;
+
+  const desktopSnapEnabled = () => window.innerWidth > 768;
+
+  const currentSectionIndex = () => {
+    let bestIndex = 0;
+    let bestDistance = Infinity;
+
+    snapSections.forEach((section, index) => {
+      const distance = Math.abs(section.getBoundingClientRect().top);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestIndex = index;
+      }
+    });
+
+    return bestIndex;
+  };
+
+  const updatePageDots = (activeIndex = currentSectionIndex()) => {
+    pageDots.forEach((dot, index) =>
+      dot.classList.toggle('active', index === activeIndex),
+    );
+  };
+
+  const goToSection = (index) => {
+    const targetIndex = Math.max(0, Math.min(index, snapSections.length - 1));
+    const target = snapSections[targetIndex];
+    if (!target) return;
+
+    snapLock = true;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    updatePageDots(targetIndex);
+
+    window.setTimeout(() => {
+      snapLock = false;
+      updatePageDots();
+    }, 900);
+  };
+
+  window.addEventListener(
+    'wheel',
+    (event) => {
+      if (!hasSnapSections) return;
+      if (!desktopSnapEnabled()) return;
+      if (navLinks?.classList.contains('open')) return;
+      if (event.target instanceof Element) {
+        if (event.target.closest('input, textarea, select, button')) return;
+      }
+
+      event.preventDefault();
+      if (snapLock) return;
+
+      wheelAccumulator += event.deltaY;
+      clearTimeout(wheelResetTimer);
+      wheelResetTimer = window.setTimeout(() => {
+        wheelAccumulator = 0;
+      }, 140);
+
+      if (Math.abs(wheelAccumulator) < 42) return;
+
+      const direction = wheelAccumulator > 0 ? 1 : -1;
+      wheelAccumulator = 0;
+      goToSection(currentSectionIndex() + direction);
+    },
+    { passive: false },
+  );
+
+  window.addEventListener('keydown', (event) => {
+    if (!hasSnapSections) return;
+    if (!desktopSnapEnabled() || snapLock) return;
+
+    if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+      event.preventDefault();
+      goToSection(currentSectionIndex() + 1);
+    }
+
+    if (['ArrowUp', 'PageUp'].includes(event.key)) {
+      event.preventDefault();
+      goToSection(currentSectionIndex() - 1);
+    }
+  });
+
+  pageDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => goToSection(index));
+  });
+
+  if (hasSnapSections) {
+    window.addEventListener('scroll', () => updatePageDots(), { passive: true });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      }),
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+  );
+
+  document
+    .querySelectorAll('.reveal,.reveal-left,.reveal-right')
+    .forEach((element) => observer.observe(element));
+
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) =>
+    anchor.addEventListener('click', (event) => {
+      const href = anchor.getAttribute('href');
+      if (!href) return;
+
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }),
+  );
+
+  let isMobile = window.innerWidth <= 768;
+
+  window.addEventListener('resize', () => {
+    isMobile = window.innerWidth <= 768;
+    runScrollFx();
+  });
+
+  const clamp = (value, min = 0, max = 1) =>
+    Math.min(max, Math.max(min, value));
+
+  const viewportFocus = (rect, anchor = 0.52, range = 0.82) => {
+    const viewportHeight = window.innerHeight;
+    const center = rect.top + rect.height / 2;
+    return clamp(
+      1 - Math.abs(center - viewportHeight * anchor) / (viewportHeight * range),
+    );
+  };
+
+  const updateHeroTone = () => {
+    if (!hero) return;
+    const progress = clamp(window.scrollY / (hero.offsetHeight * 0.9));
+    root.style.setProperty('--hero-cool', (1 - progress).toFixed(3));
+  };
+
+  const updateHeroPerson = () => {
+    if (!heroPerson || !hero) return;
+
+    if (isMobile) {
+      heroPerson.style.opacity = '1';
+      heroPerson.style.transform = 'translateX(-50%)';
+
+      if (heroFocusPortrait) {
+        heroFocusPortrait.style.opacity = '0';
+        heroFocusPortrait.style.transform = 'translateX(-42%)';
+      }
+
+      return;
+    }
+
+    const scrollY = window.scrollY;
+    const heroHeight = hero.offsetHeight;
+    const progress = clamp(scrollY / (heroHeight * 0.5));
+    const translateY = progress * -120;
+    const scale = 1 - progress * 0.2;
+    const opacity = 1 - progress * 1.4;
+    const rotate = progress * 3;
+
+    heroPerson.style.transform = `translateX(-50%) translateY(${translateY}px) scale(${Math.max(scale, 0.7)}) rotate(${rotate}deg)`;
+    heroPerson.style.opacity = `${Math.max(opacity, 0)}`;
+
+    if (!heroFocusPortrait) return;
+
+    const focusTranslateY = progress * -92;
+    const focusScale = 1 - progress * 0.16;
+    const focusOpacity = 1 - progress * 1.1;
+
+    heroFocusPortrait.style.transform = `translateX(-42%) translateY(${focusTranslateY}px) scale(${Math.max(focusScale, 0.78)})`;
+    heroFocusPortrait.style.opacity = `${Math.max(focusOpacity, 0)}`;
+  };
+
+  const updateAboutParallax = () => {
+    const main = document.querySelector('.about-photo-main');
+    const accent = document.querySelector('.about-photo-accent');
+    const section = document.querySelector('.about');
+
+    if (!main || !accent || !section) return;
+
+    const rect = section.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+
+    if (rect.top < viewportHeight && rect.bottom > 0) {
+      const progress = clamp(
+        (viewportHeight - rect.top) / (viewportHeight + section.offsetHeight),
+      );
+      const focus = viewportFocus(rect, 0.56, 0.95);
+
+      main.style.transform = `translateY(${progress * -36}px) scale(${0.92 + focus * 0.08})`;
+      main.style.opacity = (0.52 + focus * 0.48).toFixed(3);
+      accent.style.transform = `translateY(${progress * 26}px) scale(${0.9 + focus * 0.1})`;
+      accent.style.opacity = (0.38 + focus * 0.62).toFixed(3);
+    }
+  };
+
+  const updateStoryMotion = () => {
+    motionStories.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      const focus = viewportFocus(rect, 0.54, 0.88);
+      const direction = section.classList.contains('reverse') ? -1 : 1;
+      const photo = section.querySelector('.story-media');
+      const text = section.querySelector('.story-text');
+      const x = (1 - focus) * 92 * direction;
+      const y = (1 - focus) * 52;
+
+      if (photo instanceof HTMLElement) {
+        photo.style.opacity = (0.22 + focus * 0.78).toFixed(3);
+        photo.style.transform = `translateX(${x}px) translateY(${y}px) scale(${0.9 + focus * 0.1})`;
+      }
+
+      if (text instanceof HTMLElement) {
+        text.style.opacity = (0.32 + focus * 0.68).toFixed(3);
+        text.style.transform = `translateX(${x * -0.7}px) translateY(${(1 - focus) * 18}px)`;
+      }
+    });
+  };
+
+  const runScrollFx = () => {
+    updateHeroTone();
+    updateHeroPerson();
+    updateAboutParallax();
+    updateStoryMotion();
+  };
+
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        runScrollFx();
+        ticking = false;
+      });
+
+      ticking = true;
+    }
+  });
+
+  runScrollFx();
+
+  document.querySelector('.form-submit')?.addEventListener('click', function () {
+    if (!(this instanceof HTMLButtonElement)) return;
+    this.textContent = 'Gönderildi ✓';
+    this.style.background = 'var(--clr-sage)';
+
+    window.setTimeout(() => {
+      this.textContent = 'Gönder';
+      this.style.background = '';
+    }, 2000);
+  });
+
+  document
+    .querySelector('.newsletter-form button')
+    ?.addEventListener('click', function () {
+      if (!(this instanceof HTMLButtonElement)) return;
+      const input = this.parentElement?.querySelector('input');
+      if (!(input instanceof HTMLInputElement) || !input.value) return;
+
+      this.textContent = 'Kaydedildi ✓';
+      this.style.background = 'var(--clr-sage)';
+      input.value = '';
+
+      window.setTimeout(() => {
+        this.textContent = 'Kayıt Ol';
+        this.style.background = '';
+      }, 2000);
+    });
+</script>

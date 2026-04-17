@@ -1,0 +1,40 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { servicesContent } = await getSiteData();
+const ap = servicesContent.appearance;
+const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-title-size:${ap.cardTitleSize}rem;--services-card-body-size:${ap.cardBodySize}rem;--section-padding-y:${ap.paddingY}rem;--services-grid-gap:${ap.gridGap}rem;`;
+---
+
+<section class="section services snap-section" id="services" style={servicesStyle}>
+  <div class="services-header reveal">
+    <p class="section-tag">{servicesContent.eyebrow}</p>
+    <h2 class="section-title" set:html={servicesContent.title}></h2>
+  </div>
+
+  <div class="services-grid">
+    {
+      servicesContent.items.map((item, index) => (
+        <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
+          <div class="service-icon">{item.icon}</div>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+          <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="photo-marquee">
+    <div class="marquee-track">
+      {[...servicesContent.marqueeImages, ...servicesContent.marqueeImages].map((src) => (
+        <div class="marquee-item">
+          <img src={src} alt="" loading="lazy" />
+        </div>
+      ))}
+    </div>
+    <div class="marquee-overlay-text">
+      SAĞLIK · YAŞAM · DÖNÜŞÜM · SAĞLIK · YAŞAM · DÖNÜŞÜM
+    </div>
+  </div>
+</section>

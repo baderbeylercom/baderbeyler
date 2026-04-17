@@ -1,0 +1,82 @@
+---
+import type { EventEntry } from '../../lib/content';
+import { formatDateLong, formatDateShort } from '../../lib/format';
+import { getSiteData } from '../../lib/site-data';
+
+interface Props {
+  events: EventEntry[];
+}
+
+const { events } = Astro.props;
+const { eventsContent } = await getSiteData();
+const ap = eventsContent.appearance;
+const eventsStyle = `--events-title-size:${ap.titleSize}rem;--events-card-title-size:${ap.cardTitleSize}rem;--section-padding-y:${ap.paddingY}rem;--events-list-gap:${ap.listMarginTop}rem;`;
+---
+
+<section class="section events snap-section" id="events" style={eventsStyle}>
+  <div class="reveal">
+    <p class="section-tag">{eventsContent.eyebrow}</p>
+    <h2 class="section-title" set:html={eventsContent.title}></h2>
+  </div>
+
+  {
+    events.length > 0 && (
+      <div class="events-list">
+        {events.map((event, index) => (
+          <article class="event-card featured-event reveal" style={`transition-delay:.${index + 1}s`}>
+            <div class="event-copy">
+              <div class="event-date-badge">{formatDateShort(event.data.startDate)}</div>
+              <div class="event-info">
+                <h4>{event.data.title}</h4>
+                <p class="event-address">{event.data.address ?? `${event.data.city}, ${event.data.venue}`}</p>
+                <p class="event-time">{event.data.timeLabel}</p>
+                <p>{event.data.description}</p>
+              </div>
+              <div class="event-actions">
+                {event.data.mapUrl && (
+                  <a href={event.data.mapUrl} target="_blank" rel="noreferrer" class="event-action primary">
+                    Haritada Aç
+                  </a>
+                )}
+                {event.data.registrationUrl && (
+                  <a href={event.data.registrationUrl} target="_blank" rel="noreferrer" class="event-action">
+                    Detayları Gör
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div class="event-map">
+              {event.data.mapEmbedUrl ? (
+                <iframe
+                  title={`${event.data.title} konum haritası`}
+                  src={event.data.mapEmbedUrl}
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              ) : (
+                <div class="event-map-fallback">
+                  <span>{formatDateLong(event.data.startDate)}</span>
+                  <strong>{event.data.venue}</strong>
+                </div>
+              )}
+            </div>
+            <div class="editor-resize-handle editor-resize-handle--event-card" data-editor-resize="event-card-height" aria-hidden="true"></div>
+          </article>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    events.length === 0 && (
+      <div class="agenda-block reveal">
+        <div class="agenda-header">
+          <p class="section-tag">Etkinlik Takvimi</p>
+          <h3 class="agenda-title" set:html={eventsContent.emptyTitle}></h3>
+          <p>{eventsContent.emptyText}</p>
+        </div>
+      </div>
+    )
+  }
+</section>

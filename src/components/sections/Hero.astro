@@ -1,0 +1,52 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { heroContent } = await getSiteData();
+const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightPanelWidth}px;--hero-right-title-size:${heroContent.appearance.rightTitleSize}rem;--hero-right-body-size:${heroContent.appearance.rightBodySize}rem;`;
+---
+
+<section class="hero snap-section" id="home">
+  <div class="hero-tone-layer" id="heroTone" aria-hidden="true"></div>
+  <div class="hero-bg-text">{heroContent.bgText}</div>
+  <div class="hero-line"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="hero-left">
+    <p class="hero-tag">{heroContent.eyebrow}</p>
+    <h1 class="hero-title" set:html={heroContent.title}></h1>
+    <p class="hero-desc">{heroContent.description}</p>
+    <a href="#contact" class="hero-cta">
+      {heroContent.ctaLabel}
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14"></path>
+        <path d="m12 5 7 7-7 7"></path>
+      </svg>
+    </a>
+  </div>
+
+  <div class="hero-person" id="heroPerson">
+    <div class="hero-base" aria-hidden="true"></div>
+    <img src={heroContent.heroImage} alt={heroContent.heroImageAlt} />
+  </div>
+
+  <div class="hero-focus-portrait" id="heroFocusPortrait" aria-hidden="true">
+    <img src={heroContent.focusImage} alt={heroContent.focusImageAlt} />
+  </div>
+
+  <div class="hero-right" style={heroPanelStyle}>
+    <p class="hero-right-tag">{heroContent.rightEyebrow}</p>
+    <h2 class="hero-right-title" set:html={heroContent.rightTitle}></h2>
+    <p class="hero-right-text" set:html={heroContent.rightText}></p>
+    <div class="hero-right-stats">
+      {
+        heroContent.stats.map((item) => (
+          <div class="hero-stat">
+            <div class="stat-number">{item.value}</div>
+            <div class="stat-label">{item.label}</div>
+          </div>
+        ))
+      }
+    </div>
+    <div class="editor-resize-handle editor-resize-handle--hero-panel" data-editor-resize="hero-panel" aria-hidden="true"></div>
+  </div>
+</section>

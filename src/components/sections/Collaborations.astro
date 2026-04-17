@@ -1,0 +1,131 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { collaborationsContent } = await getSiteData();
+const sectionStyle = `--collab-grid-gap:${collaborationsContent.appearance.gridGap}rem;--collab-grid-margin-top:${collaborationsContent.appearance.gridMarginTop}rem;--collab-item-padding-top:${collaborationsContent.appearance.itemPaddingTop}rem;--collab-item-padding-bottom:${collaborationsContent.appearance.itemPaddingBottom}rem;`;
+
+function hexToRgba(hex: string | undefined, alpha: number | undefined) {
+  const safeHex = (hex ?? '#e9ddd0').replace('#', '');
+  const normalized =
+    safeHex.length === 3
+      ? safeHex
+          .split('')
+          .map((char) => `${char}${char}`)
+          .join('')
+      : safeHex;
+
+  const int = Number.parseInt(normalized, 16);
+  const red = (int >> 16) & 255;
+  const green = (int >> 8) & 255;
+  const blue = int & 255;
+  const safeAlpha = Math.max(0, Math.min(alpha ?? 1, 1));
+
+  return `rgba(${red}, ${green}, ${blue}, ${safeAlpha})`;
+}
+
+function getItemStyle(item: (typeof collaborationsContent.items)[number], index: number) {
+  return [
+    `transition-delay:.${index + 1}s`,
+    `--collab-visual-height:${item.design.visualHeight}px`,
+    `--collab-image-width:${item.design.imageWidth}px`,
+    `--collab-image-scale:${item.design.imageScale}`,
+    `--collab-image-offset-x:${item.design.imageOffsetX}px`,
+    `--collab-image-offset-y:${item.design.imageOffsetY}px`,
+    `--collab-blob-fill:${hexToRgba(item.design.blobColor, item.design.blobOpacity)}`,
+    `--collab-blob-gradient-fill:${hexToRgba(item.design.blobGradientColor, item.design.blobGradientOpacity)}`,
+    `--collab-blob-shadow-fill:${hexToRgba(item.design.blobColor, item.design.blobShadowOpacity)}`,
+    `--collab-blob-width:${item.design.blobWidth}px`,
+    `--collab-blob-height:${item.design.blobHeight}px`,
+    `--collab-blob-offset-x:${item.design.blobOffsetX}px`,
+    `--collab-blob-offset-y:${item.design.blobOffsetY}px`,
+    `--collab-blob-radius:${item.design.blobRadius}%`,
+    `--collab-blob-blur:${item.design.blobBlur}px`,
+    `--collab-blob-shadow-blur:${item.design.blobShadowBlur}px`,
+    `--collab-copy-offset-y:${item.design.copyOffsetY}rem`,
+    `--collab-brandline-size:${item.design.brandLineFontSize}rem`,
+    `--collab-partner-size:${item.design.partnerFontSize}rem`,
+    `--collab-lead-size:${item.design.leadFontSize}rem`,
+  ].join(';');
+}
+---
+
+<section class="section collaborations snap-section" id="collaborations" style={sectionStyle}>
+  <div class="reveal">
+    <p class="section-tag">{collaborationsContent.eyebrow}</p>
+    <h2 class="section-title" set:html={collaborationsContent.title}></h2>
+  </div>
+
+  <div class="collab-grid collab-grid--partners">
+    {
+      collaborationsContent.items.map((item, index) => (
+        <article
+          class:list={['collab-item', 'concept-card', `collab-item--${item.visualStyle ?? 'cover'}`, 'reveal']}
+          style={getItemStyle(item, index)}
+          data-collab-index={index}
+        >
+          <div class:list={['collab-visual', item.visualStyle ?? 'cover']}>
+            {
+              item.visualStyle === 'portrait' && (
+                <div
+                  class="collab-blob"
+                  aria-hidden="true"
+                  data-collab-drag="blob"
+                  data-collab-index={index}
+                ></div>
+              )
+            }
+            {
+              item.image ? (
+                <img
+                  src={item.image}
+                  alt={item.imageAlt ?? item.partnerName ?? item.brandLine}
+                  loading="lazy"
+                  draggable="false"
+                  data-collab-drag={item.visualStyle === 'portrait' ? 'image' : undefined}
+                  data-collab-index={item.visualStyle === 'portrait' ? index : undefined}
+                />
+              ) : (
+                <div class="collab-fallback">{item.logo}</div>
+              )
+            }
+            {
+              item.visualStyle === 'portrait' && (
+                <>
+                  <div
+                    class="editor-resize-handle editor-resize-handle--collab-blob"
+                    aria-hidden="true"
+                    data-editor-resize="collab-blob"
+                    data-collab-index={index}
+                  ></div>
+                  <div
+                    class="editor-resize-handle editor-resize-handle--collab-image"
+                    aria-hidden="true"
+                    data-editor-resize="collab-image"
+                    data-collab-index={index}
+                  ></div>
+                </>
+              )
+            }
+            <div
+              class="editor-resize-handle editor-resize-handle--collab-visual"
+              aria-hidden="true"
+              data-editor-resize="collab-visual"
+              data-collab-index={index}
+            ></div>
+          </div>
+          <div class="collab-copy">
+            <div class="collab-brand-row">
+              {item.brandLine && <span class="collab-brandline">{item.brandLine}</span>}
+              {item.partnerName && <span class="collab-partner">{item.partnerName}</span>}
+            </div>
+            <p class="collab-lead">
+              {item.leadStrong && <strong>{item.leadStrong}</strong>}
+              {item.leadText}
+            </p>
+            <p>{item.description}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

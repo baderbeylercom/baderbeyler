@@ -1,0 +1,23 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { footerContent, siteConfig } = await getSiteData();
+const ap = footerContent.appearance;
+const footerStyle = `--footer-font-size:${ap.fontSize}rem;--footer-link-size:${ap.linkSize}rem;`;
+---
+
+<footer class="footer" style={footerStyle}>
+  <a href="#home" class="footer-brand" aria-label={siteConfig.brandName}>
+    <img src="/assets/images/logo.png" alt={siteConfig.brandName} />
+  </a>
+  <p>{footerContent.copyright}</p>
+  <ul class="footer-links">
+    {
+      footerContent.links.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+</footer>

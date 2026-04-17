@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import VisualOverrides from '../components/VisualOverrides.astro';
+import { getSiteData } from '../lib/site-data';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  bodyClass?: string;
+}
+
+const { contactContent, siteConfig } = await getSiteData();
+
+const {
+  title = siteConfig.defaultTitle,
+  description = siteConfig.defaultDescription,
+  ogImage = siteConfig.ogImage,
+  canonical,
+  bodyClass = '',
+} = Astro.props;
+
+const canonicalUrl =
+  canonical ?? new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
+const ogUrl = ogImage.startsWith('http')
+  ? ogImage
+  : new URL(ogImage, siteConfig.siteUrl).toString();
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.personName,
+  description,
+  url: siteConfig.siteUrl,
+  email: contactContent.email,
+  telephone: contactContent.phone,
+  sameAs: contactContent.socialLinks
+    .map((item) => item.href)
+    .filter((href) => href.startsWith('http')),
+};
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#161313" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+    <VisualOverrides />
+  </body>
+</html>

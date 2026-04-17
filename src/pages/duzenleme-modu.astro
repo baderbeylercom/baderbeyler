@@ -1,0 +1,1350 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import Hero from '../components/sections/Hero.astro';
+import MotionStory from '../components/sections/MotionStory.astro';
+import About from '../components/sections/About.astro';
+import Services from '../components/sections/Services.astro';
+import Collaborations from '../components/sections/Collaborations.astro';
+import Events from '../components/sections/Events.astro';
+import Blog from '../components/sections/Blog.astro';
+import Newsletter from '../components/sections/Newsletter.astro';
+import Contact from '../components/sections/Contact.astro';
+import Footer from '../components/sections/Footer.astro';
+import { getFeaturedEvents, getPublishedBlogPosts } from '../lib/content';
+import { getSiteData } from '../lib/site-data';
+
+const siteData = await getSiteData();
+const blogPosts = await getPublishedBlogPosts(3);
+const events = await getFeaturedEvents(1);
+
+const editorDefaults = {
+  site: {
+    baseFontSize: 16,
+    titleScale: 1,
+    displayScale: 1,
+  },
+  palette: {
+    cream: '#f6f2ea',
+    warm: '#eee5d8',
+    sand: '#d8c0a5',
+    caramel: '#a66c3d',
+    terracotta: '#7f4728',
+    deep: '#161313',
+    charcoal: '#26201d',
+    sage: '#657a69',
+    gold: '#c28a35',
+    blush: '#ddbaa9',
+    white: '#ffffff',
+    steel: '#dce7f4',
+    navy: '#3a506a',
+  },
+  sections: {
+    bodyBackground: '#f6f2ea',
+    aboutBackground: '#ffffff',
+    servicesBackground: '#f2ece3',
+    collaborationsBackground: '#eee5d8',
+    eventsBackground: '#fbf8f4',
+    blogBackground: '#f3ede4',
+    contactBackground: '#fbf8f4',
+    newsletterStart: '#161313',
+    newsletterEnd: '#26201d',
+    footerBackground: '#161313',
+  },
+  surfaceColors: {
+    heroPanelStart: '#ffffff',
+    heroPanelEnd: '#f7f1ea',
+    servicesCardStart: '#e5d7c7',
+    servicesCardEnd: '#efe2d2',
+    collaborationsCardStart: '#ffffff',
+    collaborationsCardEnd: '#f8f4ee',
+    eventsCardStart: '#ffffff',
+    eventsCardEnd: '#f6f2ea',
+    blogCardBackground: '#ffffff',
+    contactFormBackground: '#f6f2ea',
+  },
+  textColors: {
+    heroTitle: '#161313',
+    heroBody: '#3a3330',
+    heroPanelTitle: '#161313',
+    heroPanelBody: '#2f241e',
+    aboutTitle: '#161313',
+    aboutBody: '#26201d',
+    servicesTitle: '#161313',
+    servicesCardTitle: '#26201d',
+    servicesCardBody: '#40312a',
+    collabTitle: '#161313',
+    collabBody: '#5d4a3d',
+    eventsTitle: '#161313',
+    eventsCardTitle: '#26201d',
+    eventsCardBody: '#342820',
+    blogTitle: '#161313',
+    blogCardTitle: '#26201d',
+    blogCardBody: '#4a3b33',
+    contactTitle: '#161313',
+    contactBody: '#26201d',
+    newsletterTitle: '#ffffff',
+    newsletterBody: '#ccbfb3',
+  },
+  fontWeights: {
+    sectionTitle: 700,
+    bodyText: 400,
+    cardTitle: 600,
+  },
+  typography: {
+    bodyLineHeight: 1.7,
+    headingLetterSpacing: 0,
+  },
+  cardStyles: {
+    servicesRadius: 20,
+    servicesShadow: 0.08,
+    servicesBorderColor: 'rgba(22,19,19,0.06)',
+    blogRadius: 20,
+    blogShadow: 0,
+    blogImageRatio: 1.6,
+    eventRadius: 28,
+    eventShadow: 0.06,
+    collabRadius: 30,
+    collabShadow: 0.08,
+    contactFormRadius: 24,
+  },
+  imageFilters: {
+    heroBrightness: 1,
+    heroContrast: 1,
+    heroSaturate: 1,
+    aboutMainRadius: 28,
+    aboutMainBrightness: 1,
+    aboutMainContrast: 1,
+    aboutMainSaturate: 1,
+    aboutAccentRadius: 22,
+    aboutAccentBrightness: 1,
+    storyRadius: 18,
+    storyBrightness: 1,
+    storySaturate: 1,
+  },
+  nav: { ...siteData.navAppearance },
+  hero: { ...siteData.heroContent.appearance },
+  about: { ...siteData.aboutContent.appearance },
+  services: siteData.servicesContent.appearance,
+  motionStories: siteData.motionStories.map((s) => ({
+    titleSize: s.appearance.titleSize,
+    bodySize: s.appearance.bodySize,
+    paddingY: s.appearance.paddingY,
+    paddingBottom: s.appearance.paddingBottom,
+  })),
+  events: {
+    ...siteData.eventsContent.appearance,
+    cardMinHeight: 430,
+  },
+  blog: { ...siteData.blogContent.appearance },
+  contact: {
+    ...siteData.contactContent.appearance,
+    formMinHeight: 560,
+  },
+  newsletter: { ...siteData.newsletterContent.appearance },
+  footer: { ...siteData.footerContent.appearance },
+  collaborations: {
+    appearance: siteData.collaborationsContent.appearance,
+    items: siteData.collaborationsContent.items.map((item) => ({
+      label: item.partnerName || item.brandLine || 'Kart',
+      visualStyle: item.visualStyle ?? 'cover',
+      design: item.design,
+    })),
+  },
+};
+
+const themePresets = {
+  default: null,
+  cool: {
+    palette: {
+      cream: '#eef2f7', warm: '#dde4ee', sand: '#a5b8d0', caramel: '#3d6da6',
+      terracotta: '#28507f', deep: '#0d1117', charcoal: '#1a2030', sage: '#5a7a6e',
+      gold: '#3580c2', blush: '#a9c0dd', white: '#ffffff', steel: '#dce7f4', navy: '#2a4060',
+    },
+    sections: {
+      bodyBackground: '#eef2f7', aboutBackground: '#f5f8fc', servicesBackground: '#e4eaf3',
+      collaborationsBackground: '#dde4ee', eventsBackground: '#f0f4fa', blogBackground: '#e6ecf4',
+      contactBackground: '#f0f4fa', newsletterStart: '#0d1117', newsletterEnd: '#1a2030',
+      footerBackground: '#0d1117',
+    },
+    surfaceColors: {
+      heroPanelStart: '#ffffff',
+      heroPanelEnd: '#edf3fb',
+      servicesCardStart: '#d7e3f1',
+      servicesCardEnd: '#ebf2fa',
+      collaborationsCardStart: '#f8fbff',
+      collaborationsCardEnd: '#edf3fb',
+      eventsCardStart: '#fbfdff',
+      eventsCardEnd: '#eef4fb',
+      blogCardBackground: '#ffffff',
+      contactFormBackground: '#f5f8fc',
+    },
+  },
+  warm: {
+    palette: {
+      cream: '#faf3e8', warm: '#f0e0cc', sand: '#d4a87a', caramel: '#b85c1e',
+      terracotta: '#8b3a12', deep: '#1a0e08', charcoal: '#2d1c14', sage: '#6a7a55',
+      gold: '#d4950a', blush: '#e8c4a0', white: '#fffdf8', steel: '#f0e6d8', navy: '#5a3a20',
+    },
+    sections: {
+      bodyBackground: '#faf3e8', aboutBackground: '#fffcf5', servicesBackground: '#f4e8d6',
+      collaborationsBackground: '#f0e0cc', eventsBackground: '#fdf8f0', blogBackground: '#f5eadc',
+      contactBackground: '#fdf8f0', newsletterStart: '#1a0e08', newsletterEnd: '#2d1c14',
+      footerBackground: '#1a0e08',
+    },
+    surfaceColors: {
+      heroPanelStart: '#fffdfa',
+      heroPanelEnd: '#f6e9da',
+      servicesCardStart: '#edd3b6',
+      servicesCardEnd: '#f5e4cf',
+      collaborationsCardStart: '#fff8f0',
+      collaborationsCardEnd: '#f6e6d5',
+      eventsCardStart: '#fffdfa',
+      eventsCardEnd: '#f7ebdc',
+      blogCardBackground: '#fff9f1',
+      contactFormBackground: '#fbf0e3',
+    },
+  },
+  dark: {
+    palette: {
+      cream: '#1a1a1a', warm: '#222222', sand: '#3a3a3a', caramel: '#c28a35',
+      terracotta: '#a66c3d', deep: '#f5f0e8', charcoal: '#e8e0d4', sage: '#7a9a7e',
+      gold: '#d4a035', blush: '#554a42', white: '#111111', steel: '#2a2a2a', navy: '#8ab0d0',
+    },
+    sections: {
+      bodyBackground: '#111111', aboutBackground: '#1a1a1a', servicesBackground: '#161616',
+      collaborationsBackground: '#1e1e1e', eventsBackground: '#141414', blogBackground: '#181818',
+      contactBackground: '#141414', newsletterStart: '#222222', newsletterEnd: '#2a2a2a',
+      footerBackground: '#0a0a0a',
+    },
+    textColors: {
+      heroTitle: '#f5f0e8', heroBody: '#d4ccc0', heroPanelTitle: '#f5f0e8', heroPanelBody: '#d4ccc0',
+      aboutTitle: '#f5f0e8', aboutBody: '#d4ccc0',
+      servicesTitle: '#f5f0e8', servicesCardTitle: '#e8e0d4', servicesCardBody: '#bfb5a8',
+      collabTitle: '#f5f0e8', collabBody: '#cbbfb0', eventsTitle: '#f5f0e8', eventsCardTitle: '#e8e0d4',
+      eventsCardBody: '#c8bdae', blogTitle: '#f5f0e8', blogCardTitle: '#e8e0d4', blogCardBody: '#c8bdae',
+      contactTitle: '#f5f0e8', contactBody: '#d4ccc0',
+      newsletterTitle: '#ffffff', newsletterBody: '#ccbfb3',
+    },
+    surfaceColors: {
+      heroPanelStart: '#232323',
+      heroPanelEnd: '#171717',
+      servicesCardStart: '#2a2a2a',
+      servicesCardEnd: '#202020',
+      collaborationsCardStart: '#252525',
+      collaborationsCardEnd: '#1a1a1a',
+      eventsCardStart: '#202020',
+      eventsCardEnd: '#171717',
+      blogCardBackground: '#202020',
+      contactFormBackground: '#1d1d1d',
+    },
+  },
+  minimal: {
+    palette: {
+      cream: '#f8f8f8', warm: '#f0f0f0', sand: '#cccccc', caramel: '#666666',
+      terracotta: '#444444', deep: '#111111', charcoal: '#222222', sage: '#888888',
+      gold: '#999999', blush: '#dddddd', white: '#ffffff', steel: '#eeeeee', navy: '#555555',
+    },
+    sections: {
+      bodyBackground: '#ffffff', aboutBackground: '#fafafa', servicesBackground: '#f5f5f5',
+      collaborationsBackground: '#f0f0f0', eventsBackground: '#fafafa', blogBackground: '#f5f5f5',
+      contactBackground: '#fafafa', newsletterStart: '#111111', newsletterEnd: '#222222',
+      footerBackground: '#111111',
+    },
+    surfaceColors: {
+      heroPanelStart: '#ffffff',
+      heroPanelEnd: '#f7f7f7',
+      servicesCardStart: '#f3f3f3',
+      servicesCardEnd: '#ebebeb',
+      collaborationsCardStart: '#ffffff',
+      collaborationsCardEnd: '#f5f5f5',
+      eventsCardStart: '#ffffff',
+      eventsCardEnd: '#f3f3f3',
+      blogCardBackground: '#ffffff',
+      contactFormBackground: '#ffffff',
+    },
+  },
+};
+
+type EditorControl = {
+  path: string;
+  label: string;
+  value: number | string;
+  controlType?: 'number' | 'color';
+  min?: number;
+  max?: number;
+  step?: number;
+};
+
+type EditorGroup = {
+  id: string;
+  title: string;
+  icon: string;
+  description: string;
+  items: EditorControl[];
+};
+
+const controlGroups: EditorGroup[] = [
+  {
+    id: 'typography',
+    title: 'Genel Tipografi',
+    icon: 'Aa',
+    description: 'Tüm sitedeki rem tabanını, başlık ölçeklerini, satır yüksekliğini ve harf aralığını ayarla.',
+    items: [
+      { path: 'site.baseFontSize', label: 'Temel font boyutu (px)', min: 13, max: 22, step: 0.1, value: editorDefaults.site.baseFontSize },
+      { path: 'site.titleScale', label: 'Section başlık ölçeği', min: 0.75, max: 1.6, step: 0.01, value: editorDefaults.site.titleScale },
+      { path: 'site.displayScale', label: 'Display başlık ölçeği', min: 0.75, max: 1.6, step: 0.01, value: editorDefaults.site.displayScale },
+      { path: 'typography.bodyLineHeight', label: 'Gövde metin satır yüksekliği', min: 1.2, max: 2.4, step: 0.05, value: editorDefaults.typography.bodyLineHeight },
+      { path: 'typography.headingLetterSpacing', label: 'Başlık harf aralığı (em)', min: -0.04, max: 0.15, step: 0.005, value: editorDefaults.typography.headingLetterSpacing },
+    ],
+  },
+  {
+    id: 'fontWeights',
+    title: 'Font Ağırlıkları',
+    icon: 'B',
+    description: 'Başlık, kart ve gövde metinlerinin kalınlığını değiştir.',
+    items: [
+      { path: 'fontWeights.sectionTitle', label: 'Section başlık ağırlığı', min: 300, max: 900, step: 100, value: editorDefaults.fontWeights.sectionTitle },
+      { path: 'fontWeights.cardTitle', label: 'Kart başlık ağırlığı', min: 300, max: 900, step: 100, value: editorDefaults.fontWeights.cardTitle },
+      { path: 'fontWeights.bodyText', label: 'Gövde metin ağırlığı', min: 300, max: 700, step: 100, value: editorDefaults.fontWeights.bodyText },
+    ],
+  },
+  {
+    id: 'palette',
+    title: 'Global Palette',
+    icon: '#',
+    description: 'Sitenin ana renk sistemini değiştir. Bu değerler pek çok section tarafından ortak kullanılır.',
+    items: [
+      { path: 'palette.cream', label: 'Cream', value: editorDefaults.palette.cream, controlType: 'color' },
+      { path: 'palette.warm', label: 'Warm', value: editorDefaults.palette.warm, controlType: 'color' },
+      { path: 'palette.sand', label: 'Sand', value: editorDefaults.palette.sand, controlType: 'color' },
+      { path: 'palette.caramel', label: 'Caramel', value: editorDefaults.palette.caramel, controlType: 'color' },
+      { path: 'palette.terracotta', label: 'Terracotta', value: editorDefaults.palette.terracotta, controlType: 'color' },
+      { path: 'palette.deep', label: 'Deep', value: editorDefaults.palette.deep, controlType: 'color' },
+      { path: 'palette.charcoal', label: 'Charcoal', value: editorDefaults.palette.charcoal, controlType: 'color' },
+      { path: 'palette.sage', label: 'Sage', value: editorDefaults.palette.sage, controlType: 'color' },
+      { path: 'palette.gold', label: 'Gold', value: editorDefaults.palette.gold, controlType: 'color' },
+      { path: 'palette.blush', label: 'Blush', value: editorDefaults.palette.blush, controlType: 'color' },
+      { path: 'palette.white', label: 'White', value: editorDefaults.palette.white, controlType: 'color' },
+      { path: 'palette.steel', label: 'Steel', value: editorDefaults.palette.steel, controlType: 'color' },
+      { path: 'palette.navy', label: 'Navy', value: editorDefaults.palette.navy, controlType: 'color' },
+    ],
+  },
+  {
+    id: 'textColors',
+    title: 'Yazı Renkleri',
+    icon: 'T',
+    description: 'Her bölümün başlık ve metin renklerini bağımsız olarak değiştir.',
+    items: [
+      { path: 'textColors.heroTitle', label: 'Hero başlık', value: editorDefaults.textColors.heroTitle, controlType: 'color' },
+      { path: 'textColors.heroBody', label: 'Hero metin', value: editorDefaults.textColors.heroBody, controlType: 'color' },
+      { path: 'textColors.heroPanelTitle', label: 'Hero sag panel baslik', value: editorDefaults.textColors.heroPanelTitle, controlType: 'color' },
+      { path: 'textColors.heroPanelBody', label: 'Hero sag panel metin', value: editorDefaults.textColors.heroPanelBody, controlType: 'color' },
+      { path: 'textColors.aboutTitle', label: 'About başlık', value: editorDefaults.textColors.aboutTitle, controlType: 'color' },
+      { path: 'textColors.aboutBody', label: 'About metin', value: editorDefaults.textColors.aboutBody, controlType: 'color' },
+      { path: 'textColors.servicesTitle', label: 'Services başlık', value: editorDefaults.textColors.servicesTitle, controlType: 'color' },
+      { path: 'textColors.servicesCardTitle', label: 'Services kart başlığı', value: editorDefaults.textColors.servicesCardTitle, controlType: 'color' },
+      { path: 'textColors.servicesCardBody', label: 'Services kart metni', value: editorDefaults.textColors.servicesCardBody, controlType: 'color' },
+      { path: 'textColors.collabTitle', label: 'Collab başlık', value: editorDefaults.textColors.collabTitle, controlType: 'color' },
+      { path: 'textColors.collabBody', label: 'Collab metin', value: editorDefaults.textColors.collabBody, controlType: 'color' },
+      { path: 'textColors.eventsTitle', label: 'Events başlık', value: editorDefaults.textColors.eventsTitle, controlType: 'color' },
+      { path: 'textColors.eventsCardTitle', label: 'Events kart başlığı', value: editorDefaults.textColors.eventsCardTitle, controlType: 'color' },
+      { path: 'textColors.eventsCardBody', label: 'Events kart metni', value: editorDefaults.textColors.eventsCardBody, controlType: 'color' },
+      { path: 'textColors.blogTitle', label: 'Blog başlık', value: editorDefaults.textColors.blogTitle, controlType: 'color' },
+      { path: 'textColors.blogCardTitle', label: 'Blog kart başlığı', value: editorDefaults.textColors.blogCardTitle, controlType: 'color' },
+      { path: 'textColors.blogCardBody', label: 'Blog kart metni', value: editorDefaults.textColors.blogCardBody, controlType: 'color' },
+      { path: 'textColors.contactTitle', label: 'Contact başlık', value: editorDefaults.textColors.contactTitle, controlType: 'color' },
+      { path: 'textColors.contactBody', label: 'Contact metin', value: editorDefaults.textColors.contactBody, controlType: 'color' },
+      { path: 'textColors.newsletterTitle', label: 'Newsletter başlık', value: editorDefaults.textColors.newsletterTitle, controlType: 'color' },
+      { path: 'textColors.newsletterBody', label: 'Newsletter metin', value: editorDefaults.textColors.newsletterBody, controlType: 'color' },
+    ],
+  },
+  {
+    id: 'sectionBgs',
+    title: 'Section Arka Planları',
+    icon: '▦',
+    description: 'Ana sayfadaki büyük blokların arka planlarını section section değiştir.',
+    items: [
+      { path: 'sections.bodyBackground', label: 'Body', value: editorDefaults.sections.bodyBackground, controlType: 'color' },
+      { path: 'sections.aboutBackground', label: 'About', value: editorDefaults.sections.aboutBackground, controlType: 'color' },
+      { path: 'sections.servicesBackground', label: 'Services', value: editorDefaults.sections.servicesBackground, controlType: 'color' },
+      { path: 'sections.collaborationsBackground', label: 'Collaborations', value: editorDefaults.sections.collaborationsBackground, controlType: 'color' },
+      { path: 'sections.eventsBackground', label: 'Events', value: editorDefaults.sections.eventsBackground, controlType: 'color' },
+      { path: 'sections.blogBackground', label: 'Blog', value: editorDefaults.sections.blogBackground, controlType: 'color' },
+      { path: 'sections.contactBackground', label: 'Contact', value: editorDefaults.sections.contactBackground, controlType: 'color' },
+      { path: 'sections.newsletterStart', label: 'Newsletter ust', value: editorDefaults.sections.newsletterStart, controlType: 'color' },
+      { path: 'sections.newsletterEnd', label: 'Newsletter alt', value: editorDefaults.sections.newsletterEnd, controlType: 'color' },
+      { path: 'sections.footerBackground', label: 'Footer', value: editorDefaults.sections.footerBackground, controlType: 'color' },
+    ],
+  },
+  {
+    id: 'surfaceColors',
+    title: 'Kart ve Yuzey Renkleri',
+    icon: '◫',
+    description: 'Kart, panel ve form yuzeylerinin arka plan renklerini ayarla.',
+    items: [
+      { path: 'surfaceColors.heroPanelStart', label: 'Hero panel ust', value: editorDefaults.surfaceColors.heroPanelStart, controlType: 'color' },
+      { path: 'surfaceColors.heroPanelEnd', label: 'Hero panel alt', value: editorDefaults.surfaceColors.heroPanelEnd, controlType: 'color' },
+      { path: 'surfaceColors.servicesCardStart', label: 'Hizmet karti ust', value: editorDefaults.surfaceColors.servicesCardStart, controlType: 'color' },
+      { path: 'surfaceColors.servicesCardEnd', label: 'Hizmet karti alt', value: editorDefaults.surfaceColors.servicesCardEnd, controlType: 'color' },
+      { path: 'surfaceColors.collaborationsCardStart', label: 'Is birlikleri karti ust', value: editorDefaults.surfaceColors.collaborationsCardStart, controlType: 'color' },
+      { path: 'surfaceColors.collaborationsCardEnd', label: 'Is birlikleri karti alt', value: editorDefaults.surfaceColors.collaborationsCardEnd, controlType: 'color' },
+      { path: 'surfaceColors.eventsCardStart', label: 'Etkinlik karti ust', value: editorDefaults.surfaceColors.eventsCardStart, controlType: 'color' },
+      { path: 'surfaceColors.eventsCardEnd', label: 'Etkinlik karti alt', value: editorDefaults.surfaceColors.eventsCardEnd, controlType: 'color' },
+      { path: 'surfaceColors.blogCardBackground', label: 'Blog kart zemini', value: editorDefaults.surfaceColors.blogCardBackground, controlType: 'color' },
+      { path: 'surfaceColors.contactFormBackground', label: 'Iletisim form zemini', value: editorDefaults.surfaceColors.contactFormBackground, controlType: 'color' },
+    ],
+  },
+  {
+    id: 'cardStyles',
+    title: 'Kart Stilleri',
+    icon: '▢',
+    description: 'Hizmet, blog ve etkinlik kartlarinin kose yuvarlakligi, golge yogunlugu ve gorsel oranlarini ayarla.',
+    items: [
+      { path: 'cardStyles.servicesRadius', label: 'Hizmet karti kose yuvarlakligi', min: 0, max: 50, step: 1, value: editorDefaults.cardStyles.servicesRadius },
+      { path: 'cardStyles.servicesShadow', label: 'Hizmet karti golge yogunlugu', min: 0, max: 0.4, step: 0.01, value: editorDefaults.cardStyles.servicesShadow },
+      { path: 'cardStyles.blogRadius', label: 'Blog karti kose yuvarlakligi', min: 0, max: 50, step: 1, value: editorDefaults.cardStyles.blogRadius },
+      { path: 'cardStyles.blogShadow', label: 'Blog karti golge yogunlugu', min: 0, max: 0.4, step: 0.01, value: editorDefaults.cardStyles.blogShadow },
+      { path: 'cardStyles.blogImageRatio', label: 'Blog gorsel en/boy orani', min: 0.6, max: 2.5, step: 0.05, value: editorDefaults.cardStyles.blogImageRatio },
+      { path: 'cardStyles.eventRadius', label: 'Etkinlik karti kose yuvarlakligi', min: 0, max: 50, step: 1, value: editorDefaults.cardStyles.eventRadius },
+      { path: 'cardStyles.eventShadow', label: 'Etkinlik karti golge yogunlugu', min: 0, max: 0.4, step: 0.01, value: editorDefaults.cardStyles.eventShadow },
+      { path: 'cardStyles.collabRadius', label: 'Is birlikleri karti kose yuvarlakligi', min: 0, max: 60, step: 1, value: editorDefaults.cardStyles.collabRadius },
+      { path: 'cardStyles.collabShadow', label: 'Is birlikleri karti golge yogunlugu', min: 0, max: 0.4, step: 0.01, value: editorDefaults.cardStyles.collabShadow },
+      { path: 'cardStyles.contactFormRadius', label: 'Iletisim form kose yuvarlakligi', min: 0, max: 60, step: 1, value: editorDefaults.cardStyles.contactFormRadius },
+    ],
+  },
+  {
+    id: 'imageFilters',
+    title: 'Fotograf Filtreleri',
+    icon: '☀',
+    description: 'Fotograflarin parlaklik, kontrast, doygunluk ve kose yuvarlakligi.',
+    items: [
+      { path: 'imageFilters.heroBrightness', label: 'Hero parlaklik', min: 0.4, max: 1.6, step: 0.02, value: editorDefaults.imageFilters.heroBrightness },
+      { path: 'imageFilters.heroContrast', label: 'Hero kontrast', min: 0.4, max: 1.8, step: 0.02, value: editorDefaults.imageFilters.heroContrast },
+      { path: 'imageFilters.heroSaturate', label: 'Hero doygunluk', min: 0, max: 2, step: 0.02, value: editorDefaults.imageFilters.heroSaturate },
+      { path: 'imageFilters.aboutMainRadius', label: 'About ana foto kose', min: 0, max: 60, step: 1, value: editorDefaults.imageFilters.aboutMainRadius },
+      { path: 'imageFilters.aboutMainBrightness', label: 'About ana foto parlaklik', min: 0.4, max: 1.6, step: 0.02, value: editorDefaults.imageFilters.aboutMainBrightness },
+      { path: 'imageFilters.aboutMainContrast', label: 'About ana foto kontrast', min: 0.4, max: 1.8, step: 0.02, value: editorDefaults.imageFilters.aboutMainContrast },
+      { path: 'imageFilters.aboutMainSaturate', label: 'About ana foto doygunluk', min: 0, max: 2, step: 0.02, value: editorDefaults.imageFilters.aboutMainSaturate },
+      { path: 'imageFilters.aboutAccentRadius', label: 'About vurgu foto kose', min: 0, max: 60, step: 1, value: editorDefaults.imageFilters.aboutAccentRadius },
+      { path: 'imageFilters.aboutAccentBrightness', label: 'About vurgu foto parlaklik', min: 0.4, max: 1.6, step: 0.02, value: editorDefaults.imageFilters.aboutAccentBrightness },
+      { path: 'imageFilters.storyRadius', label: 'Story foto kose', min: 0, max: 60, step: 1, value: editorDefaults.imageFilters.storyRadius },
+      { path: 'imageFilters.storyBrightness', label: 'Story foto parlaklik', min: 0.4, max: 1.6, step: 0.02, value: editorDefaults.imageFilters.storyBrightness },
+      { path: 'imageFilters.storySaturate', label: 'Story foto doygunluk', min: 0, max: 2, step: 0.02, value: editorDefaults.imageFilters.storySaturate },
+    ],
+  },
+  {
+    id: 'nav',
+    title: 'Navigasyon',
+    icon: '≡',
+    description: 'Ust bar icindeki marka ve menu yazi boyutlarini canli olarak ayarla.',
+    items: [
+      { path: 'nav.brandFontSize', label: 'Marka yazi boyutu', min: 1, max: 3.2, step: 0.01, value: editorDefaults.nav.brandFontSize },
+      { path: 'nav.linkFontSize', label: 'Menu link boyutu', min: 0.7, max: 1.8, step: 0.01, value: editorDefaults.nav.linkFontSize },
+      { path: 'nav.bgOpacity', label: 'Arka plan saydamligi', min: 0, max: 1, step: 0.01, value: editorDefaults.nav.bgOpacity },
+      { path: 'nav.paddingY', label: 'Dikey dolgu', min: 0.3, max: 2, step: 0.01, value: editorDefaults.nav.paddingY },
+      { path: 'nav.blur', label: 'Arka plan bulanikligi', min: 0, max: 40, step: 1, value: editorDefaults.nav.blur },
+      { path: 'nav.radius', label: 'Kose yumusakligi', min: 0, max: 40, step: 1, value: editorDefaults.nav.radius },
+    ],
+  },
+  {
+    id: 'hero',
+    title: 'Hero Sag Panel',
+    icon: '◐',
+    description: 'Ilk ekranin sagindaki hakkinda panelinin genislik ve tipografi dengesini degistir.',
+    items: [
+      { path: 'hero.rightPanelWidth', label: 'Panel genisligi', min: 320, max: 700, step: 1, value: editorDefaults.hero.rightPanelWidth },
+      { path: 'hero.rightTitleSize', label: 'Baslik boyutu', min: 1.8, max: 4.2, step: 0.01, value: editorDefaults.hero.rightTitleSize },
+      { path: 'hero.rightBodySize', label: 'Metin boyutu', min: 0.82, max: 1.6, step: 0.01, value: editorDefaults.hero.rightBodySize },
+    ],
+  },
+  {
+    id: 'about',
+    title: 'About — Hakkimda',
+    icon: '◉',
+    description: 'Yazi boyutlari, bolum yuksekligi ve fotograf konumlari.',
+    items: [
+      { path: 'about.titleSize', label: 'Baslik boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.about.titleSize },
+      { path: 'about.bodySize', label: 'Metin boyutu', min: 0.8, max: 1.6, step: 0.01, value: editorDefaults.about.bodySize },
+      { path: 'about.statNumberSize', label: 'Istatistik sayi boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.about.statNumberSize },
+      { path: 'about.statLabelSize', label: 'Istatistik etiket boyutu', min: 0.6, max: 1.4, step: 0.01, value: editorDefaults.about.statLabelSize },
+      { path: 'about.paddingY', label: 'Bolum dikey dolgu', min: 2, max: 14, step: 0.5, value: editorDefaults.about.paddingY },
+      { path: 'about.stackHeight', label: 'Fotograf alani yuksekligi', min: 300, max: 800, step: 5, value: editorDefaults.about.stackHeight },
+      { path: 'about.mainPhotoWidth', label: 'Ana foto genisligi (%)', min: 30, max: 100, step: 1, value: editorDefaults.about.mainPhotoWidth },
+      { path: 'about.mainPhotoLeft', label: 'Ana foto sol konum (%)', min: -10, max: 40, step: 1, value: editorDefaults.about.mainPhotoLeft },
+      { path: 'about.mainPhotoTop', label: 'Ana foto ust konum (%)', min: -10, max: 30, step: 1, value: editorDefaults.about.mainPhotoTop },
+      { path: 'about.accentPhotoWidth', label: 'Kucuk foto genisligi (%)', min: 20, max: 70, step: 1, value: editorDefaults.about.accentPhotoWidth },
+      { path: 'about.accentPhotoRight', label: 'Kucuk foto sag konum (%)', min: -10, max: 40, step: 1, value: editorDefaults.about.accentPhotoRight },
+      { path: 'about.accentPhotoBottom', label: 'Kucuk foto alt konum (%)', min: -10, max: 30, step: 1, value: editorDefaults.about.accentPhotoBottom },
+    ],
+  },
+  {
+    id: 'services',
+    title: 'Services — Hizmetler',
+    icon: '✦',
+    description: 'Yazi boyutlari, bolum yuksekligi ve kart araligi.',
+    items: [
+      { path: 'services.titleSize', label: 'Baslik boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.services.titleSize },
+      { path: 'services.cardTitleSize', label: 'Kart basligi boyutu', min: 0.9, max: 2.4, step: 0.01, value: editorDefaults.services.cardTitleSize },
+      { path: 'services.cardBodySize', label: 'Kart metin boyutu', min: 0.7, max: 1.4, step: 0.01, value: editorDefaults.services.cardBodySize },
+      { path: 'services.paddingY', label: 'Bolum dikey dolgu', min: 2, max: 14, step: 0.5, value: editorDefaults.services.paddingY },
+      { path: 'services.gridGap', label: 'Kartlar arasi bosluk', min: 0.5, max: 4, step: 0.05, value: editorDefaults.services.gridGap },
+    ],
+  },
+  {
+    id: 'collabSection',
+    title: 'Is Birlikleri Bolumu',
+    icon: '◈',
+    description: 'Baslik alti bosluk, kart arasi mesafe ve genel kart yuksekligi hissini burada toparla.',
+    items: [
+      { path: 'collaborations.appearance.gridMarginTop', label: 'Basliktan sonra bosluk', min: 0, max: 4, step: 0.01, value: editorDefaults.collaborations.appearance.gridMarginTop },
+      { path: 'collaborations.appearance.gridGap', label: 'Kartlar arasi bosluk', min: 0, max: 3, step: 0.01, value: editorDefaults.collaborations.appearance.gridGap },
+      { path: 'collaborations.appearance.itemPaddingTop', label: 'Kart ust boslugu', min: 0.5, max: 4, step: 0.01, value: editorDefaults.collaborations.appearance.itemPaddingTop },
+      { path: 'collaborations.appearance.itemPaddingBottom', label: 'Kart alt boslugu', min: 0.4, max: 4, step: 0.01, value: editorDefaults.collaborations.appearance.itemPaddingBottom },
+    ],
+  },
+  {
+    id: 'story1',
+    title: 'Story 1 — Genetik Neden Onemli',
+    icon: '▷',
+    description: 'Birinci hikaye bolumunun yazi boyutlari ve dikey dolgusu.',
+    items: [
+      { path: 'motionStories.0.titleSize', label: 'Baslik boyutu', min: 1.5, max: 6, step: 0.01, value: editorDefaults.motionStories[0].titleSize },
+      { path: 'motionStories.0.bodySize', label: 'Metin boyutu', min: 0.8, max: 1.6, step: 0.01, value: editorDefaults.motionStories[0].bodySize },
+      { path: 'motionStories.0.paddingY', label: 'Ust dolgu', min: 0, max: 8, step: 0.1, value: editorDefaults.motionStories[0].paddingY },
+      { path: 'motionStories.0.paddingBottom', label: 'Alt dolgu', min: 0, max: 12, step: 0.1, value: editorDefaults.motionStories[0].paddingBottom },
+    ],
+  },
+  {
+    id: 'story2',
+    title: 'Story 2 — Onleyici Yaklasim',
+    icon: '▷',
+    description: 'Ikinci hikaye bolumunun yazi boyutlari ve dikey dolgusu.',
+    items: [
+      { path: 'motionStories.1.titleSize', label: 'Baslik boyutu', min: 1.5, max: 6, step: 0.01, value: editorDefaults.motionStories[1].titleSize },
+      { path: 'motionStories.1.bodySize', label: 'Metin boyutu', min: 0.8, max: 1.6, step: 0.01, value: editorDefaults.motionStories[1].bodySize },
+      { path: 'motionStories.1.paddingY', label: 'Ust dolgu', min: 0, max: 8, step: 0.1, value: editorDefaults.motionStories[1].paddingY },
+      { path: 'motionStories.1.paddingBottom', label: 'Alt dolgu', min: 0, max: 12, step: 0.1, value: editorDefaults.motionStories[1].paddingBottom },
+    ],
+  },
+  {
+    id: 'events',
+    title: 'Events — Etkinlikler',
+    icon: '▣',
+    description: 'Etkinlikler bolumu yazi boyutlari, yukseklik ve liste araligi.',
+    items: [
+      { path: 'events.titleSize', label: 'Baslik boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.events.titleSize },
+      { path: 'events.cardTitleSize', label: 'Etkinlik basligi boyutu', min: 1, max: 3.5, step: 0.01, value: editorDefaults.events.cardTitleSize },
+      { path: 'events.paddingY', label: 'Bolum dikey dolgu', min: 2, max: 14, step: 0.5, value: editorDefaults.events.paddingY },
+      { path: 'events.listMarginTop', label: 'Liste ust boslugu', min: 0, max: 8, step: 0.25, value: editorDefaults.events.listMarginTop },
+      { path: 'events.cardMinHeight', label: 'Kart min yuksekligi', min: 260, max: 900, step: 5, value: editorDefaults.events.cardMinHeight },
+    ],
+  },
+  {
+    id: 'blog',
+    title: 'Blog',
+    icon: '✎',
+    description: 'Blog bolumu yazi boyutlari, yukseklik ve kart araligi.',
+    items: [
+      { path: 'blog.titleSize', label: 'Baslik boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.blog.titleSize },
+      { path: 'blog.cardTitleSize', label: 'Kart basligi boyutu', min: 0.9, max: 2.4, step: 0.01, value: editorDefaults.blog.cardTitleSize },
+      { path: 'blog.paddingY', label: 'Bolum dikey dolgu', min: 2, max: 14, step: 0.5, value: editorDefaults.blog.paddingY },
+      { path: 'blog.gridGap', label: 'Kartlar arasi bosluk', min: 0.5, max: 5, step: 0.1, value: editorDefaults.blog.gridGap },
+    ],
+  },
+  {
+    id: 'contact',
+    title: 'Contact — Iletisim',
+    icon: '✉',
+    description: 'Iletisim bolumu yazi boyutlari ve yukseklik.',
+    items: [
+      { path: 'contact.titleSize', label: 'Baslik boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.contact.titleSize },
+      { path: 'contact.bodySize', label: 'Giris metin boyutu', min: 0.8, max: 1.6, step: 0.01, value: editorDefaults.contact.bodySize },
+      { path: 'contact.paddingY', label: 'Bolum dikey dolgu', min: 2, max: 14, step: 0.5, value: editorDefaults.contact.paddingY },
+      { path: 'contact.formMinHeight', label: 'Form min yuksekligi', min: 320, max: 980, step: 5, value: editorDefaults.contact.formMinHeight },
+    ],
+  },
+  {
+    id: 'newsletter',
+    title: 'Newsletter — E-Bulten',
+    icon: '✉',
+    description: 'E-Bulten bolumu yazi boyutlari ve yukseklik.',
+    items: [
+      { path: 'newsletter.titleSize', label: 'Baslik boyutu', min: 1.5, max: 5, step: 0.01, value: editorDefaults.newsletter.titleSize },
+      { path: 'newsletter.bodySize', label: 'Aciklama metin boyutu', min: 0.8, max: 1.6, step: 0.01, value: editorDefaults.newsletter.bodySize },
+      { path: 'newsletter.paddingY', label: 'Bolum dikey dolgu', min: 2, max: 14, step: 0.5, value: editorDefaults.newsletter.paddingY },
+    ],
+  },
+  {
+    id: 'footer',
+    title: 'Footer',
+    icon: '▬',
+    description: 'Alt bilgi metin ve link boyutlari.',
+    items: [
+      { path: 'footer.fontSize', label: 'Metin boyutu', min: 0.6, max: 1.4, step: 0.01, value: editorDefaults.footer.fontSize },
+      { path: 'footer.linkSize', label: 'Link boyutu', min: 0.6, max: 1.4, step: 0.01, value: editorDefaults.footer.linkSize },
+    ],
+  },
+  ...editorDefaults.collaborations.items.map((item, index) => ({
+    id: `collab-${index}`,
+    title: `${item.label || `Kart ${index + 1}`} Karti`,
+    icon: '◈',
+    description:
+      item.visualStyle === 'portrait'
+        ? 'Blob katmani ve fotografi hem panelden hem onizleme uzerinde surukleyerek oynatabilirsin.'
+        : 'Foto boyutu, crop hissi, yazi kaydirmasi ve font buyuklukleri.',
+    items: [
+      ...(item.visualStyle === 'portrait'
+        ? [
+            { path: `collaborations.items.${index}.design.blobColor`, label: 'Blob ana renk', value: item.design.blobColor, controlType: 'color' as const },
+            { path: `collaborations.items.${index}.design.blobGradientColor`, label: 'Blob ikinci renk', value: item.design.blobGradientColor, controlType: 'color' as const },
+            { path: `collaborations.items.${index}.design.blobOpacity`, label: 'Blob opaklik', min: 0, max: 1, step: 0.01, value: item.design.blobOpacity },
+            { path: `collaborations.items.${index}.design.blobGradientOpacity`, label: 'Blob ikinci renk opakligi', min: 0, max: 1, step: 0.01, value: item.design.blobGradientOpacity },
+            { path: `collaborations.items.${index}.design.blobWidth`, label: 'Blob genisligi', min: 80, max: 420, step: 1, value: item.design.blobWidth },
+            { path: `collaborations.items.${index}.design.blobHeight`, label: 'Blob yuksekligi', min: 80, max: 420, step: 1, value: item.design.blobHeight },
+            { path: `collaborations.items.${index}.design.blobOffsetX`, label: 'Blob sag-sol', min: -180, max: 180, step: 1, value: item.design.blobOffsetX },
+            { path: `collaborations.items.${index}.design.blobOffsetY`, label: 'Blob yukari-asagi', min: -180, max: 180, step: 1, value: item.design.blobOffsetY },
+            { path: `collaborations.items.${index}.design.blobRadius`, label: 'Blob radius', min: 0, max: 50, step: 1, value: item.design.blobRadius },
+            { path: `collaborations.items.${index}.design.blobBlur`, label: 'Blob blur', min: 0, max: 40, step: 1, value: item.design.blobBlur },
+            { path: `collaborations.items.${index}.design.blobShadowBlur`, label: 'Blob golge', min: 0, max: 80, step: 1, value: item.design.blobShadowBlur },
+            { path: `collaborations.items.${index}.design.blobShadowOpacity`, label: 'Blob golge opakligi', min: 0, max: 1, step: 0.01, value: item.design.blobShadowOpacity },
+          ]
+        : []),
+      { path: `collaborations.items.${index}.design.visualHeight`, label: 'Gorsel alan yuksekligi', min: 120, max: 420, step: 1, value: item.design.visualHeight },
+      { path: `collaborations.items.${index}.design.imageWidth`, label: 'Foto genisligi', min: 90, max: 420, step: 1, value: item.design.imageWidth },
+      { path: `collaborations.items.${index}.design.imageScale`, label: 'Foto olcegi', min: 0.5, max: 2.5, step: 0.01, value: item.design.imageScale },
+      { path: `collaborations.items.${index}.design.imageOffsetX`, label: 'Foto sag-sol', min: -180, max: 180, step: 1, value: item.design.imageOffsetX },
+      { path: `collaborations.items.${index}.design.imageOffsetY`, label: 'Foto yukari-asagi', min: -180, max: 180, step: 1, value: item.design.imageOffsetY },
+      { path: `collaborations.items.${index}.design.copyOffsetY`, label: 'Yazi blogu dikey', min: -3, max: 6, step: 0.01, value: item.design.copyOffsetY },
+      { path: `collaborations.items.${index}.design.brandLineFontSize`, label: 'Ust satir yazi boyutu', min: 0.8, max: 2.4, step: 0.01, value: item.design.brandLineFontSize },
+      { path: `collaborations.items.${index}.design.partnerFontSize`, label: 'Isim yazi boyutu', min: 1, max: 3.6, step: 0.01, value: item.design.partnerFontSize },
+      { path: `collaborations.items.${index}.design.leadFontSize`, label: 'Giris paragrafi boyutu', min: 0.82, max: 2, step: 0.01, value: item.design.leadFontSize },
+    ],
+  })),
+];
+
+const presetNames = [
+  { key: 'default', label: 'Varsayilan' },
+  { key: 'cool', label: 'Serin Mavi' },
+  { key: 'warm', label: 'Sicak Toprak' },
+  { key: 'dark', label: 'Koyu Elegans' },
+  { key: 'minimal', label: 'Minimal' },
+];
+---
+
+<BaseLayout
+  title={`Duzenleme Modu | ${siteData.siteConfig.brandName}`}
+  description="Canli onizleme ile renkleri, arka planlari, blob katmanlarini, fotograf yerlesimlerini ve tipografi olceklerini dogrudan gorerek ayarlayabileceginiz duzenleme modu."
+  bodyClass="visual-editor-page"
+>
+  <div class="editor-shell">
+    <aside class="editor-sidebar">
+      <div class="editor-panel">
+        <!-- Header -->
+        <p class="editor-eyebrow">Canli Duzenleme</p>
+        <h1 class="editor-title">Visual Builder</h1>
+        <p class="editor-copy">
+          Renkler, yazilar, kart stilleri, fotograf filtreleri ve daha fazlasini canli onizleme ile ayarla. Fotograflari surukleyebilir, turuncu handle'lari cekerek kutulari ve gorsel alanlarini buyutup kucultebilirsin.
+        </p>
+
+        <!-- Search -->
+        <div class="editor-search-wrap">
+          <input
+            type="search"
+            class="editor-search"
+            placeholder="Kontrol ara... (ornek: baslik, renk, kose)"
+            data-editor-search
+          />
+        </div>
+
+        <!-- Section Quick Nav -->
+        <nav class="editor-nav" data-editor-nav>
+          {controlGroups.map((group) => (
+            <button type="button" class="editor-nav-pill" data-nav-target={group.id}>
+              <span class="editor-nav-icon">{group.icon}</span>
+              <span class="editor-nav-label">{group.title.split('—')[0].trim().substring(0, 12)}</span>
+            </button>
+          ))}
+        </nav>
+
+        <!-- Actions -->
+        <div class="editor-actions">
+          <div class="editor-actions-row">
+            <button type="button" class="editor-button editor-button--icon" data-editor-undo title="Geri al">&#8617;</button>
+            <button type="button" class="editor-button editor-button--icon" data-editor-redo title="Ileri al">&#8618;</button>
+            <button type="button" class="editor-button" data-editor-reset>Varsayilanlara don</button>
+            <button type="button" class="editor-button editor-button--dark" data-editor-copy>JSON kopyala</button>
+          </div>
+          <a class="editor-link" href="/" target="_blank" rel="noreferrer">Ana sayfayi ac &#8599;</a>
+        </div>
+
+        <!-- Presets -->
+        <div class="editor-presets">
+          <p class="editor-presets-label">Hazir Temalar</p>
+          <div class="editor-presets-row">
+            {presetNames.map((p) => (
+              <button
+                type="button"
+                class={`editor-preset-btn ${p.key === 'default' ? 'is-active' : ''}`}
+                data-preset={p.key}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Control Groups (Accordion) -->
+        {controlGroups.map((group) => (
+          <section class="editor-group" id={`group-${group.id}`} data-group-id={group.id}>
+            <button type="button" class="editor-group-toggle" data-toggle-group={group.id}>
+              <div class="editor-group-head">
+                <span class="editor-group-icon">{group.icon}</span>
+                <div>
+                  <h2>{group.title}</h2>
+                  <p>{group.description}</p>
+                </div>
+              </div>
+              <span class="editor-chevron">&#9662;</span>
+            </button>
+
+            <div class="editor-fields" data-group-fields={group.id}>
+              {group.items.map((item) => (
+                <label class="editor-field" data-field-label={item.label.toLowerCase()}>
+                  <span>{item.label}</span>
+                  {item.controlType === 'color' ? (
+                    <div class="editor-inputs editor-inputs--color">
+                      <input
+                        class="editor-color"
+                        type="color"
+                        value={String(item.value)}
+                        data-editor-path={item.path}
+                        data-editor-control-type="color"
+                      />
+                      <input
+                        class="editor-text"
+                        type="text"
+                        value={String(item.value)}
+                        data-editor-path={item.path}
+                        data-editor-control-type="color"
+                      />
+                    </div>
+                  ) : (
+                    <div class="editor-inputs">
+                      <input
+                        class="editor-range"
+                        type="range"
+                        min={item.min}
+                        max={item.max}
+                        step={item.step}
+                        value={Number(item.value)}
+                        data-editor-path={item.path}
+                        data-editor-control-type="number"
+                      />
+                      <input
+                        class="editor-number"
+                        type="number"
+                        min={item.min}
+                        max={item.max}
+                        step={item.step}
+                        value={Number(item.value)}
+                        data-editor-path={item.path}
+                        data-editor-control-type="number"
+                      />
+                    </div>
+                  )}
+                </label>
+              ))}
+            </div>
+          </section>
+        ))}
+
+        <!-- Output -->
+        <section class="editor-group editor-group--output">
+          <div class="editor-group-head" style="padding-left:0;">
+            <div>
+              <h2>Cikti</h2>
+              <p>Bu JSON tarayicida saklanir. Kalici hale getirmek icin CMS'e veya dosyaya baglanabilir.</p>
+            </div>
+          </div>
+          <textarea id="editorExport" class="editor-output" readonly></textarea>
+          <p class="editor-status" id="editorStatus">Canli onizleme hazir.</p>
+        </section>
+      </div>
+    </aside>
+
+    <div class="editor-preview">
+      <Navbar />
+      <main>
+        <Hero />
+        <section class="motion-story-wrap">
+          {siteData.motionStories.map((story) => (
+            <MotionStory {...story} />
+          ))}
+        </section>
+        <About />
+        <Services />
+        <Collaborations />
+        <Events events={events} />
+        <Blog posts={blogPosts} />
+        <Newsletter />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  </div>
+
+  <!-- Data -->
+  <script id="visual-editor-defaults" type="application/json" set:html={JSON.stringify(editorDefaults)} />
+  <script id="visual-editor-presets" type="application/json" set:html={JSON.stringify(themePresets)} />
+
+  <!-- Runtime -->
+  <script>
+    const STORAGE_KEY = 'bader-visual-overrides-v1';
+    const MAX_HISTORY = 60;
+
+    const defaultsNode = document.getElementById('visual-editor-defaults');
+    const presetsNode = document.getElementById('visual-editor-presets');
+    const output = document.getElementById('editorExport') as HTMLTextAreaElement | null;
+    const status = document.getElementById('editorStatus');
+    const controls = [...document.querySelectorAll('[data-editor-path]')] as HTMLInputElement[];
+    const resetButton = document.querySelector('[data-editor-reset]');
+    const copyButton = document.querySelector('[data-editor-copy]');
+    const undoButton = document.querySelector('[data-editor-undo]');
+    const redoButton = document.querySelector('[data-editor-redo]');
+    const searchInput = document.querySelector('[data-editor-search]') as HTMLInputElement | null;
+    const draggableParts = [...document.querySelectorAll('[data-collab-drag], [data-editor-drag]')] as HTMLElement[];
+    const resizableParts = [...document.querySelectorAll('[data-editor-resize]')] as HTMLElement[];
+    const groupToggles = [...document.querySelectorAll('[data-toggle-group]')];
+    const navPills = [...document.querySelectorAll('[data-nav-target]')];
+    const presetButtons = [...document.querySelectorAll('[data-preset]')];
+    const groups = [...document.querySelectorAll('[data-group-id]')] as HTMLElement[];
+
+    // Helpers
+    const parseJson = (value: string | null, fallback: any) => {
+      try { return value ? JSON.parse(value) : fallback; } catch { return fallback; }
+    };
+    const clone = (v: any) => parseJson(JSON.stringify(v), {});
+    const isFiniteNumber = (v: any): v is number => typeof v === 'number' && Number.isFinite(v);
+
+    const mergeDeep = (base: any, extra: any): any => {
+      if (!extra || typeof extra !== 'object') return base;
+      Object.entries(extra).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          base[key] = value.map((item: any, index: number) => {
+            const source = Array.isArray(base[key]) && typeof base[key][index] === 'object' && base[key][index] !== null ? base[key][index] : {};
+            return typeof item === 'object' && item !== null ? mergeDeep(clone(source), item) : item;
+          });
+          return;
+        }
+        if (value && typeof value === 'object') {
+          const source = typeof base[key] === 'object' && base[key] !== null && !Array.isArray(base[key]) ? base[key] : {};
+          base[key] = mergeDeep(clone(source), value);
+          return;
+        }
+        base[key] = value;
+      });
+      return base;
+    };
+
+    const getPathValue = (obj: any, path: string) => path.split('.').reduce((r, p) => r?.[p], obj);
+    const setPathValue = (obj: any, path: string, value: any) => {
+      const parts = path.split('.');
+      let cursor = obj;
+      parts.forEach((part, i) => {
+        if (i === parts.length - 1) { cursor[part] = value; return; }
+        const next = parts[i + 1];
+        const nextIsIdx = /^\d+$/.test(next);
+        if (!(part in cursor) || cursor[part] === null) cursor[part] = nextIsIdx ? [] : {};
+        cursor = cursor[part];
+      });
+    };
+
+    const getNumericBounds = (path: string) => {
+      const control = controls.find((item) => item.dataset.editorPath === path && item.dataset.editorControlType === 'number');
+      const min = control?.min !== '' && control ? Number(control.min) : Number.NEGATIVE_INFINITY;
+      const max = control?.max !== '' && control ? Number(control.max) : Number.POSITIVE_INFINITY;
+      return {
+        min: Number.isFinite(min) ? min : Number.NEGATIVE_INFINITY,
+        max: Number.isFinite(max) ? max : Number.POSITIVE_INFINITY,
+      };
+    };
+
+    const clampNumericValue = (path: string, value: number) => {
+      const { min, max } = getNumericBounds(path);
+      return Math.min(max, Math.max(min, value));
+    };
+
+    // State
+    const defaults = parseJson(defaultsNode?.textContent ?? null, {});
+    const presets = parseJson(presetsNode?.textContent ?? null, {});
+    const storedState = parseJson(window.localStorage.getItem(STORAGE_KEY), null);
+    let state = mergeDeep(clone(defaults), storedState ?? {});
+
+    // History (undo/redo)
+    let history: string[] = [JSON.stringify(state)];
+    let historyIndex = 0;
+
+    const pushHistory = () => {
+      const snap = JSON.stringify(state);
+      if (history[historyIndex] === snap) return;
+      history = history.slice(0, historyIndex + 1);
+      history.push(snap);
+      if (history.length > MAX_HISTORY) history.shift();
+      historyIndex = history.length - 1;
+      updateUndoRedoState();
+    };
+
+    const updateUndoRedoState = () => {
+      if (undoButton instanceof HTMLButtonElement) undoButton.disabled = historyIndex <= 0;
+      if (redoButton instanceof HTMLButtonElement) redoButton.disabled = historyIndex >= history.length - 1;
+    };
+
+    const applyHistorySnapshot = (snap: string) => {
+      state = parseJson(snap, clone(defaults));
+      syncAllControls();
+      broadcastState();
+      writeOutput('Gecmis uyguland\u0131.');
+    };
+
+    // Sync
+    const syncPathControls = (path: string) => {
+      const val = getPathValue(state, path);
+      controls.filter(c => c.dataset.editorPath === path).forEach(c => { c.value = String(val); });
+    };
+
+    const writeOutput = (msg: string) => {
+      if (output) output.value = JSON.stringify(state, null, 2);
+      if (status) status.textContent = msg;
+    };
+
+    const broadcastState = () => {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      window.dispatchEvent(new CustomEvent('bader-visual-overrides-updated'));
+      (window as any)['__baderApplyVisualOverrides']?.();
+    };
+
+    const persistState = (msg: string) => { broadcastState(); writeOutput(msg); };
+
+    const syncAllControls = () => {
+      [...new Set(controls.map(c => c.dataset.editorPath).filter(Boolean))].forEach(p => syncPathControls(p!));
+      writeOutput('Canli onizleme hazir.');
+    };
+
+    // Controls binding
+    controls.forEach(control => {
+      control.addEventListener('input', () => {
+        const path = control.dataset.editorPath;
+        if (!path) return;
+        const ct = control.dataset.editorControlType || 'number';
+        const value = ct === 'number' ? Number(control.value) : control.value;
+        setPathValue(state, path, value);
+        syncPathControls(path);
+        const label = control.closest('.editor-field')?.querySelector('span')?.textContent?.trim() || 'Ayar';
+        persistState(`${label} guncellendi.`);
+        pushHistory();
+      });
+    });
+
+    // Accordion
+    const collapsedGroups = new Set<string>();
+
+    groupToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const id = (toggle as HTMLElement).dataset.toggleGroup;
+        if (!id) return;
+        const fields = document.querySelector(`[data-group-fields="${id}"]`) as HTMLElement | null;
+        const group = document.getElementById(`group-${id}`);
+        if (!fields || !group) return;
+        const isCollapsed = group.classList.toggle('is-collapsed');
+        if (isCollapsed) collapsedGroups.add(id); else collapsedGroups.delete(id);
+      });
+    });
+
+    // Search
+    searchInput?.addEventListener('input', () => {
+      const query = (searchInput.value || '').toLowerCase().trim();
+      groups.forEach(group => {
+        if (!query) {
+          group.style.display = '';
+          group.querySelectorAll('.editor-field').forEach(f => (f as HTMLElement).style.display = '');
+          return;
+        }
+        const fields = [...group.querySelectorAll('.editor-field')] as HTMLElement[];
+        let groupVisible = false;
+        const groupTitle = group.querySelector('h2')?.textContent?.toLowerCase() || '';
+        if (groupTitle.includes(query)) {
+          group.style.display = '';
+          fields.forEach(f => f.style.display = '');
+          groupVisible = true;
+        } else {
+          fields.forEach(f => {
+            const label = f.dataset.fieldLabel || '';
+            const visible = label.includes(query);
+            f.style.display = visible ? '' : 'none';
+            if (visible) groupVisible = true;
+          });
+          group.style.display = groupVisible ? '' : 'none';
+        }
+        if (groupVisible && query) group.classList.remove('is-collapsed');
+      });
+    });
+
+    // Nav pills
+    navPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const target = (pill as HTMLElement).dataset.navTarget;
+        if (!target) return;
+        const group = document.getElementById(`group-${target}`);
+        if (group) {
+          group.classList.remove('is-collapsed');
+          group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Presets
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = (btn as HTMLElement).dataset.preset;
+        if (!key) return;
+        if (key === 'default') {
+          state = clone(defaults);
+        } else {
+          const preset = presets[key];
+          if (preset) state = mergeDeep(clone(defaults), preset);
+        }
+        presetButtons.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        syncAllControls();
+        persistState(`"${btn.textContent?.trim()}" teması uygulandi.`);
+        pushHistory();
+      });
+    });
+
+    // Undo / Redo
+    undoButton?.addEventListener('click', () => {
+      if (historyIndex <= 0) return;
+      historyIndex--;
+      applyHistorySnapshot(history[historyIndex]);
+      updateUndoRedoState();
+    });
+
+    redoButton?.addEventListener('click', () => {
+      if (historyIndex >= history.length - 1) return;
+      historyIndex++;
+      applyHistorySnapshot(history[historyIndex]);
+      updateUndoRedoState();
+    });
+
+    // Reset
+    resetButton?.addEventListener('click', () => {
+      state = clone(defaults);
+      window.localStorage.removeItem(STORAGE_KEY);
+      syncAllControls();
+      broadcastState();
+      writeOutput('Varsayilan tasarima donuldu.');
+      presetButtons.forEach(b => b.classList.remove('is-active'));
+      presetButtons[0]?.classList.add('is-active');
+      pushHistory();
+    });
+
+    // Copy JSON
+    copyButton?.addEventListener('click', async () => {
+      if (!output) return;
+      try {
+        await navigator.clipboard.writeText(output.value);
+        writeOutput('JSON panoya kopyalandi.');
+      } catch {
+        output.focus();
+        output.select();
+        writeOutput('Kopyalama basarisiz, JSON secildi.');
+      }
+    });
+
+    // Direct manipulation on preview: drag and resize
+    let dragState: any = null;
+
+    const updateNumericPath = (path: string, value: number) => {
+      const next = clampNumericValue(path, value);
+      setPathValue(state, path, next);
+      syncPathControls(path);
+      return next;
+    };
+
+    const startEditorInteraction = (pe: PointerEvent, config: any) => {
+      dragState = {
+        ...config,
+        startX: pe.clientX,
+        startY: pe.clientY,
+      };
+      document.body.classList.add(config.mode === 'resize' ? 'is-resizing-editor' : 'is-dragging-editor');
+      if (status) status.textContent = config.startMessage ?? `${config.label} duzenleniyor...`;
+      window.addEventListener('pointermove', handleDragMove);
+      window.addEventListener('pointerup', stopDrag);
+    };
+
+    const handleDragMove = (e: PointerEvent) => {
+      if (!dragState) return;
+      dragState.onMove?.(e);
+      broadcastState();
+    };
+
+    const stopDrag = () => {
+      if (!dragState) return;
+      const label = dragState.label;
+      dragState = null;
+      document.body.classList.remove('is-dragging-editor', 'is-resizing-editor');
+      window.removeEventListener('pointermove', handleDragMove);
+      window.removeEventListener('pointerup', stopDrag);
+      writeOutput(`${label} guncellendi.`);
+      pushHistory();
+    };
+
+    draggableParts.forEach((part) => {
+      part.addEventListener('pointerdown', (e: Event) => {
+        const pe = e as PointerEvent;
+        if (!(part instanceof HTMLElement)) return;
+
+        const editorDrag = part.dataset.editorDrag;
+        const collabKind = part.dataset.collabDrag;
+
+        if (editorDrag === 'about-main' || editorDrag === 'about-accent') {
+          pe.preventDefault();
+          const stack = part.closest('.about-photo-stack') as HTMLElement | null;
+          if (!stack) return;
+          const stackRect = stack.getBoundingClientRect();
+          const isMain = editorDrag === 'about-main';
+          const pathX = isMain ? 'about.mainPhotoLeft' : 'about.accentPhotoRight';
+          const pathY = isMain ? 'about.mainPhotoTop' : 'about.accentPhotoBottom';
+          const baseX = Number(getPathValue(state, pathX) ?? 0);
+          const baseY = Number(getPathValue(state, pathY) ?? 0);
+          const factorX = isMain ? 1 : -1;
+          const factorY = isMain ? 1 : -1;
+
+          startEditorInteraction(pe, {
+            mode: 'drag',
+            label: isMain ? 'About ana fotograf' : 'About kucuk fotograf',
+            startMessage: `${isMain ? 'Ana fotograf' : 'Kucuk fotograf'} surukleniyor...`,
+            onMove: (moveEvent: PointerEvent) => {
+              const dxPercent = ((moveEvent.clientX - pe.clientX) / stackRect.width) * 100;
+              const dyPercent = ((moveEvent.clientY - pe.clientY) / stackRect.height) * 100;
+              const nx = updateNumericPath(pathX, Math.round((baseX + (dxPercent * factorX)) * 100) / 100);
+              const ny = updateNumericPath(pathY, Math.round((baseY + (dyPercent * factorY)) * 100) / 100);
+              if (status) status.textContent = `${isMain ? 'Ana fotograf' : 'Kucuk fotograf'} surukle... X ${nx.toFixed(1)}%, Y ${ny.toFixed(1)}%`;
+            },
+          });
+          return;
+        }
+
+        if (collabKind) {
+          const index = Number(part.dataset.collabIndex);
+          if (!Number.isFinite(index)) return;
+          pe.preventDefault();
+          const base = collabKind === 'blob' ? 'blobOffset' : 'imageOffset';
+          const xPath = `collaborations.items.${index}.design.${base}X`;
+          const yPath = `collaborations.items.${index}.design.${base}Y`;
+          const baseX = Number(getPathValue(state, xPath) ?? 0);
+          const baseY = Number(getPathValue(state, yPath) ?? 0);
+
+          startEditorInteraction(pe, {
+            mode: 'drag',
+            label: collabKind === 'blob' ? 'Blob katmani' : 'Fotograf',
+            startMessage: `${collabKind === 'blob' ? 'Blob katmani' : 'Fotograf'} surukleniyor...`,
+            onMove: (moveEvent: PointerEvent) => {
+              const nx = updateNumericPath(xPath, Math.round(baseX + (moveEvent.clientX - pe.clientX)));
+              const ny = updateNumericPath(yPath, Math.round(baseY + (moveEvent.clientY - pe.clientY)));
+              if (status) status.textContent = `${collabKind === 'blob' ? 'Blob katmani' : 'Fotograf'} surukle... X ${nx}, Y ${ny}`;
+            },
+          });
+        }
+      });
+    });
+
+    resizableParts.forEach((part) => {
+      part.addEventListener('pointerdown', (e: Event) => {
+        const pe = e as PointerEvent;
+        if (!(part instanceof HTMLElement)) return;
+        pe.preventDefault();
+        pe.stopPropagation();
+
+        const resizeKind = part.dataset.editorResize;
+        if (!resizeKind) return;
+
+        if (resizeKind === 'hero-panel') {
+          const path = 'hero.rightPanelWidth';
+          const base = Number(getPathValue(state, path) ?? 480);
+          startEditorInteraction(pe, {
+            mode: 'resize',
+            label: 'Hero paneli',
+            startMessage: 'Hero panel genisligi ayarlaniyor...',
+            onMove: (moveEvent: PointerEvent) => {
+              const next = updateNumericPath(path, Math.round(base + (moveEvent.clientX - pe.clientX)));
+              if (status) status.textContent = `Hero panel genisligi ${next}px`;
+            },
+          });
+          return;
+        }
+
+        if (resizeKind === 'blog-image-ratio') {
+          const path = 'cardStyles.blogImageRatio';
+          const base = Number(getPathValue(state, path) ?? 1.6);
+          startEditorInteraction(pe, {
+            mode: 'resize',
+            label: 'Blog gorseli',
+            startMessage: 'Blog gorsel orani ayarlaniyor...',
+            onMove: (moveEvent: PointerEvent) => {
+              const delta = (moveEvent.clientY - pe.clientY) / 180;
+              const next = updateNumericPath(path, Math.round((base - delta) * 100) / 100);
+              if (status) status.textContent = `Blog gorsel orani ${next.toFixed(2)}`;
+            },
+          });
+          return;
+        }
+
+        if (resizeKind === 'about-stack' || resizeKind === 'about-main' || resizeKind === 'about-accent') {
+          const stack = part.closest('.about-photo-stack') as HTMLElement | null;
+          if (!stack) return;
+          const stackRect = stack.getBoundingClientRect();
+
+          if (resizeKind === 'about-stack') {
+            const path = 'about.stackHeight';
+            const base = Number(getPathValue(state, path) ?? stackRect.height);
+            startEditorInteraction(pe, {
+              mode: 'resize',
+              label: 'About fotograf alani',
+              startMessage: 'Fotograf alani yuksekligi ayarlaniyor...',
+              onMove: (moveEvent: PointerEvent) => {
+                const next = updateNumericPath(path, Math.round(base + (moveEvent.clientY - pe.clientY)));
+                if (status) status.textContent = `Fotograf alani yuksekligi ${next}px`;
+              },
+            });
+            return;
+          }
+
+          const path = resizeKind === 'about-main' ? 'about.mainPhotoWidth' : 'about.accentPhotoWidth';
+          const base = Number(getPathValue(state, path) ?? 50);
+          startEditorInteraction(pe, {
+            mode: 'resize',
+            label: resizeKind === 'about-main' ? 'About ana fotograf' : 'About kucuk fotograf',
+            startMessage: 'Fotograf boyutu ayarlaniyor...',
+            onMove: (moveEvent: PointerEvent) => {
+              const dxPercent = ((moveEvent.clientX - pe.clientX) / stackRect.width) * 100;
+              const next = updateNumericPath(path, Math.round((base + dxPercent) * 100) / 100);
+              if (status) status.textContent = `Fotograf genisligi ${next.toFixed(1)}%`;
+            },
+          });
+          return;
+        }
+
+        if (resizeKind.startsWith('collab-')) {
+          const index = Number(part.dataset.collabIndex);
+          if (!Number.isFinite(index)) return;
+
+          const imagePath = `collaborations.items.${index}.design.imageWidth`;
+          const visualPath = `collaborations.items.${index}.design.visualHeight`;
+          const blobWidthPath = `collaborations.items.${index}.design.blobWidth`;
+          const blobHeightPath = `collaborations.items.${index}.design.blobHeight`;
+
+          if (resizeKind === 'collab-image') {
+            const base = Number(getPathValue(state, imagePath) ?? 188);
+            startEditorInteraction(pe, {
+              mode: 'resize',
+              label: 'Partner fotografi',
+              startMessage: 'Partner fotograf boyutu ayarlaniyor...',
+              onMove: (moveEvent: PointerEvent) => {
+                const next = updateNumericPath(imagePath, Math.round(base + (moveEvent.clientX - pe.clientX)));
+                if (status) status.textContent = `Partner fotograf genisligi ${next}px`;
+              },
+            });
+            return;
+          }
+
+          if (resizeKind === 'collab-visual') {
+            const base = Number(getPathValue(state, visualPath) ?? 220);
+            startEditorInteraction(pe, {
+              mode: 'resize',
+              label: 'Gorsel alan',
+              startMessage: 'Gorsel alan yuksekligi ayarlaniyor...',
+              onMove: (moveEvent: PointerEvent) => {
+                const next = updateNumericPath(visualPath, Math.round(base + (moveEvent.clientY - pe.clientY)));
+                if (status) status.textContent = `Gorsel alan yuksekligi ${next}px`;
+              },
+            });
+            return;
+          }
+
+          if (resizeKind === 'collab-blob') {
+            const baseW = Number(getPathValue(state, blobWidthPath) ?? 194);
+            const baseH = Number(getPathValue(state, blobHeightPath) ?? 224);
+            startEditorInteraction(pe, {
+              mode: 'resize',
+              label: 'Blob katmani',
+              startMessage: 'Blob boyutu ayarlaniyor...',
+              onMove: (moveEvent: PointerEvent) => {
+                const nextW = updateNumericPath(blobWidthPath, Math.round(baseW + (moveEvent.clientX - pe.clientX)));
+                const nextH = updateNumericPath(blobHeightPath, Math.round(baseH + (moveEvent.clientY - pe.clientY)));
+                if (status) status.textContent = `Blob boyutu ${nextW}px × ${nextH}px`;
+              },
+            });
+          }
+        }
+
+        if (resizeKind === 'event-card-height') {
+          const card = part.closest('.event-card') as HTMLElement | null;
+          const path = 'events.cardMinHeight';
+          const base = Number(getPathValue(state, path) ?? Math.round(card?.getBoundingClientRect().height ?? 430));
+          startEditorInteraction(pe, {
+            mode: 'resize',
+            label: 'Etkinlik karti',
+            startMessage: 'Etkinlik karti yuksekligi ayarlaniyor...',
+            onMove: (moveEvent: PointerEvent) => {
+              const next = updateNumericPath(path, Math.round(base + (moveEvent.clientY - pe.clientY)));
+              if (status) status.textContent = `Etkinlik karti min yuksekligi ${next}px`;
+            },
+          });
+          return;
+        }
+
+        if (resizeKind === 'contact-form-height') {
+          const form = part.closest('.contact-form-wrapper') as HTMLElement | null;
+          const path = 'contact.formMinHeight';
+          const base = Number(getPathValue(state, path) ?? Math.round(form?.getBoundingClientRect().height ?? 560));
+          startEditorInteraction(pe, {
+            mode: 'resize',
+            label: 'Iletisim formu',
+            startMessage: 'Iletisim form yuksekligi ayarlaniyor...',
+            onMove: (moveEvent: PointerEvent) => {
+              const next = updateNumericPath(path, Math.round(base + (moveEvent.clientY - pe.clientY)));
+              if (status) status.textContent = `Iletisim formu min yuksekligi ${next}px`;
+            },
+          });
+          return;
+        }
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        (undoButton as HTMLElement)?.click();
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        (redoButton as HTMLElement)?.click();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        searchInput?.focus();
+      }
+    });
+
+    // Init
+    syncAllControls();
+    broadcastState();
+    updateUndoRedoState();
+
+    if (storedState) writeOutput('Onceki yerel ayarlar geri yuklendi.');
+  </script>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedBlogPosts } from '../../lib/content';
+import { formatDateLong } from '../../lib/format';
+
+const posts = await getPublishedBlogPosts();
+---
+
+<BaseLayout
+  title="Blog | Bader Beyler"
+  description="Bader Beyler blog yazıları: nutrigenetik, yaşam tarzı, bütünsel sağlık ve eğitim içerikleri."
+>
+  <main class="content-page">
+    <div class="content-shell">
+      <a class="content-back" href="/">← Anasayfaya dön</a>
+      <header class="content-header">
+        <p class="section-tag">Blog</p>
+        <h1 class="section-title">Yayınlanan <em>yazılar</em></h1>
+        <p class="content-lead">
+          Blog içerikleri mevcut markdown yapısıyla çalışmaya devam eder; Sanity aktif olduğunda aynı liste doğrudan panel verileriyle beslenir.
+        </p>
+      </header>
+
+      <div class="content-grid">
+        {
+          posts.map((post) => (
+            <a class="blog-card" href={`/blog/${post.slug}/`}>
+              <div class="blog-card-img">
+                <img
+                  src={post.data.featuredImage}
+                  alt={post.data.featuredImageAlt}
+                  loading="lazy"
+                />
+              </div>
+              <div class="blog-card-body">
+                <div class="blog-card-tag">{post.data.category}</div>
+                <h3>{post.data.title}</h3>
+                <p>{post.data.excerpt}</p>
+                <div class="blog-card-date">{formatDateLong(post.data.date)}</div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </main>
+</BaseLayout>

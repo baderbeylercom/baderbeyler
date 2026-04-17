@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteScripts from '../components/SiteScripts.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import Footer from '../components/sections/Footer.astro';
+import { getSiteData } from '../lib/site-data';
+
+const { mediaPageContent, siteConfig } = await getSiteData();
+---
+
+<BaseLayout
+  title={`Bilim Dünyasında Sesimiz | ${siteConfig.brandName}`}
+  description="Söyleşi, etkinlik duyurusu, yayın ve görünürlük içeriklerinin ayrı sayfada toplanacağı alan."
+>
+  <Navbar />
+
+  <main class="page-shell">
+    <section class="section subpage-hero">
+      <div class="reveal">
+        <p class="section-tag">{mediaPageContent.eyebrow}</p>
+        <h1 class="section-title" set:html={mediaPageContent.title}></h1>
+        <p class="page-intro">{mediaPageContent.description}</p>
+        <div class="page-actions">
+          <a href="/#contact" class="page-action-primary">İletişime Geç</a>
+          <a href="/#blog" class="page-action-secondary">Bloga Dön</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section media-highlights">
+      <div class="media-grid">
+        {
+          mediaPageContent.highlights.map((item, index) => (
+            <article class="media-card reveal" style={`transition-delay:.${index + 1}s`}>
+              <p class="section-tag">Hazır Modül</p>
+              <h2>{item.title}</h2>
+              <p>{item.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <SiteScripts />
+</BaseLayout>

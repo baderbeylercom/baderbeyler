@@ -1,0 +1,28 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F6F2EA"/>
+  <rect x="40" y="40" width="1120" height="550" rx="32" fill="url(#bg)"/>
+  <path d="M168 154C168 154 275 72 451 132C627 192 626 390 819 394C1012 398 1032 219 1032 219V490H168V154Z" fill="url(#shape)" opacity="0.36"/>
+  <circle cx="907" cy="158" r="92" fill="#C28A35" opacity="0.18"/>
+  <circle cx="254" cy="124" r="128" fill="#3A506A" opacity="0.12"/>
+  <text x="110" y="220" fill="#7F4728" font-family="Cormorant Garamond, serif" font-size="34" letter-spacing="7">NUTRIGENETIK · BUTUNSEL SAGLIK</text>
+  <text x="110" y="332" fill="#161313" font-family="Playfair Display, serif" font-size="84" font-weight="700">Bader Beyler</text>
+  <text x="110" y="420" fill="#26201D" font-family="DM Sans, sans-serif" font-size="30">
+    Kisisel marka ve uzmanlik sitesi
+  </text>
+  <text x="110" y="468" fill="#26201D" font-family="DM Sans, sans-serif" font-size="30">
+    bilimsel, premium ve CMS hazir altyapi
+  </text>
+  <rect x="110" y="514" width="258" height="58" rx="29" fill="#161313"/>
+  <text x="148" y="551" fill="#F6F2EA" font-family="DM Sans, sans-serif" font-size="22" font-weight="700">baderbeyler.com</text>
+  <defs>
+    <linearGradient id="bg" x1="88" y1="88" x2="1038" y2="576" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EDF4FC"/>
+      <stop offset="0.5" stop-color="#F5F1EA"/>
+      <stop offset="1" stop-color="#EEE5D8"/>
+    </linearGradient>
+    <linearGradient id="shape" x1="168" y1="132" x2="1032" y2="490" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A66C3D"/>
+      <stop offset="1" stop-color="#3A506A"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,55 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/sections/Navbar.astro';
+import Footer from '../../components/sections/Footer.astro';
+import { formatDateLong } from '../../lib/format';
+import {
+  getAllBlogPostSlugs,
+  getBlogPostBySlug,
+  renderPortableTextHtml,
+  type BlogPostEntry,
+} from '../../lib/content';
+
+export async function getStaticPaths() {
+  const slugs = await getAllBlogPostSlugs();
+  return slugs.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const post = (await getBlogPostBySlug(Astro.params.slug ?? '')) as BlogPostEntry;
+const localRendered = post.source === 'local' && post.localEntry ? await render(post.localEntry) : null;
+const Content = localRendered?.Content;
+const portableTextHtml = post.source === 'sanity' ? renderPortableTextHtml(post.body) : '';
+const title = post.data.seoTitle ?? `${post.data.title} | Bader Beyler`;
+const description = post.data.seoDescription ?? post.data.description;
+---
+
+<BaseLayout title={title} description={description}>
+  <Navbar />
+  <main class="content-page">
+    <article class="content-shell content-article">
+      <a class="content-back" href="/#blog">← Blog'a Dön</a>
+
+      <header class="content-header">
+        <div class="content-meta">
+          <span class="blog-card-tag">{post.data.category}</span>
+          <span>{formatDateLong(post.data.date)}</span>
+        </div>
+        <h1 class="section-title">{post.data.title}</h1>
+        <p class="content-lead">{post.data.description}</p>
+        <img
+          class="content-cover"
+          src={post.data.featuredImage}
+          alt={post.data.featuredImageAlt}
+        />
+      </header>
+
+      <div class="content-prose">
+        {Content ? <Content /> : <Fragment set:html={portableTextHtml} />}
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

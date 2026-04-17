@@ -1,0 +1,568 @@
+<script>
+  const STORAGE_KEY = 'bader-visual-overrides-v1';
+  const ROOT_PROPS = [
+    '--site-base-size',
+    '--site-title-scale',
+    '--site-display-scale',
+    '--site-body-bg',
+    '--clr-cream',
+    '--clr-warm',
+    '--clr-sand',
+    '--clr-caramel',
+    '--clr-terracotta',
+    '--clr-deep',
+    '--clr-charcoal',
+    '--clr-sage',
+    '--clr-gold',
+    '--clr-blush',
+    '--clr-white',
+    '--clr-steel',
+    '--clr-navy',
+    '--section-about-bg',
+    '--section-services-bg',
+    '--section-collab-bg',
+    '--section-events-bg',
+    '--section-blog-bg',
+    '--section-contact-bg',
+    '--section-newsletter-bg-start',
+    '--section-newsletter-bg-end',
+    '--section-footer-bg',
+    // Text colors
+    '--text-hero-title',
+    '--text-hero-body',
+    '--text-hero-panel-title',
+    '--text-hero-panel-body',
+    '--text-about-title',
+    '--text-about-body',
+    '--text-services-title',
+    '--text-services-card-title',
+    '--text-services-card-body',
+    '--text-collab-title',
+    '--text-collab-body',
+    '--text-events-title',
+    '--text-events-card-title',
+    '--text-events-card-body',
+    '--text-blog-title',
+    '--text-blog-card-title',
+    '--text-blog-card-body',
+    '--text-contact-title',
+    '--text-contact-body',
+    '--text-newsletter-title',
+    '--text-newsletter-body',
+    // Font weights
+    '--fw-section-title',
+    '--fw-card-title',
+    '--fw-body-text',
+    // Typography
+    '--body-line-height',
+    '--heading-letter-spacing',
+    // Card styles
+    '--services-card-radius',
+    '--services-card-shadow',
+    '--blog-card-radius',
+    '--blog-card-shadow',
+    '--blog-card-image-ratio',
+    '--event-card-radius',
+    '--event-card-shadow',
+    '--collab-card-radius',
+    '--collab-card-shadow',
+    '--contact-form-radius',
+    // Surface colors
+    '--hero-panel-start',
+    '--hero-panel-end',
+    '--services-card-start',
+    '--services-card-end',
+    '--collab-card-start',
+    '--collab-card-end',
+    '--event-card-start',
+    '--event-card-end',
+    '--blog-card-bg',
+    '--contact-form-bg',
+    // Image filters
+    '--hero-person-filter',
+    '--about-main-radius',
+    '--about-main-filter',
+    '--about-accent-radius',
+    '--about-accent-filter',
+    '--story-img-radius',
+    '--story-img-filter',
+  ];
+  const NAV_PROPS = ['--nav-brand-size', '--nav-link-size', '--nav-bg-opacity', '--nav-padding-y', '--nav-blur', '--nav-radius'];
+  const HERO_PROPS = [
+    '--hero-right-panel-width',
+    '--hero-right-title-size',
+    '--hero-right-body-size',
+  ];
+  const COLLAB_SECTION_PROPS = [
+    '--collab-grid-gap',
+    '--collab-grid-margin-top',
+    '--collab-item-padding-top',
+    '--collab-item-padding-bottom',
+  ];
+  const COLLAB_CARD_PROPS = [
+    '--collab-visual-height',
+    '--collab-image-width',
+    '--collab-image-scale',
+    '--collab-image-offset-x',
+    '--collab-image-offset-y',
+    '--collab-blob-fill',
+    '--collab-blob-gradient-fill',
+    '--collab-blob-shadow-fill',
+    '--collab-blob-width',
+    '--collab-blob-height',
+    '--collab-blob-offset-x',
+    '--collab-blob-offset-y',
+    '--collab-blob-radius',
+    '--collab-blob-blur',
+    '--collab-blob-shadow-blur',
+    '--collab-copy-offset-y',
+    '--collab-brandline-size',
+    '--collab-partner-size',
+    '--collab-lead-size',
+  ];
+  const ABOUT_PROPS = ['--about-title-size', '--about-body-size', '--about-stat-number-size', '--about-stat-label-size', '--about-stack-height', '--about-main-width', '--about-main-left', '--about-main-top', '--about-accent-width', '--about-accent-right', '--about-accent-bottom'];
+  const SERVICES_PROPS = ['--services-title-size', '--services-card-title-size', '--services-card-body-size', '--services-grid-gap'];
+  const MOTION_STORY_PROPS = ['--story-title-size', '--story-body-size', '--story-padding-y', '--story-padding-bottom'];
+  const EVENTS_PROPS = ['--events-title-size', '--events-card-title-size', '--events-list-gap', '--event-card-min-height'];
+  const BLOG_PROPS = ['--blog-title-size', '--blog-card-title-size', '--blog-grid-gap'];
+  const CONTACT_PROPS = ['--contact-title-size', '--contact-body-size', '--contact-form-min-height'];
+  const NEWSLETTER_PROPS = ['--newsletter-title-size', '--newsletter-body-size'];
+  const FOOTER_PROPS = ['--footer-font-size', '--footer-link-size'];
+
+  const isFiniteNumber = (value) =>
+    typeof value === 'number' && Number.isFinite(value);
+
+  const readOverrides = () => {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (error) {
+      console.warn('Visual overrides okunamadi.', error);
+      return null;
+    }
+  };
+
+  const hexToRgba = (hex, alpha = 1) => {
+    const normalized = String(hex || '#e9ddd0').replace('#', '');
+    const value =
+      normalized.length === 3
+        ? normalized
+            .split('')
+            .map((char) => `${char}${char}`)
+            .join('')
+        : normalized.padEnd(6, '0').slice(0, 6);
+    const int = Number.parseInt(value, 16);
+    const red = (int >> 16) & 255;
+    const green = (int >> 8) & 255;
+    const blue = int & 255;
+    const safeAlpha = Math.max(0, Math.min(alpha, 1));
+    return `rgba(${red}, ${green}, ${blue}, ${safeAlpha})`;
+  };
+
+  const setVar = (element, property, value) => {
+    if (!(element instanceof HTMLElement)) return;
+    if (value === undefined || value === null || value === '') return;
+    element.style.setProperty(property, String(value));
+  };
+
+  const removeVars = (element, properties) => {
+    if (!(element instanceof HTMLElement)) return;
+    properties.forEach((property) => {
+      element.style.removeProperty(property);
+    });
+  };
+
+  const clearVisualOverrides = () => {
+    removeVars(document.documentElement, ROOT_PROPS);
+    removeVars(document.getElementById('nav'), NAV_PROPS);
+    removeVars(document.querySelector('.hero-right-panel'), HERO_PROPS);
+    removeVars(document.getElementById('collaborations'), COLLAB_SECTION_PROPS);
+    [...document.querySelectorAll('[data-collab-index]')].forEach((card) => {
+      removeVars(card, COLLAB_CARD_PROPS);
+    });
+    removeVars(document.getElementById('about'), ABOUT_PROPS);
+    removeVars(document.getElementById('services'), SERVICES_PROPS);
+    removeVars(document.getElementById('storyOne'), MOTION_STORY_PROPS);
+    removeVars(document.getElementById('storyTwo'), MOTION_STORY_PROPS);
+    removeVars(document.getElementById('events'), EVENTS_PROPS);
+    removeVars(document.getElementById('blog'), BLOG_PROPS);
+    removeVars(document.getElementById('contact'), CONTACT_PROPS);
+    removeVars(document.getElementById('newsletter'), NEWSLETTER_PROPS);
+    removeVars(document.querySelector('.footer'), FOOTER_PROPS);
+  };
+
+  const buildFilter = (brightness, contrast, saturate) => {
+    const parts = [];
+    if (isFiniteNumber(brightness) && brightness !== 1) parts.push(`brightness(${brightness})`);
+    if (isFiniteNumber(contrast) && contrast !== 1) parts.push(`contrast(${contrast})`);
+    if (isFiniteNumber(saturate) && saturate !== 1) parts.push(`saturate(${saturate})`);
+    return parts.length > 0 ? parts.join(' ') : null;
+  };
+
+  const applyRootTheme = (overrides) => {
+    const root = document.documentElement;
+
+    if (isFiniteNumber(overrides.site?.baseFontSize)) {
+      setVar(root, '--site-base-size', `${overrides.site.baseFontSize}px`);
+    }
+
+    if (isFiniteNumber(overrides.site?.titleScale)) {
+      setVar(root, '--site-title-scale', overrides.site.titleScale);
+    }
+
+    if (isFiniteNumber(overrides.site?.displayScale)) {
+      setVar(root, '--site-display-scale', overrides.site.displayScale);
+    }
+
+    // Typography
+    if (isFiniteNumber(overrides.typography?.bodyLineHeight)) {
+      setVar(root, '--body-line-height', overrides.typography.bodyLineHeight);
+    }
+    if (isFiniteNumber(overrides.typography?.headingLetterSpacing)) {
+      setVar(root, '--heading-letter-spacing', `${overrides.typography.headingLetterSpacing}em`);
+    }
+
+    // Font weights
+    if (isFiniteNumber(overrides.fontWeights?.sectionTitle)) {
+      setVar(root, '--fw-section-title', overrides.fontWeights.sectionTitle);
+    }
+    if (isFiniteNumber(overrides.fontWeights?.cardTitle)) {
+      setVar(root, '--fw-card-title', overrides.fontWeights.cardTitle);
+    }
+    if (isFiniteNumber(overrides.fontWeights?.bodyText)) {
+      setVar(root, '--fw-body-text', overrides.fontWeights.bodyText);
+    }
+
+    // Palette
+    const colorMap = {
+      cream: '--clr-cream',
+      warm: '--clr-warm',
+      sand: '--clr-sand',
+      caramel: '--clr-caramel',
+      terracotta: '--clr-terracotta',
+      deep: '--clr-deep',
+      charcoal: '--clr-charcoal',
+      sage: '--clr-sage',
+      gold: '--clr-gold',
+      blush: '--clr-blush',
+      white: '--clr-white',
+      steel: '--clr-steel',
+      navy: '--clr-navy',
+    };
+
+    Object.entries(colorMap).forEach(([key, cssVar]) => {
+      const value = overrides.palette?.[key];
+      if (typeof value === 'string' && value.trim()) {
+        setVar(root, cssVar, value);
+      }
+    });
+
+    // Section backgrounds
+    const sectionMap = {
+      bodyBackground: '--site-body-bg',
+      aboutBackground: '--section-about-bg',
+      servicesBackground: '--section-services-bg',
+      collaborationsBackground: '--section-collab-bg',
+      eventsBackground: '--section-events-bg',
+      blogBackground: '--section-blog-bg',
+      contactBackground: '--section-contact-bg',
+      newsletterStart: '--section-newsletter-bg-start',
+      newsletterEnd: '--section-newsletter-bg-end',
+      footerBackground: '--section-footer-bg',
+    };
+
+    Object.entries(sectionMap).forEach(([key, cssVar]) => {
+      const value = overrides.sections?.[key];
+      if (typeof value === 'string' && value.trim()) {
+        setVar(root, cssVar, value);
+      }
+    });
+
+    // Text colors
+    const textColorMap = {
+      heroTitle: '--text-hero-title',
+      heroBody: '--text-hero-body',
+      heroPanelTitle: '--text-hero-panel-title',
+      heroPanelBody: '--text-hero-panel-body',
+      aboutTitle: '--text-about-title',
+      aboutBody: '--text-about-body',
+      servicesTitle: '--text-services-title',
+      servicesCardTitle: '--text-services-card-title',
+      servicesCardBody: '--text-services-card-body',
+      collabTitle: '--text-collab-title',
+      collabBody: '--text-collab-body',
+      eventsTitle: '--text-events-title',
+      eventsCardTitle: '--text-events-card-title',
+      eventsCardBody: '--text-events-card-body',
+      blogTitle: '--text-blog-title',
+      blogCardTitle: '--text-blog-card-title',
+      blogCardBody: '--text-blog-card-body',
+      contactTitle: '--text-contact-title',
+      contactBody: '--text-contact-body',
+      newsletterTitle: '--text-newsletter-title',
+      newsletterBody: '--text-newsletter-body',
+    };
+
+    Object.entries(textColorMap).forEach(([key, cssVar]) => {
+      const value = overrides.textColors?.[key];
+      if (typeof value === 'string' && value.trim()) {
+        setVar(root, cssVar, value);
+      }
+    });
+
+    // Card styles
+    const cs = overrides.cardStyles;
+    if (cs) {
+      if (isFiniteNumber(cs.servicesRadius)) setVar(root, '--services-card-radius', `${cs.servicesRadius}px`);
+      if (isFiniteNumber(cs.servicesShadow)) {
+        setVar(root, '--services-card-shadow', `inset 0 1px 0 rgba(255,255,255,0.55), 0 12px 34px rgba(22,19,19,${cs.servicesShadow})`);
+      }
+      if (isFiniteNumber(cs.blogRadius)) setVar(root, '--blog-card-radius', `${cs.blogRadius}px`);
+      if (isFiniteNumber(cs.blogShadow)) setVar(root, '--blog-card-shadow', `0 20px 50px rgba(44,24,16,${cs.blogShadow})`);
+      if (isFiniteNumber(cs.blogImageRatio)) setVar(root, '--blog-card-image-ratio', cs.blogImageRatio);
+      if (isFiniteNumber(cs.eventRadius)) setVar(root, '--event-card-radius', `${cs.eventRadius}px`);
+      if (isFiniteNumber(cs.eventShadow)) setVar(root, '--event-card-shadow', `0 22px 48px rgba(44,24,16,${cs.eventShadow})`);
+      if (isFiniteNumber(cs.collabRadius)) setVar(root, '--collab-card-radius', `${cs.collabRadius}px`);
+      if (isFiniteNumber(cs.collabShadow)) setVar(root, '--collab-card-shadow', `0 22px 54px rgba(44,24,16,${cs.collabShadow})`);
+      if (isFiniteNumber(cs.contactFormRadius)) setVar(root, '--contact-form-radius', `${cs.contactFormRadius}px`);
+    }
+
+    const surfaceColorMap = {
+      heroPanelStart: '--hero-panel-start',
+      heroPanelEnd: '--hero-panel-end',
+      servicesCardStart: '--services-card-start',
+      servicesCardEnd: '--services-card-end',
+      collaborationsCardStart: '--collab-card-start',
+      collaborationsCardEnd: '--collab-card-end',
+      eventsCardStart: '--event-card-start',
+      eventsCardEnd: '--event-card-end',
+      blogCardBackground: '--blog-card-bg',
+      contactFormBackground: '--contact-form-bg',
+    };
+
+    Object.entries(surfaceColorMap).forEach(([key, cssVar]) => {
+      const value = overrides.surfaceColors?.[key];
+      if (typeof value === 'string' && value.trim()) {
+        setVar(root, cssVar, value);
+      }
+    });
+
+    // Image filters
+    const img = overrides.imageFilters;
+    if (img) {
+      const heroFilter = buildFilter(img.heroBrightness, img.heroContrast, img.heroSaturate);
+      if (heroFilter) setVar(root, '--hero-person-filter', heroFilter);
+
+      if (isFiniteNumber(img.aboutMainRadius)) setVar(root, '--about-main-radius', `${img.aboutMainRadius}px`);
+      const aboutMainFilter = buildFilter(img.aboutMainBrightness, img.aboutMainContrast, img.aboutMainSaturate);
+      if (aboutMainFilter) setVar(root, '--about-main-filter', aboutMainFilter);
+
+      if (isFiniteNumber(img.aboutAccentRadius)) setVar(root, '--about-accent-radius', `${img.aboutAccentRadius}px`);
+      const aboutAccentFilter = buildFilter(img.aboutAccentBrightness, 1, 1);
+      if (aboutAccentFilter) setVar(root, '--about-accent-filter', aboutAccentFilter);
+
+      if (isFiniteNumber(img.storyRadius)) setVar(root, '--story-img-radius', `${img.storyRadius}px`);
+      const storyFilter = buildFilter(img.storyBrightness, 1, img.storySaturate);
+      if (storyFilter) setVar(root, '--story-img-filter', storyFilter);
+    }
+  };
+
+  const applyVisualOverrides = () => {
+    clearVisualOverrides();
+
+    const overrides = readOverrides();
+    if (!overrides) return;
+
+    applyRootTheme(overrides);
+
+    const nav = document.getElementById('nav');
+    if (nav) {
+      if (isFiniteNumber(overrides.nav?.brandFontSize)) {
+        setVar(nav, '--nav-brand-size', `${overrides.nav.brandFontSize}rem`);
+      }
+      if (isFiniteNumber(overrides.nav?.linkFontSize)) {
+        setVar(nav, '--nav-link-size', `${overrides.nav.linkFontSize}rem`);
+      }
+      if (isFiniteNumber(overrides.nav?.bgOpacity)) {
+        setVar(nav, '--nav-bg-opacity', overrides.nav.bgOpacity);
+      }
+      if (isFiniteNumber(overrides.nav?.paddingY)) {
+        setVar(nav, '--nav-padding-y', `${overrides.nav.paddingY}rem`);
+      }
+      if (isFiniteNumber(overrides.nav?.blur)) {
+        setVar(nav, '--nav-blur', `${overrides.nav.blur}px`);
+      }
+      if (isFiniteNumber(overrides.nav?.radius)) {
+        setVar(nav, '--nav-radius', `${overrides.nav.radius}px`);
+      }
+    }
+
+    const heroPanel = document.querySelector('.hero-right-panel');
+    if (heroPanel instanceof HTMLElement) {
+      if (isFiniteNumber(overrides.hero?.rightPanelWidth)) {
+        setVar(heroPanel, '--hero-right-panel-width', `${overrides.hero.rightPanelWidth}px`);
+      }
+      if (isFiniteNumber(overrides.hero?.rightTitleSize)) {
+        setVar(heroPanel, '--hero-right-title-size', `${overrides.hero.rightTitleSize}rem`);
+      }
+      if (isFiniteNumber(overrides.hero?.rightBodySize)) {
+        setVar(heroPanel, '--hero-right-body-size', `${overrides.hero.rightBodySize}rem`);
+      }
+    }
+
+    const collabSection = document.getElementById('collaborations');
+    if (collabSection instanceof HTMLElement) {
+      if (isFiniteNumber(overrides.collaborations?.appearance?.gridGap)) {
+        setVar(collabSection, '--collab-grid-gap', `${overrides.collaborations.appearance.gridGap}rem`);
+      }
+      if (isFiniteNumber(overrides.collaborations?.appearance?.gridMarginTop)) {
+        setVar(collabSection, '--collab-grid-margin-top', `${overrides.collaborations.appearance.gridMarginTop}rem`);
+      }
+      if (isFiniteNumber(overrides.collaborations?.appearance?.itemPaddingTop)) {
+        setVar(collabSection, '--collab-item-padding-top', `${overrides.collaborations.appearance.itemPaddingTop}rem`);
+      }
+      if (isFiniteNumber(overrides.collaborations?.appearance?.itemPaddingBottom)) {
+        setVar(collabSection, '--collab-item-padding-bottom', `${overrides.collaborations.appearance.itemPaddingBottom}rem`);
+      }
+    }
+
+    // About
+    const aboutSection = document.getElementById('about');
+    if (aboutSection instanceof HTMLElement) {
+      const ap = overrides.about;
+      if (isFiniteNumber(ap?.titleSize)) setVar(aboutSection, '--about-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.bodySize)) setVar(aboutSection, '--about-body-size', `${ap.bodySize}rem`);
+      if (isFiniteNumber(ap?.statNumberSize)) setVar(aboutSection, '--about-stat-number-size', `${ap.statNumberSize}rem`);
+      if (isFiniteNumber(ap?.statLabelSize)) setVar(aboutSection, '--about-stat-label-size', `${ap.statLabelSize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(aboutSection, '--section-padding-y', `${ap.paddingY}rem`);
+      if (isFiniteNumber(ap?.stackHeight)) setVar(aboutSection, '--about-stack-height', `${ap.stackHeight}px`);
+      if (isFiniteNumber(ap?.mainPhotoWidth)) setVar(aboutSection, '--about-main-width', `${ap.mainPhotoWidth}%`);
+      if (isFiniteNumber(ap?.mainPhotoLeft)) setVar(aboutSection, '--about-main-left', `${ap.mainPhotoLeft}%`);
+      if (isFiniteNumber(ap?.mainPhotoTop)) setVar(aboutSection, '--about-main-top', `${ap.mainPhotoTop}%`);
+      if (isFiniteNumber(ap?.accentPhotoWidth)) setVar(aboutSection, '--about-accent-width', `${ap.accentPhotoWidth}%`);
+      if (isFiniteNumber(ap?.accentPhotoRight)) setVar(aboutSection, '--about-accent-right', `${ap.accentPhotoRight}%`);
+      if (isFiniteNumber(ap?.accentPhotoBottom)) setVar(aboutSection, '--about-accent-bottom', `${ap.accentPhotoBottom}%`);
+    }
+
+    // Services
+    const servicesSection = document.getElementById('services');
+    if (servicesSection instanceof HTMLElement) {
+      const ap = overrides.services;
+      if (isFiniteNumber(ap?.titleSize)) setVar(servicesSection, '--services-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.cardTitleSize)) setVar(servicesSection, '--services-card-title-size', `${ap.cardTitleSize}rem`);
+      if (isFiniteNumber(ap?.cardBodySize)) setVar(servicesSection, '--services-card-body-size', `${ap.cardBodySize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(servicesSection, '--section-padding-y', `${ap.paddingY}rem`);
+      if (isFiniteNumber(ap?.gridGap)) setVar(servicesSection, '--services-grid-gap', `${ap.gridGap}rem`);
+    }
+
+    // Motion Stories
+    ['storyOne', 'storyTwo'].forEach((id, index) => {
+      const section = document.getElementById(id);
+      if (!(section instanceof HTMLElement)) return;
+      const ap = overrides.motionStories?.[index];
+      if (isFiniteNumber(ap?.titleSize)) setVar(section, '--story-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.bodySize)) setVar(section, '--story-body-size', `${ap.bodySize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(section, '--story-padding-y', `${ap.paddingY}rem`);
+      if (isFiniteNumber(ap?.paddingBottom)) setVar(section, '--story-padding-bottom', `${ap.paddingBottom}rem`);
+    });
+
+    // Events
+    const eventsSection = document.getElementById('events');
+    if (eventsSection instanceof HTMLElement) {
+      const ap = overrides.events;
+      if (isFiniteNumber(ap?.titleSize)) setVar(eventsSection, '--events-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.cardTitleSize)) setVar(eventsSection, '--events-card-title-size', `${ap.cardTitleSize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(eventsSection, '--section-padding-y', `${ap.paddingY}rem`);
+      if (isFiniteNumber(ap?.listMarginTop)) setVar(eventsSection, '--events-list-gap', `${ap.listMarginTop}rem`);
+      if (isFiniteNumber(ap?.cardMinHeight)) setVar(eventsSection, '--event-card-min-height', `${ap.cardMinHeight}px`);
+    }
+
+    // Blog
+    const blogSection = document.getElementById('blog');
+    if (blogSection instanceof HTMLElement) {
+      const ap = overrides.blog;
+      if (isFiniteNumber(ap?.titleSize)) setVar(blogSection, '--blog-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.cardTitleSize)) setVar(blogSection, '--blog-card-title-size', `${ap.cardTitleSize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(blogSection, '--section-padding-y', `${ap.paddingY}rem`);
+      if (isFiniteNumber(ap?.gridGap)) setVar(blogSection, '--blog-grid-gap', `${ap.gridGap}rem`);
+    }
+
+    // Contact
+    const contactSection = document.getElementById('contact');
+    if (contactSection instanceof HTMLElement) {
+      const ap = overrides.contact;
+      if (isFiniteNumber(ap?.titleSize)) setVar(contactSection, '--contact-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.bodySize)) setVar(contactSection, '--contact-body-size', `${ap.bodySize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(contactSection, '--section-padding-y', `${ap.paddingY}rem`);
+      if (isFiniteNumber(ap?.formMinHeight)) setVar(contactSection, '--contact-form-min-height', `${ap.formMinHeight}px`);
+    }
+
+    // Newsletter
+    const newsletterSection = document.getElementById('newsletter');
+    if (newsletterSection instanceof HTMLElement) {
+      const ap = overrides.newsletter;
+      if (isFiniteNumber(ap?.titleSize)) setVar(newsletterSection, '--newsletter-title-size', `${ap.titleSize}rem`);
+      if (isFiniteNumber(ap?.bodySize)) setVar(newsletterSection, '--newsletter-body-size', `${ap.bodySize}rem`);
+      if (isFiniteNumber(ap?.paddingY)) setVar(newsletterSection, '--section-padding-y', `${ap.paddingY}rem`);
+    }
+
+    // Footer
+    const footerEl = document.querySelector('.footer');
+    if (footerEl instanceof HTMLElement) {
+      const ap = overrides.footer;
+      if (isFiniteNumber(ap?.fontSize)) setVar(footerEl, '--footer-font-size', `${ap.fontSize}rem`);
+      if (isFiniteNumber(ap?.linkSize)) setVar(footerEl, '--footer-link-size', `${ap.linkSize}rem`);
+    }
+
+    // Collaboration cards
+    const collabCards = [...document.querySelectorAll('[data-collab-index]')];
+    collabCards.forEach((card) => {
+      if (!(card instanceof HTMLElement)) return;
+      const index = Number(card.dataset.collabIndex);
+      const design = overrides.collaborations?.items?.[index]?.design;
+      if (!design) return;
+
+      if (isFiniteNumber(design.visualHeight)) setVar(card, '--collab-visual-height', `${design.visualHeight}px`);
+      if (isFiniteNumber(design.imageWidth)) setVar(card, '--collab-image-width', `${design.imageWidth}px`);
+      if (isFiniteNumber(design.imageScale)) setVar(card, '--collab-image-scale', design.imageScale);
+      if (isFiniteNumber(design.imageOffsetX)) setVar(card, '--collab-image-offset-x', `${design.imageOffsetX}px`);
+      if (isFiniteNumber(design.imageOffsetY)) setVar(card, '--collab-image-offset-y', `${design.imageOffsetY}px`);
+
+      if (typeof design.blobColor === 'string') {
+        setVar(card, '--collab-blob-fill', hexToRgba(design.blobColor, isFiniteNumber(design.blobOpacity) ? design.blobOpacity : 1));
+        setVar(card, '--collab-blob-shadow-fill', hexToRgba(design.blobColor, isFiniteNumber(design.blobShadowOpacity) ? design.blobShadowOpacity : 0.16));
+      }
+
+      if (typeof design.blobGradientColor === 'string') {
+        setVar(card, '--collab-blob-gradient-fill', hexToRgba(design.blobGradientColor, isFiniteNumber(design.blobGradientOpacity) ? design.blobGradientOpacity : 0.58));
+      }
+
+      if (isFiniteNumber(design.blobWidth)) setVar(card, '--collab-blob-width', `${design.blobWidth}px`);
+      if (isFiniteNumber(design.blobHeight)) setVar(card, '--collab-blob-height', `${design.blobHeight}px`);
+      if (isFiniteNumber(design.blobOffsetX)) setVar(card, '--collab-blob-offset-x', `${design.blobOffsetX}px`);
+      if (isFiniteNumber(design.blobOffsetY)) setVar(card, '--collab-blob-offset-y', `${design.blobOffsetY}px`);
+      if (isFiniteNumber(design.blobRadius)) setVar(card, '--collab-blob-radius', `${design.blobRadius}%`);
+      if (isFiniteNumber(design.blobBlur)) setVar(card, '--collab-blob-blur', `${design.blobBlur}px`);
+      if (isFiniteNumber(design.blobShadowBlur)) setVar(card, '--collab-blob-shadow-blur', `${design.blobShadowBlur}px`);
+      if (isFiniteNumber(design.copyOffsetY)) setVar(card, '--collab-copy-offset-y', `${design.copyOffsetY}rem`);
+      if (isFiniteNumber(design.brandLineFontSize)) setVar(card, '--collab-brandline-size', `${design.brandLineFontSize}rem`);
+      if (isFiniteNumber(design.partnerFontSize)) setVar(card, '--collab-partner-size', `${design.partnerFontSize}rem`);
+      if (isFiniteNumber(design.leadFontSize)) setVar(card, '--collab-lead-size', `${design.leadFontSize}rem`);
+    });
+  };
+
+  window.addEventListener('storage', (event) => {
+    if (event.key === STORAGE_KEY) {
+      applyVisualOverrides();
+    }
+  });
+
+  window.addEventListener('bader-visual-overrides-updated', applyVisualOverrides);
+
+  window.requestAnimationFrame(() => {
+    applyVisualOverrides();
+  });
+
+  window['__baderApplyVisualOverrides'] = applyVisualOverrides;
+</script>

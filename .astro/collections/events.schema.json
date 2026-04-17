@@ -1,0 +1,100 @@
+{
+  "$ref": "#/definitions/events",
+  "definitions": {
+    "events": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "venue": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "startDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "endDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "timeLabel": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "upcoming",
+            "completed"
+          ]
+        },
+        "featured": {
+          "type": "boolean",
+          "default": true
+        },
+        "registrationUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "mapUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "mapEmbedUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "city",
+        "venue",
+        "startDate",
+        "timeLabel",
+        "status"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

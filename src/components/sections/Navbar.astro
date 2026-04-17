@@ -1,0 +1,31 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { navAppearance, navLinks, siteConfig } = await getSiteData();
+const navStyle = `--nav-brand-size:${navAppearance.brandFontSize}rem;--nav-link-size:${navAppearance.linkFontSize}rem;--nav-bg-opacity:${navAppearance.bgOpacity};--nav-padding-y:${navAppearance.paddingY}rem;--nav-blur:${navAppearance.blur}px;--nav-radius:${navAppearance.radius}px;`;
+---
+
+<nav class="nav" id="nav" style={navStyle}>
+  <a href="#home" class="site-brand" aria-label={siteConfig.brandName}>
+    <img src="/assets/images/logo.png" alt={siteConfig.brandName} />
+  </a>
+  <ul class="nav-links" id="navLinks">
+    {
+      navLinks.map((link) => (
+        <li>
+          <a href={link.href} data-close-menu>{link.label}</a>
+        </li>
+      ))
+    }
+    <li>
+      <a href="/#contact" data-close-menu class="nav-cta-link">
+        İletişim →
+      </a>
+    </li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menü">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>

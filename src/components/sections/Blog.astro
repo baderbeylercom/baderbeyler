@@ -1,0 +1,52 @@
+---
+import { formatDateLong } from '../../lib/format';
+import type { BlogPostEntry } from '../../lib/content';
+import { getSiteData } from '../../lib/site-data';
+
+interface Props {
+  posts: BlogPostEntry[];
+}
+
+const { posts } = Astro.props;
+const { blogContent } = await getSiteData();
+const ap = blogContent.appearance;
+const blogStyle = `--blog-title-size:${ap.titleSize}rem;--blog-card-title-size:${ap.cardTitleSize}rem;--section-padding-y:${ap.paddingY}rem;--blog-grid-gap:${ap.gridGap}rem;`;
+---
+
+<section class="section blog snap-section" id="blog" style={blogStyle}>
+  <div class="reveal">
+    <p class="section-tag">{blogContent.eyebrow}</p>
+    <h2 class="section-title" set:html={blogContent.title}></h2>
+  </div>
+
+  <div class="blog-grid">
+    {
+      posts.map((post, index) => (
+        <a
+          class="blog-card reveal"
+          style={`transition-delay:.${index + 1}s`}
+          href={`/blog/${post.slug}/`}
+        >
+          <div class="blog-card-img">
+            <img src={post.data.featuredImage} alt={post.data.featuredImageAlt} loading="lazy" />
+            {
+              index === 0 && (
+                <div
+                  class="editor-resize-handle editor-resize-handle--blog-image"
+                  data-editor-resize="blog-image-ratio"
+                  aria-hidden="true"
+                ></div>
+              )
+            }
+          </div>
+          <div class="blog-card-body">
+            <div class="blog-card-tag">{post.data.category}</div>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.excerpt}</p>
+            <div class="blog-card-date">{formatDateLong(post.data.date)}</div>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</section>

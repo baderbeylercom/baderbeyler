@@ -1,0 +1,17 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { pageDots } = await getSiteData();
+---
+
+<div class="page-dots" id="pageDots" aria-label="Bölüm geçişleri">
+  {
+    pageDots.map((item, index) => (
+      <button
+        class:list={['page-dot', { active: index === 0 }]}
+        data-target={item.target}
+        aria-label={item.label}
+      ></button>
+    ))
+  }
+</div>

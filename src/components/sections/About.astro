@@ -1,0 +1,46 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { aboutContent } = await getSiteData();
+const ap = aboutContent.appearance;
+const aboutStyle = `--about-title-size:${ap.titleSize}rem;--about-body-size:${ap.bodySize}rem;--about-stat-number-size:${ap.statNumberSize}rem;--about-stat-label-size:${ap.statLabelSize}rem;--section-padding-y:${ap.paddingY}rem;--about-stack-height:${ap.stackHeight}px;--about-main-width:${ap.mainPhotoWidth}%;--about-main-left:${ap.mainPhotoLeft}%;--about-main-top:${ap.mainPhotoTop}%;--about-accent-width:${ap.accentPhotoWidth}%;--about-accent-right:${ap.accentPhotoRight}%;--about-accent-bottom:${ap.accentPhotoBottom}%;`;
+---
+
+<section class="section about snap-section" id="about" style={aboutStyle}>
+  <div class="about-photo-stack reveal-left">
+    <div class="about-decor"></div>
+    <img
+      class="about-photo-main dynamic-photo"
+      src={aboutContent.images.main}
+      alt={aboutContent.images.mainAlt}
+      draggable="false"
+      data-editor-drag="about-main"
+    />
+    <div class="editor-resize-handle editor-resize-handle--about-main" data-editor-resize="about-main" aria-hidden="true"></div>
+    <img
+      class="about-photo-accent dynamic-photo"
+      src={aboutContent.images.accent}
+      alt={aboutContent.images.accentAlt}
+      draggable="false"
+      data-editor-drag="about-accent"
+    />
+    <div class="editor-resize-handle editor-resize-handle--about-accent" data-editor-resize="about-accent" aria-hidden="true"></div>
+    <div class="editor-resize-handle editor-resize-handle--about-stack" data-editor-resize="about-stack" aria-hidden="true"></div>
+  </div>
+
+  <div class="about-text reveal-right">
+    <p class="section-tag">{aboutContent.eyebrow}</p>
+    <h2 class="section-title" set:html={aboutContent.title}></h2>
+    {aboutContent.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    <div class="about-stats">
+      {
+        aboutContent.stats.map((item) => (
+          <div>
+            <div class="stat-number">{item.value}</div>
+            <div class="stat-label">{item.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

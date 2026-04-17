@@ -1,0 +1,17 @@
+---
+import { getSiteData } from '../../lib/site-data';
+
+const { newsletterContent } = await getSiteData();
+const ap = newsletterContent.appearance;
+const newsletterStyle = `--newsletter-title-size:${ap.titleSize}rem;--newsletter-body-size:${ap.bodySize}rem;--section-padding-y:${ap.paddingY}rem;`;
+---
+
+<section class="newsletter reveal snap-section" id="newsletter" style={newsletterStyle}>
+  <p class="section-tag">{newsletterContent.eyebrow}</p>
+  <h2 class="section-title" set:html={newsletterContent.title}></h2>
+  <p class="newsletter-copy">{newsletterContent.description}</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder={newsletterContent.placeholder} required />
+    <button type="submit">{newsletterContent.buttonLabel}</button>
+  </div>
+</section>

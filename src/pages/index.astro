@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteScripts from '../components/SiteScripts.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import PageDots from '../components/sections/PageDots.astro';
+import Hero from '../components/sections/Hero.astro';
+import MotionStory from '../components/sections/MotionStory.astro';
+import About from '../components/sections/About.astro';
+import Services from '../components/sections/Services.astro';
+import Collaborations from '../components/sections/Collaborations.astro';
+import Events from '../components/sections/Events.astro';
+import Blog from '../components/sections/Blog.astro';
+import Newsletter from '../components/sections/Newsletter.astro';
+import Contact from '../components/sections/Contact.astro';
+import Footer from '../components/sections/Footer.astro';
+import {
+  getFeaturedEvents,
+  getPublishedBlogPosts,
+} from '../lib/content';
+import { getSiteData } from '../lib/site-data';
+
+const { motionStories, siteConfig } = await getSiteData();
+const blogPosts = await getPublishedBlogPosts(3);
+const events = await getFeaturedEvents(1);
+---
+
+<BaseLayout
+  title={siteConfig.defaultTitle}
+  description={siteConfig.defaultDescription}
+>
+  <Navbar />
+  <PageDots />
+
+  <main>
+    <Hero />
+
+    <section class="motion-story-wrap">
+      {
+        motionStories.slice(0, 1).map((story) => (
+          <MotionStory {...story} />
+        ))
+      }
+    </section>
+
+    {/* <About /> */}
+    <Services />
+    <Collaborations />
+    <Events events={events} />
+    <Blog posts={blogPosts} />
+    <Newsletter />
+    <Contact />
+  </main>
+
+  <Footer />
+  <SiteScripts />
+</BaseLayout>

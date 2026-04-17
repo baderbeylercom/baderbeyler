@@ -1,0 +1,69 @@
+media: public/uploads
+
+content:
+  - name: blog
+    label: Blog Yazıları
+    type: collection
+    path: src/content/blog
+    filename: "{fields.slug}.md"
+    view:
+      fields: [title, category, date, draft]
+    fields:
+      - { name: title, label: Başlık, type: string }
+      - { name: slug, label: "URL Kısa Adı (örn: beslenme-onerileri)", type: string }
+      - { name: description, label: Açıklama, type: string }
+      - { name: excerpt, label: Kısa Özet, type: text }
+      - { name: category, label: Kategori, type: string }
+      - { name: date, label: Yayın Tarihi, type: date }
+      - { name: featuredImage, label: Kapak Görseli URL, type: string }
+      - { name: featuredImageAlt, label: Görsel Alt Metni, type: string }
+      - { name: draft, label: Taslak, type: boolean }
+      - { name: featured, label: Öne Çıkar, type: boolean }
+      - { name: seoTitle, label: "SEO Başlık (opsiyonel)", type: string }
+      - { name: seoDescription, label: "SEO Açıklama (opsiyonel)", type: text }
+      - { name: body, label: İçerik, type: rich-text }
+
+  - name: events
+    label: Etkinlikler
+    type: collection
+    path: src/content/events
+    filename: "{fields.slug}.md"
+    view:
+      fields: [title, city, startDate, status]
+    fields:
+      - { name: title, label: Başlık, type: string }
+      - { name: slug, label: "URL Kısa Adı (örn: ankara-semineri)", type: string }
+      - { name: description, label: Açıklama, type: text }
+      - { name: city, label: Şehir, type: string }
+      - { name: venue, label: Mekan, type: string }
+      - { name: address, label: Adres, type: string }
+      - { name: startDate, label: Başlangıç Tarihi, type: date }
+      - { name: endDate, label: Bitiş Tarihi, type: date }
+      - { name: timeLabel, label: "Saat (örn: 14:00 - 16:00)", type: string }
+      - name: status
+        label: Durum
+        type: select
+        options:
+          values: [upcoming, completed]
+      - { name: featured, label: Öne Çıkar, type: boolean }
+      - { name: registrationUrl, label: Kayıt URL, type: string }
+      - { name: mapUrl, label: Harita URL, type: string }
+      - { name: body, label: Detaylar, type: rich-text }
+
+  - name: agenda
+    label: Ajanda
+    type: collection
+    path: src/content/agenda
+    filename: "{fields.slug}.md"
+    view:
+      fields: [title, location, date]
+    fields:
+      - { name: title, label: Başlık, type: string }
+      - { name: slug, label: URL Kısa Adı, type: string }
+      - { name: description, label: Açıklama, type: text }
+      - { name: date, label: Tarih, type: date }
+      - { name: location, label: Konum, type: string }
+      - { name: audience, label: Hedef Kitle, type: string }
+      - { name: relatedEventSlug, label: "İlgili Etkinlik (slug)", type: string }
+      - { name: featured, label: Öne Çıkar, type: boolean }
+      - { name: body, label: Detaylar, type: rich-text }
