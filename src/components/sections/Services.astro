@@ -269,19 +269,29 @@ const textModalItems = servicesContent.items.filter(
     let current = 0;
 
     if (slides.length > 0 && currentEl) {
-      function show(n: number) {
+      const show = (n: number) => {
         slides[current].classList.remove('active');
         current = (n + slides.length) % slides.length;
         slides[current].classList.add('active');
         currentEl.textContent = String(current + 1);
-      }
+      };
       (modal as any)._show = show;
+      (modal as any)._step = (dir: number) => show(current + dir);
       modal.querySelector('.svc-prev')?.addEventListener('click', () => show(current - 1));
       modal.querySelector('.svc-next')?.addEventListener('click', () => show(current + 1));
     }
 
     modal.querySelector('.svc-modal-backdrop')!.addEventListener('click', () => closeModal(modal));
     modal.querySelector('.svc-modal-close')!.addEventListener('click', () => closeModal(modal));
+
+    // "İletişime Geç" linki: modal kapat, sonra yönlendir
+    modal.querySelector('.svc-text-cta')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeModal(modal);
+      setTimeout(() => {
+        window.location.href = '#contact';
+      }, 320);
+    });
   });
 
   function openModal(modal: HTMLElement) {
@@ -299,5 +309,7 @@ const textModalItems = servicesContent.items.filter(
     const open = document.querySelector<HTMLElement>('.svc-modal.open');
     if (!open) return;
     if (e.key === 'Escape') closeModal(open);
+    if (e.key === 'ArrowLeft' && typeof (open as any)._step === 'function') (open as any)._step(-1);
+    if (e.key === 'ArrowRight' && typeof (open as any)._step === 'function') (open as any)._step(1);
   });
 </script>
