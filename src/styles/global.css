@@ -224,7 +224,7 @@ img {
 .nav-links a {
   text-decoration: none;
   color: #22303b;
-  font-size: 1.1rem;
+  font-size: 1.32rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   position: relative;
@@ -1419,11 +1419,10 @@ img {
 
 .collab-brand-row {
   display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
   margin-bottom: 0.78rem;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .collab-brandline {
