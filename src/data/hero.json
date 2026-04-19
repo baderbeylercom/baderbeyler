@@ -5,5 +5,5 @@
   "ctaLabel": "Ücretsiz Ön Görüşme Talebi",
   "rightTitle": "Bader <em>Beyler</em>",
   "rightText": "Bader Beyler, Moleküler Biyoloji ve Genetik lisansını Bursa Uludağ Üniversitesinde tamamladı. İngiltere ve İspanya merkezli Nutrigenomik enstitü ve kuruluşlarından Nutrigenetik eğitimlerini tamamladı. Halen TOBB Ekonomi ve Teknoloji Üniversitesi alt yapısıyla moleküler tıp alanında uzmanlığına devam etmektedir.\nBugün genetik veriyi raporlamakla kalmayıp, danışan, hekim ve diyetisyenler için uygulanabilir, klinik olarak anlamlı kararlara dönüştüren bütünsel bir çerçeve sunarak hizmet vermektedir. \n",
-  "stats": "Moleküler Biyoloji ve Genetik / Uludağ Üniversitesi\nNutrigenetik / İngiltere · İspanya · TOBB ETÜ"
+  "stats": "\"stats\": [\n  {\n    \"value\": \"Moleküler Biyoloji ve Genetik\",\n    \"label\": \"Uludağ Üniversitesi\"\n  },\n  {\n    \"value\": \"Nutrigenetik\",\n    \"label\": \"İngiltere · İspanya · TOBB ETÜ\"\n  }\n]\n"
 }
