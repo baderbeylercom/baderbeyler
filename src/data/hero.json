@@ -3,12 +3,7 @@
   "title": "Bilge Bedenin Yolculuğunu<br /><em>\"OKU\"</em>yun",
   "description": "Genetik verileri bilgiye dönüştürün.\nYol sizin, birlikte yürüyelim.",
   "ctaLabel": "Ücretsiz Ön Görüşme Talebi",
-  "bgText": "Bader Beyler",
-  "rightEyebrow": "Hakkında",
   "rightTitle": "Bader <em>Beyler</em>",
-  "rightText": "Bader Beyler, Moleküler Biyoloji ve Genetik eğitimini Bursa Uludağ Üniversitesinde tamamladı. İngiltere, İspanya ve TOBB ETÜ merkezli nutrigenetik eğitimlerle uzmanlığını derinleştirdi.<br /><br />Bugün genetik veriyi yalnızca raporlamakla kalmayan; onu danışan, hekim ve diyetisyen için uygulanabilir kararlara dönüştüren bütünsel bir çerçeve sunuyor.",
-  "stats": [
-    { "value": "Moleküler Biyoloji ve Genetik", "label": "Uludağ Üniversitesi" },
-    { "value": "Nutrigenetik", "label": "İngiltere · İspanya · TOBB ETÜ" }
-  ]
+  "rightText": "Bader Beyler, Moleküler Biyoloji ve Genetik lisansını Bursa Uludağ Üniversitesinde tamamladı. İngiltere ve İspanya merkezli Nutrigenomik enstitü ve kuruluşlarından Nutrigenetik eğitimlerini tamamladı. Halen TOBB Ekonomi ve Teknoloji Üniversitesi alt yapısıyla moleküler tıp alanında uzmanlığına devam etmektedir.\n<br /><br />Bugün genetik veriyi raporlamakla kalmayıp, danışan, hekim ve diyetisyenler için uygulanabilir, klinik olarak anlamlı kararlara dönüştüren bütünsel bir çerçeve sunarak hizmet vermektedir. ",
+  "stats": "[object Object],[object Object]A"
 }
