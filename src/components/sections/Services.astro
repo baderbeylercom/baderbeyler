@@ -4,6 +4,12 @@ import { getSiteData } from '../../lib/site-data';
 const { servicesContent } = await getSiteData();
 const ap = servicesContent.appearance;
 const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-title-size:${ap.cardTitleSize}rem;--services-card-body-size:${ap.cardBodySize}rem;--section-padding-y:${ap.paddingY}rem;--services-grid-gap:${ap.gridGap}rem;`;
+
+const seminerGorseller = [
+  '/assets/images/seminer-1.jpeg',
+  '/assets/images/seminer-2.jpeg',
+  '/assets/images/seminer-3.jpeg',
+];
 ---
 
 <section class="section services snap-section" id="services" style={servicesStyle}>
@@ -19,7 +25,11 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
           <div class="service-icon">{item.icon}</div>
           <h3>{item.title}</h3>
           <p>{item.description}</p>
-          <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+          {index === 1 ? (
+            <button class="service-link seminer-galeri-btn" type="button">Detaylı Bilgi →</button>
+          ) : (
+            <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+          )}
         </div>
       ))
     }
@@ -38,3 +48,164 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
     </div>
   </div>
 </section>
+
+<!-- Seminer Galeri Modal -->
+<div id="seminer-modal" class="seminer-modal" role="dialog" aria-modal="true" aria-label="Seminer Görselleri">
+  <div class="seminer-modal-backdrop"></div>
+  <div class="seminer-modal-content">
+    <button class="seminer-modal-close" aria-label="Kapat">✕</button>
+    <div class="seminer-slider">
+      {seminerGorseller.map((src, i) => (
+        <div class={`seminer-slide${i === 0 ? ' active' : ''}`} data-index={i}>
+          <img src={src} alt={`Seminer ${i + 1}`} />
+        </div>
+      ))}
+    </div>
+    <div class="seminer-nav">
+      <button class="seminer-prev" aria-label="Önceki">&#8592;</button>
+      <span class="seminer-counter"><span class="seminer-current">1</span> / {seminerGorseller.length}</span>
+      <button class="seminer-next" aria-label="Sonraki">&#8594;</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .seminer-galeri-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-align: left;
+  }
+
+  .seminer-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .seminer-modal.open {
+    display: flex;
+  }
+
+  .seminer-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+  }
+
+  .seminer-modal-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: min(90vw, 900px);
+    width: 100%;
+  }
+
+  .seminer-modal-close {
+    position: absolute;
+    top: -2.5rem;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  .seminer-modal-close:hover { opacity: 1; }
+
+  .seminer-slider {
+    width: 100%;
+    position: relative;
+  }
+
+  .seminer-slide {
+    display: none;
+  }
+  .seminer-slide.active {
+    display: block;
+  }
+  .seminer-slide img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    display: block;
+  }
+
+  .seminer-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: #fff;
+  }
+
+  .seminer-prev,
+  .seminer-next {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .seminer-prev:hover,
+  .seminer-next:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  .seminer-counter {
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    min-width: 4rem;
+    text-align: center;
+  }
+</style>
+
+<script>
+  const modal = document.getElementById('seminer-modal')!;
+  const slides = modal.querySelectorAll<HTMLElement>('.seminer-slide');
+  const currentEl = modal.querySelector<HTMLElement>('.seminer-current')!;
+  let current = 0;
+
+  function showSlide(n: number) {
+    slides[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    currentEl.textContent = String(current + 1);
+  }
+
+  document.querySelector('.seminer-galeri-btn')!.addEventListener('click', () => {
+    showSlide(0);
+    modal.classList.add('open');
+  });
+
+  modal.querySelector('.seminer-modal-close')!.addEventListener('click', () => modal.classList.remove('open'));
+  modal.querySelector('.seminer-modal-backdrop')!.addEventListener('click', () => modal.classList.remove('open'));
+  modal.querySelector('.seminer-prev')!.addEventListener('click', () => showSlide(current - 1));
+  modal.querySelector('.seminer-next')!.addEventListener('click', () => showSlide(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape') modal.classList.remove('open');
+    if (e.key === 'ArrowLeft') showSlide(current - 1);
+    if (e.key === 'ArrowRight') showSlide(current + 1);
+  });
+</script>
