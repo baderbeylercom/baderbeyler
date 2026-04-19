@@ -1,9 +1,1 @@
-{
-  "eyebrow": "Beden · Sağlık · Dönüşüm",
-  "title": "Bilge Bedenin Yolculuğunu<br /><em>\"OKU\"</em>yun",
-  "description": "Genetik verileri bilgiye dönüştürün.\nYol sizin, birlikte yürüyelim.",
-  "ctaLabel": "Ücretsiz Ön Görüşme Talebi",
-  "rightTitle": "Bader <em>Beyler</em>",
-  "rightText": "Bader Beyler, Moleküler Biyoloji ve Genetik lisansını Bursa Uludağ Üniversitesinde tamamladı. İngiltere ve İspanya merkezli Nutrigenomik enstitü ve kuruluşlarından Nutrigenetik eğitimlerini tamamladı. Halen TOBB Ekonomi ve Teknoloji Üniversitesi alt yapısıyla moleküler tıp alanında uzmanlığına devam etmektedir.\n<br /><br />Bugün genetik veriyi raporlamakla kalmayıp, danışan, hekim ve diyetisyenler için uygulanabilir, klinik olarak anlamlı kararlara dönüştüren bütünsel bir çerçeve sunarak hizmet vermektedir. ",
-  "stats": "\"stats\": [\n  {\n    \"label\": \"İstatistik 1\",\n    \"value\": \"100\"\n  },\n  {\n    \"label\": \"İstatistik 2\",\n    \"value\": \"50\"\n  }\n]"
-}
+{"eyebrow":"Beden · Sağlık · Dönüşüm","title":"Bilge Bedenin Yolculuğunu\n\u003cbr /\u003e\u003cem\u003e\"OKU\"\u003c/em\u003eun","description":"Genetik verileri bilgiye dönüştürün.\nYol sizin, birlikte yürüyelim.","ctaLabel":"Ücretsiz Ön Görüşme Talebi","rightTitle":"Bader \u003cem\u003eBeyler\u003c/em\u003e","rightText":"Bader Beyler, Moleküler Biyoloji ve Genetik lisansını Bursa Uludağ Üniversitesinde tamamladı. İngiltere ve İspanya merkezli Nutrigenomik enstitü ve kuruluşlarından Nutrigenetik alanında eğitim almıştır.","stats":[{"label":"İstatistik 1","value":"100"},{"label":"İstatistik 2","value":"50"}]}
