@@ -115,14 +115,20 @@ const textModalItems = servicesContent.items.filter(
   }
 
   .svc-modal {
-    display: none;
     position: fixed;
     inset: 0;
     z-index: 9999;
     align-items: center;
     justify-content: center;
+    display: flex;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
-  .svc-modal.open { display: flex; }
+  .svc-modal.open {
+    pointer-events: auto;
+    opacity: 1;
+  }
 
   .svc-modal-backdrop {
     position: absolute;
@@ -140,6 +146,11 @@ const textModalItems = servicesContent.items.filter(
     gap: 1.25rem;
     max-width: min(90vw, 960px);
     width: 100%;
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .svc-modal.open .svc-modal-content {
+    transform: translateY(0) scale(1);
   }
 
   .svc-modal-close {
