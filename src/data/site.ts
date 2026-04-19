@@ -218,12 +218,13 @@ export const aboutContent = {
 export const servicesContent = {
   ...servicesData,
   marqueeImages: [
-    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1502767089025-6572583495f0?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop',
+    '/assets/images/1.jpeg',
+    '/assets/images/2.jpeg',
+    '/assets/images/3.jpeg',
+    '/assets/images/4.jpeg',
+    '/assets/images/5.jpeg',
+    '/assets/images/6.jpeg',
+    '/assets/images/7.jpeg',
   ],
   appearance: {
     titleSize: 3.35,
