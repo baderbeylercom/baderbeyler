@@ -5,11 +5,9 @@ const { servicesContent } = await getSiteData();
 const ap = servicesContent.appearance;
 const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-title-size:${ap.cardTitleSize}rem;--services-card-body-size:${ap.cardBodySize}rem;--section-padding-y:${ap.paddingY}rem;--services-grid-gap:${ap.gridGap}rem;`;
 
-const seminerGorseller = [
-  '/assets/images/seminer-1.jpeg',
-  '/assets/images/seminer-2.jpeg',
-  '/assets/images/seminer-3.jpeg',
-];
+const modalItems = servicesContent.items.filter(
+  (item: any) => Array.isArray(item.detailImages) && item.detailImages.length > 0
+);
 ---
 
 <section class="section services snap-section" id="services" style={servicesStyle}>
@@ -20,24 +18,32 @@ const seminerGorseller = [
 
   <div class="services-grid">
     {
-      servicesContent.items.map((item, index) => (
-        <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
-          <div class="service-icon">{item.icon}</div>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
-          {index === 1 ? (
-            <button class="service-link seminer-galeri-btn" type="button">Detaylı Bilgi →</button>
-          ) : (
-            <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
-          )}
-        </div>
-      ))
+      servicesContent.items.map((item: any, index: number) => {
+        const hasGallery = Array.isArray(item.detailImages) && item.detailImages.length > 0;
+        const modalId = `modal-${index}`;
+        return (
+          <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
+            <div class="service-icon">{item.icon}</div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            {hasGallery ? (
+              <button
+                type="button"
+                class="service-link service-galeri-btn"
+                data-modal={modalId}
+              >Detaylı Bilgi →</button>
+            ) : (
+              <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+            )}
+          </div>
+        );
+      })
     }
   </div>
 
   <div class="photo-marquee">
     <div class="marquee-track">
-      {[...servicesContent.marqueeImages, ...servicesContent.marqueeImages].map((src) => (
+      {[...servicesContent.marqueeImages, ...servicesContent.marqueeImages].map((src: string) => (
         <div class="marquee-item">
           <img src={src} alt="" loading="lazy" />
         </div>
@@ -49,28 +55,33 @@ const seminerGorseller = [
   </div>
 </section>
 
-<!-- Seminer Galeri Modal -->
-<div id="seminer-modal" class="seminer-modal" role="dialog" aria-modal="true" aria-label="Seminer Görselleri">
-  <div class="seminer-modal-backdrop"></div>
-  <div class="seminer-modal-content">
-    <button class="seminer-modal-close" aria-label="Kapat">✕</button>
-    <div class="seminer-slider">
-      {seminerGorseller.map((src, i) => (
-        <div class={`seminer-slide${i === 0 ? ' active' : ''}`} data-index={i}>
-          <img src={src} alt={`Seminer ${i + 1}`} />
+{modalItems.map((item: any) => {
+  const itemIndex = servicesContent.items.indexOf(item);
+  const modalId = `modal-${itemIndex}`;
+  return (
+    <div id={modalId} class="svc-modal" role="dialog" aria-modal="true" aria-label={item.title}>
+      <div class="svc-modal-backdrop"></div>
+      <div class="svc-modal-content">
+        <button class="svc-modal-close" aria-label="Kapat">&#x2715;</button>
+        <div class="svc-slider">
+          {item.detailImages.map((src: string, i: number) => (
+            <div class={`svc-slide${i === 0 ? ' active' : ''}`}>
+              <img src={src} alt={`${item.title} ${i + 1}`} />
+            </div>
+          ))}
         </div>
-      ))}
+        <div class="svc-nav">
+          <button class="svc-prev" aria-label="Onceki">&#8592;</button>
+          <span class="svc-counter"><span class="svc-current">1</span> / {item.detailImages.length}</span>
+          <button class="svc-next" aria-label="Sonraki">&#8594;</button>
+        </div>
+      </div>
     </div>
-    <div class="seminer-nav">
-      <button class="seminer-prev" aria-label="Önceki">&#8592;</button>
-      <span class="seminer-counter"><span class="seminer-current">1</span> / {seminerGorseller.length}</span>
-      <button class="seminer-next" aria-label="Sonraki">&#8594;</button>
-    </div>
-  </div>
-</div>
+  );
+})}
 
 <style>
-  .seminer-galeri-btn {
+  .service-galeri-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -79,7 +90,7 @@ const seminerGorseller = [
     text-align: left;
   }
 
-  .seminer-modal {
+  .svc-modal {
     display: none;
     position: fixed;
     inset: 0;
@@ -87,29 +98,27 @@ const seminerGorseller = [
     align-items: center;
     justify-content: center;
   }
-  .seminer-modal.open {
-    display: flex;
-  }
+  .svc-modal.open { display: flex; }
 
-  .seminer-modal-backdrop {
+  .svc-modal-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0,0,0,0.82);
     cursor: pointer;
   }
 
-  .seminer-modal-content {
+  .svc-modal-content {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.25rem;
-    max-width: min(90vw, 900px);
+    max-width: min(90vw, 960px);
     width: 100%;
   }
 
-  .seminer-modal-close {
+  .svc-modal-close {
     position: absolute;
     top: -2.5rem;
     right: 0;
@@ -118,25 +127,17 @@ const seminerGorseller = [
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
-    line-height: 1;
     padding: 0.25rem 0.5rem;
     opacity: 0.75;
     transition: opacity 0.2s;
   }
-  .seminer-modal-close:hover { opacity: 1; }
+  .svc-modal-close:hover { opacity: 1; }
 
-  .seminer-slider {
-    width: 100%;
-    position: relative;
-  }
+  .svc-slider { width: 100%; }
 
-  .seminer-slide {
-    display: none;
-  }
-  .seminer-slide.active {
-    display: block;
-  }
-  .seminer-slide img {
+  .svc-slide { display: none; }
+  .svc-slide.active { display: block; }
+  .svc-slide img {
     width: 100%;
     height: auto;
     border-radius: 0.75rem;
@@ -144,15 +145,14 @@ const seminerGorseller = [
     display: block;
   }
 
-  .seminer-nav {
+  .svc-nav {
     display: flex;
     align-items: center;
     gap: 1.5rem;
     color: #fff;
   }
 
-  .seminer-prev,
-  .seminer-next {
+  .svc-prev, .svc-next {
     background: rgba(255,255,255,0.15);
     border: 1px solid rgba(255,255,255,0.3);
     color: #fff;
@@ -166,12 +166,9 @@ const seminerGorseller = [
     justify-content: center;
     transition: background 0.2s;
   }
-  .seminer-prev:hover,
-  .seminer-next:hover {
-    background: rgba(255,255,255,0.3);
-  }
+  .svc-prev:hover, .svc-next:hover { background: rgba(255,255,255,0.3); }
 
-  .seminer-counter {
+  .svc-counter {
     font-size: 1rem;
     letter-spacing: 0.05em;
     min-width: 4rem;
@@ -180,32 +177,49 @@ const seminerGorseller = [
 </style>
 
 <script>
-  const modal = document.getElementById('seminer-modal')!;
-  const slides = modal.querySelectorAll<HTMLElement>('.seminer-slide');
-  const currentEl = modal.querySelector<HTMLElement>('.seminer-current')!;
-  let current = 0;
-
-  function showSlide(n: number) {
-    slides[current].classList.remove('active');
-    current = (n + slides.length) % slides.length;
-    slides[current].classList.add('active');
-    currentEl.textContent = String(current + 1);
-  }
-
-  document.querySelector('.seminer-galeri-btn')!.addEventListener('click', () => {
-    showSlide(0);
-    modal.classList.add('open');
+  document.querySelectorAll<HTMLButtonElement>('.service-galeri-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const modalId = btn.getAttribute('data-modal')!;
+      const modal = document.getElementById(modalId)!;
+      openModal(modal);
+    });
   });
 
-  modal.querySelector('.seminer-modal-close')!.addEventListener('click', () => modal.classList.remove('open'));
-  modal.querySelector('.seminer-modal-backdrop')!.addEventListener('click', () => modal.classList.remove('open'));
-  modal.querySelector('.seminer-prev')!.addEventListener('click', () => showSlide(current - 1));
-  modal.querySelector('.seminer-next')!.addEventListener('click', () => showSlide(current + 1));
+  document.querySelectorAll('.svc-modal').forEach((modalEl) => {
+    const modal = modalEl as HTMLElement;
+    const slides = modal.querySelectorAll<HTMLElement>('.svc-slide');
+    const currentEl = modal.querySelector<HTMLElement>('.svc-current')!;
+    let current = 0;
+
+    function show(n: number) {
+      slides[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      currentEl.textContent = String(current + 1);
+    }
+
+    (modal as any)._show = show;
+
+    modal.querySelector('.svc-modal-backdrop')!.addEventListener('click', () => closeModal(modal));
+    modal.querySelector('.svc-modal-close')!.addEventListener('click', () => closeModal(modal));
+    modal.querySelector('.svc-prev')!.addEventListener('click', () => show(current - 1));
+    modal.querySelector('.svc-next')!.addEventListener('click', () => show(current + 1));
+  });
+
+  function openModal(modal: HTMLElement) {
+    (modal as any)._show(0);
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(modal: Element) {
+    modal.classList.remove('open');
+    (document.body.style as any).overflow = '';
+  }
 
   document.addEventListener('keydown', (e) => {
-    if (!modal.classList.contains('open')) return;
-    if (e.key === 'Escape') modal.classList.remove('open');
-    if (e.key === 'ArrowLeft') showSlide(current - 1);
-    if (e.key === 'ArrowRight') showSlide(current + 1);
+    const open = document.querySelector<HTMLElement>('.svc-modal.open');
+    if (!open) return;
+    if (e.key === 'Escape') closeModal(open);
   });
 </script>
