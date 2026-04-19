@@ -2739,6 +2739,72 @@ img {
   .content-article {
     padding: 1.5rem;
   }
+
+  /* ── Story (Tanıtım) bölümleri ── */
+  .motion-story {
+    padding: 1rem 1.25rem 3rem;
+  }
+
+  .story-shell,
+  .motion-story.reverse .story-shell {
+    gap: 1.25rem;
+  }
+
+  .story-media,
+  .motion-story.reverse .story-media {
+    min-height: 220px;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  .story-media img {
+    height: min(40vh, 260px);
+  }
+
+  .story-title {
+    font-size: clamp(1.65rem, 6vw, 2rem);
+    line-height: 1.1;
+  }
+
+  .story-copy {
+    font-size: 0.94rem;
+    line-height: 1.75;
+  }
+
+  .story-note {
+    font-size: 0.7rem;
+    padding: 0.55rem 0.85rem;
+  }
+
+  /* ── Hizmetler eyebrow ── */
+  .services-header .section-tag {
+    font-size: 1.1rem;
+  }
+
+  .services-header {
+    margin-top: 0;
+  }
+
+  /* ── Hero sağ panel ── */
+  .hero-right-title {
+    font-size: clamp(1.65rem, 6vw, 2.25rem);
+  }
+
+  .hero-right-text {
+    padding: 1rem 1.1rem;
+    font-size: 0.93rem;
+  }
+
+  /* ── Hero açıklama kutusu ── */
+  .hero-desc {
+    padding: 1rem 1.1rem;
+    font-size: 1rem;
+  }
+
+  /* ── Hero CTA butonu ── */
+  .hero-cta {
+    font-size: 0.76rem;
+    padding: 0.85rem 1.6rem;
+  }
 }
 
 @keyframes personEntranceMobile {
