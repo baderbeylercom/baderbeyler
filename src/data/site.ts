@@ -6,6 +6,121 @@ import contactData from './contact.json';
 import footerData from './footer.json';
 import navLinksData from './nav-links.json';
 
+type StatItem = {
+  value: string;
+  label: string;
+};
+
+const defaultHeroStats: StatItem[] = [
+  { value: 'Moleküler Biyoloji ve Genetik', label: 'Uludağ Üniversitesi' },
+  { value: 'Nutrigenetik', label: 'İngiltere · İspanya · TOBB ETÜ' },
+];
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function normalizeStatItem(value: unknown, label: unknown): StatItem | null {
+  if (!isNonEmptyString(value) || !isNonEmptyString(label)) {
+    return null;
+  }
+
+  return {
+    value: value.trim(),
+    label: label.trim(),
+  };
+}
+
+function parseStats(raw: unknown, fallback: StatItem[]): StatItem[] {
+  if (Array.isArray(raw)) {
+    const normalized = raw
+      .map((item) =>
+        item && typeof item === 'object'
+          ? normalizeStatItem(
+              'value' in item ? (item as { value?: unknown }).value : '',
+              'label' in item ? (item as { label?: unknown }).label : '',
+            )
+          : null,
+      )
+      .filter((item): item is StatItem => item !== null);
+
+    return normalized.length ? normalized : fallback;
+  }
+
+  if (!isNonEmptyString(raw)) {
+    return fallback;
+  }
+
+  let text = raw.trim().replace(/\r/g, '').replace(/\\"/g, '"').replace(/\\n/g, '\n');
+
+  const bracketStart = text.indexOf('[');
+  const bracketEnd = text.lastIndexOf(']');
+
+  if (bracketStart !== -1 && bracketEnd > bracketStart) {
+    const candidate = text.slice(bracketStart, bracketEnd + 1);
+
+    try {
+      return parseStats(JSON.parse(candidate), fallback);
+    } catch {
+      // Ignore and continue with line-based parsing below.
+    }
+  }
+
+  const lines = text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(
+      (line) =>
+        line &&
+        line !== '[' &&
+        line !== ']' &&
+        line !== '{' &&
+        line !== '},' &&
+        line !== '}' &&
+        line !== '"stats": [',
+    );
+
+  const parsed: StatItem[] = [];
+  let pendingValue = '';
+  let pendingLabel = '';
+
+  for (const line of lines) {
+    const valueMatch = line.match(/"value"\s*:\s*"([^"]+)"/);
+    if (valueMatch) {
+      pendingValue = valueMatch[1];
+    }
+
+    const labelMatch = line.match(/"label"\s*:\s*"([^"]+)"/);
+    if (labelMatch) {
+      pendingLabel = labelMatch[1];
+    }
+
+    if (pendingValue && pendingLabel) {
+      parsed.push({ value: pendingValue.trim(), label: pendingLabel.trim() });
+      pendingValue = '';
+      pendingLabel = '';
+      continue;
+    }
+
+    const simpleLine = line
+      .replace(/^[-*•]\s*/, '')
+      .replace(/^"stats"\s*:\s*/, '')
+      .replace(/^[",'`]+|[",'`]+$/g, '')
+      .trim();
+
+    if (!simpleLine) {
+      continue;
+    }
+
+    const parts = simpleLine.split(/\s*\/\s*|\s*[—–-]\s*|\s*\|\s*/).map((part) => part.trim());
+    if (parts.length >= 2 && parts[0] && parts[1]) {
+      parsed.push({ value: parts[0], label: parts.slice(1).join(' / ') });
+    }
+  }
+
+  return parsed.length ? parsed : fallback;
+}
+
 export const siteConfig = { ...siteConfigData };
 
 export const navLinks = navLinksData.links;
@@ -34,6 +149,9 @@ export const pageDots = [
 
 export const heroContent = {
   ...heroData,
+  bgText: isNonEmptyString(heroData.bgText) ? heroData.bgText : 'Bader Beyler',
+  rightEyebrow: isNonEmptyString(heroData.rightEyebrow) ? heroData.rightEyebrow : 'Hakkında',
+  stats: parseStats(heroData.stats, defaultHeroStats),
   heroImage: '/assets/images/hero-person.png',
   heroImageAlt: 'Bader Beyler ekip görseli',
   focusImage: '/assets/images/hero-focus-portrait.png',
