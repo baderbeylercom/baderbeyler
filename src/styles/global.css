@@ -1073,8 +1073,8 @@ img {
 
 .services-header {
   text-align: center;
-  max-width: 600px;
-  margin: -2.5rem auto 1.25rem;
+  max-width: 900px;
+  margin: 0 auto 2rem;
 }
 
 .services-header .section-tag {
