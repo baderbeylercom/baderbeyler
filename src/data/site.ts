@@ -166,12 +166,11 @@ export const heroContent = {
 export const motionStories = [
   {
     id: 'storyOne',
-    tag: 'Genetik Neden Önemli ?',
-    title: 'Çünkü her beden eşsiz bir <em>tasarımdır</em>',
+    tag: 'Genetik Neden Önemli?',
+    title: 'Eşsiz sistemlerin eşsiz <em>sorunları</em> vardır.',
     paragraphs: [
-      'Eşsiz sistemlerin eşsiz sorunları vardır.',
-      'Genetik analiz, soru(n)ları sorulara çevirerek yanıt verebileceğimiz cevapları taşır.',
-      'Ömür boyu sistemimizi destekleyecek takviye ve beslenme önerileri; kişisel veriyi doğru okumakla mümkün.',
+      'Genetik analiz, sorunları sorulara çevirerek yanıt verebileceğimiz formu taşır.',
+      'Ömür boyu bedensel sisteminizi destekleyecek takviye ve beslenme önerileri; kişisel veriyi doğru okumakla mümkün.',
     ],
     note: 'Bilgiyi kişisel sağlık kararına dönüştüren başlangıç',
     image: '/assets/images/story-one.png',
