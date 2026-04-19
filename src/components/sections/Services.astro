@@ -14,14 +14,46 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
 
   <div class="services-grid">
     {
-      servicesContent.items.map((item, index) => (
-        <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
-          <div class="service-icon">{item.icon}</div>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
-          <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
-        </div>
-      ))
+      servicesContent.items.map((item, index) => {
+        const detailId = `service-detail-${index}`;
+        const hasGallery = Array.isArray(item.detailImages) && item.detailImages.length > 0;
+
+        return (
+          <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
+            <div class="service-icon">{item.icon}</div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+
+            {
+              hasGallery ? (
+                <>
+                  <button
+                    type="button"
+                    class="service-link service-link-button"
+                    data-service-toggle={detailId}
+                    aria-expanded="false"
+                    aria-controls={detailId}
+                  >
+                    Detaylı Bilgi →
+                  </button>
+
+                  <div class="service-detail" id={detailId} data-service-panel hidden>
+                    <div class="service-detail-grid">
+                      {item.detailImages.map((src, imageIndex) => (
+                        <figure class="service-detail-figure">
+                          <img src={src} alt={`${item.title} görsel ${imageIndex + 1}`} loading="lazy" />
+                        </figure>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+              )
+            }
+          </div>
+        );
+      })
     }
   </div>
 
@@ -38,3 +70,38 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
     </div>
   </div>
 </section>
+
+<script is:inline>
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const button = target.closest('[data-service-toggle]');
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    const detailId = button.getAttribute('data-service-toggle');
+    if (!detailId) return;
+
+    const panel = document.getElementById(detailId);
+    if (!(panel instanceof HTMLElement)) return;
+
+    const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+    document.querySelectorAll('[data-service-toggle]').forEach((node) => {
+      if (node instanceof HTMLButtonElement) {
+        node.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.querySelectorAll('[data-service-panel]').forEach((node) => {
+      if (node instanceof HTMLElement) {
+        node.setAttribute('hidden', '');
+      }
+    });
+
+    if (!isOpen) {
+      button.setAttribute('aria-expanded', 'true');
+      panel.removeAttribute('hidden');
+    }
+  });
+</script>
