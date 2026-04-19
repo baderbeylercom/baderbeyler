@@ -143,7 +143,6 @@ export const pageDots = [
   { target: '#collaborations', label: 'İş birlikleri' },
   { target: '#events', label: 'Etkinlikler' },
   { target: '#blog', label: 'Blog' },
-  { target: '#newsletter', label: 'E-bülten' },
   { target: '#contact', label: 'İletişim' },
 ];
 

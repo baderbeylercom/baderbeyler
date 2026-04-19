@@ -10,7 +10,6 @@ import Services from '../components/sections/Services.astro';
 import Collaborations from '../components/sections/Collaborations.astro';
 import Events from '../components/sections/Events.astro';
 import Blog from '../components/sections/Blog.astro';
-import Newsletter from '../components/sections/Newsletter.astro';
 import Contact from '../components/sections/Contact.astro';
 import Footer from '../components/sections/Footer.astro';
 import {
@@ -47,8 +46,7 @@ const events = await getFeaturedEvents(1);
     <Collaborations />
     <Events events={events} />
     <Blog posts={blogPosts} />
-    <Newsletter />
-    <Contact />
+<Contact />
   </main>
 
   <Footer />
