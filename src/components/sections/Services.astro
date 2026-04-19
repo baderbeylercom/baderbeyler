@@ -8,6 +8,9 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
 const modalItems = servicesContent.items.filter(
   (item: any) => Array.isArray(item.detailImages) && item.detailImages.length > 0
 );
+const textModalItems = servicesContent.items.filter(
+  (item: any) => Array.isArray(item.detailParagraphs) && item.detailParagraphs.length > 0
+);
 ---
 
 <section class="section services snap-section" id="services" style={servicesStyle}>
@@ -20,13 +23,14 @@ const modalItems = servicesContent.items.filter(
     {
       servicesContent.items.map((item: any, index: number) => {
         const hasGallery = Array.isArray(item.detailImages) && item.detailImages.length > 0;
+        const hasText = Array.isArray(item.detailParagraphs) && item.detailParagraphs.length > 0;
         const modalId = `modal-${index}`;
         return (
           <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
             <div class="service-icon">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
-            {hasGallery ? (
+            {hasGallery || hasText ? (
               <button
                 type="button"
                 class="service-link service-galeri-btn"
@@ -74,6 +78,26 @@ const modalItems = servicesContent.items.filter(
           <button class="svc-prev" aria-label="Onceki">&#8592;</button>
           <span class="svc-counter"><span class="svc-current">1</span> / {item.detailImages.length}</span>
           <button class="svc-next" aria-label="Sonraki">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  );
+})}
+
+{textModalItems.map((item: any) => {
+  const itemIndex = servicesContent.items.indexOf(item);
+  const modalId = `modal-${itemIndex}`;
+  return (
+    <div id={modalId} class="svc-modal" role="dialog" aria-modal="true" aria-label={item.title}>
+      <div class="svc-modal-backdrop"></div>
+      <div class="svc-modal-content svc-modal-content--text">
+        <button class="svc-modal-close" aria-label="Kapat">&#x2715;</button>
+        <div class="svc-text-body">
+          <h3 class="svc-text-title">{item.title}</h3>
+          {item.detailParagraphs.map((p: string) => (
+            <p class="svc-text-para">{p}</p>
+          ))}
+          <a href="#contact" class="svc-text-cta">İletişime Geç →</a>
         </div>
       </div>
     </div>
@@ -174,6 +198,48 @@ const modalItems = servicesContent.items.filter(
     min-width: 4rem;
     text-align: center;
   }
+
+  .svc-modal-content--text {
+    align-items: stretch;
+    max-width: min(90vw, 720px);
+  }
+
+  .svc-text-body {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .svc-text-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+  }
+
+  .svc-text-para {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: #333;
+  }
+
+  .svc-text-cta {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #5a2a6e;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    align-self: flex-start;
+    transition: opacity 0.2s;
+  }
+  .svc-text-cta:hover { opacity: 0.7; }
 </style>
 
 <script>
@@ -188,26 +254,27 @@ const modalItems = servicesContent.items.filter(
   document.querySelectorAll('.svc-modal').forEach((modalEl) => {
     const modal = modalEl as HTMLElement;
     const slides = modal.querySelectorAll<HTMLElement>('.svc-slide');
-    const currentEl = modal.querySelector<HTMLElement>('.svc-current')!;
+    const currentEl = modal.querySelector<HTMLElement>('.svc-current');
     let current = 0;
 
-    function show(n: number) {
-      slides[current].classList.remove('active');
-      current = (n + slides.length) % slides.length;
-      slides[current].classList.add('active');
-      currentEl.textContent = String(current + 1);
+    if (slides.length > 0 && currentEl) {
+      function show(n: number) {
+        slides[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        currentEl.textContent = String(current + 1);
+      }
+      (modal as any)._show = show;
+      modal.querySelector('.svc-prev')?.addEventListener('click', () => show(current - 1));
+      modal.querySelector('.svc-next')?.addEventListener('click', () => show(current + 1));
     }
-
-    (modal as any)._show = show;
 
     modal.querySelector('.svc-modal-backdrop')!.addEventListener('click', () => closeModal(modal));
     modal.querySelector('.svc-modal-close')!.addEventListener('click', () => closeModal(modal));
-    modal.querySelector('.svc-prev')!.addEventListener('click', () => show(current - 1));
-    modal.querySelector('.svc-next')!.addEventListener('click', () => show(current + 1));
   });
 
   function openModal(modal: HTMLElement) {
-    (modal as any)._show(0);
+    if (typeof (modal as any)._show === 'function') (modal as any)._show(0);
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
   }

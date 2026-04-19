@@ -22,7 +22,14 @@
     {
       "icon": "❖",
       "title": "Klinik İş Birlikleri",
-      "description": "Hekim ve diyetisyenlerle birlikte ilerleyen, vaka yönetimini destekleyen ve kişiselleştirilmiş değerlendirmeyi güçlendiren iş ortaklığı yapısı."
+      "description": "Hekim ve diyetisyenlerle birlikte ilerleyen, vaka yönetimini destekleyen ve kişiselleştirilmiş değerlendirmeyi güçlendiren iş ortaklığı yapısı.",
+      "detailParagraphs": [
+        "Klinik ve sağlık profesyonellerine özgü iş birliği kapsamında, nutrigenetik analiz değerlendirme ve yorum raporları sunulur.",
+        "Hekim istemi üzerinde farmakogenetik analizlerle ilaç dozajlarının kişiselleştirilmesi, çeşitli etken maddelere verilecek yanıtların etkinliğinin öngörülmesi mümkün. Bunun yanı sıra, tedavi süreçlerinde beslenme protokollerine dahil edilebilecek supplement ve besin etken maddeleri listelenerek yaklaşık 1 saat süren danışmanlık randevusuyla aktarılır.",
+        "Hücresel biyokimya yolaklarında görev yapan enzimleri kodlayan gen bölgeleri ve bunların regülatör bölgeleri hedef alınarak Tüm Genom Sekanslama teknolojisiyle veriler değerlendirilir. Yorum raporları hekim istemi üzerine biyokimyasal bilgi içerecek şekilde donatılarak maksimum fayda gözetilmektedir. Prognoza destek, %99.9 oranında kişiselleştirilmiş klinik açıdan anlamlı benign SNP yorumlamaları yapılmaktadır.",
+        "Hekim, diyetisyen veya sağlık profesyoneliyseniz, kendi klinik deneyiminize premium ve kişiye özgü genetik analiz raporlamalarıyla fark yaratabilirsiniz.",
+        "Olası iş birlikleri için bizimle iletişime geçin."
+      ]
     }
   ]
 }
