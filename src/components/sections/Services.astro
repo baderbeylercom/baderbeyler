@@ -4,6 +4,13 @@ import { getSiteData } from '../../lib/site-data';
 const { servicesContent } = await getSiteData();
 const ap = servicesContent.appearance;
 const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-title-size:${ap.cardTitleSize}rem;--services-card-body-size:${ap.cardBodySize}rem;--section-padding-y:${ap.paddingY}rem;--services-grid-gap:${ap.gridGap}rem;`;
+
+const modalItems = servicesContent.items.filter(
+  (item: any) => Array.isArray(item.detailImages) && item.detailImages.length > 0
+);
+const textModalItems = servicesContent.items.filter(
+  (item: any) => Array.isArray(item.detailParagraphs) && item.detailParagraphs.length > 0
+);
 ---
 
 <section class="section services snap-section" id="services" style={servicesStyle}>
@@ -14,43 +21,24 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
 
   <div class="services-grid">
     {
-      servicesContent.items.map((item, index) => {
-        const detailId = `service-detail-${index}`;
+      servicesContent.items.map((item: any, index: number) => {
         const hasGallery = Array.isArray(item.detailImages) && item.detailImages.length > 0;
-
+        const hasText = Array.isArray(item.detailParagraphs) && item.detailParagraphs.length > 0;
+        const modalId = `modal-${index}`;
         return (
           <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
             <div class="service-icon">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
-
-            {
-              hasGallery ? (
-                <>
-                  <button
-                    type="button"
-                    class="service-link service-link-button"
-                    data-service-toggle={detailId}
-                    aria-expanded="false"
-                    aria-controls={detailId}
-                  >
-                    Detaylı Bilgi →
-                  </button>
-
-                  <div class="service-detail" id={detailId} data-service-panel hidden>
-                    <div class="service-detail-grid">
-                      {item.detailImages.map((src, imageIndex) => (
-                        <figure class="service-detail-figure">
-                          <img src={src} alt={`${item.title} görsel ${imageIndex + 1}`} loading="lazy" />
-                        </figure>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
-              )
-            }
+            {hasGallery || hasText ? (
+              <button
+                type="button"
+                class="service-link service-galeri-btn"
+                data-modal={modalId}
+              >Detaylı Bilgi →</button>
+            ) : (
+              <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+            )}
           </div>
         );
       })
@@ -59,49 +47,266 @@ const servicesStyle = `--services-title-size:${ap.titleSize}rem;--services-card-
 
   <div class="photo-marquee">
     <div class="marquee-track">
-      {[...servicesContent.marqueeImages, ...servicesContent.marqueeImages].map((src) => (
+      {[...servicesContent.marqueeImages, ...servicesContent.marqueeImages].map((src: string) => (
         <div class="marquee-item">
           <img src={src} alt="" loading="lazy" />
         </div>
       ))}
     </div>
-    <div class="marquee-overlay-text">
-      SAĞLIK · YAŞAM · DÖNÜŞÜM · SAĞLIK · YAŞAM · DÖNÜŞÜM
-    </div>
   </div>
 </section>
 
-<script is:inline>
-  document.addEventListener('click', (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
+{modalItems.map((item: any) => {
+  const itemIndex = servicesContent.items.indexOf(item);
+  const modalId = `modal-${itemIndex}`;
+  return (
+    <div id={modalId} class="svc-modal" role="dialog" aria-modal="true" aria-label={item.title}>
+      <div class="svc-modal-backdrop"></div>
+      <div class="svc-modal-content">
+        <button class="svc-modal-close" aria-label="Kapat">&#x2715;</button>
+        <div class="svc-slider">
+          {item.detailImages.map((src: string, i: number) => (
+            <div class={`svc-slide${i === 0 ? ' active' : ''}`}>
+              <img src={src} alt={`${item.title} ${i + 1}`} />
+            </div>
+          ))}
+        </div>
+        <div class="svc-nav">
+          <button class="svc-prev" aria-label="Onceki">&#8592;</button>
+          <span class="svc-counter"><span class="svc-current">1</span> / {item.detailImages.length}</span>
+          <button class="svc-next" aria-label="Sonraki">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  );
+})}
 
-    const button = target.closest('[data-service-toggle]');
-    if (!(button instanceof HTMLButtonElement)) return;
+{textModalItems.map((item: any) => {
+  const itemIndex = servicesContent.items.indexOf(item);
+  const modalId = `modal-${itemIndex}`;
+  return (
+    <div id={modalId} class="svc-modal" role="dialog" aria-modal="true" aria-label={item.title}>
+      <div class="svc-modal-backdrop"></div>
+      <div class="svc-modal-content svc-modal-content--text">
+        <button class="svc-modal-close" aria-label="Kapat">&#x2715;</button>
+        <div class="svc-text-body">
+          <h3 class="svc-text-title">{item.title}</h3>
+          {item.detailParagraphs.map((p: string) => (
+            <p class="svc-text-para">{p}</p>
+          ))}
+          <a href="#contact" class="svc-text-cta">İletişime Geç →</a>
+        </div>
+      </div>
+    </div>
+  );
+})}
 
-    const detailId = button.getAttribute('data-service-toggle');
-    if (!detailId) return;
+<style>
+  .service-galeri-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-align: left;
+  }
 
-    const panel = document.getElementById(detailId);
-    if (!(panel instanceof HTMLElement)) return;
+  .svc-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .svc-modal.open {
+    pointer-events: auto;
+    opacity: 1;
+  }
 
-    const isOpen = button.getAttribute('aria-expanded') === 'true';
+  .svc-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    cursor: pointer;
+  }
 
-    document.querySelectorAll('[data-service-toggle]').forEach((node) => {
-      if (node instanceof HTMLButtonElement) {
-        node.setAttribute('aria-expanded', 'false');
-      }
+  .svc-modal-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: min(90vw, 960px);
+    width: 100%;
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .svc-modal.open .svc-modal-content {
+    transform: translateY(0) scale(1);
+  }
+
+  .svc-modal-close {
+    position: absolute;
+    top: -2.5rem;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  .svc-modal-close:hover { opacity: 1; }
+
+  .svc-slider { width: 100%; }
+
+  .svc-slide { display: none; }
+  .svc-slide.active { display: block; }
+  .svc-slide img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    display: block;
+  }
+
+  .svc-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: #fff;
+  }
+
+  .svc-prev, .svc-next {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .svc-prev:hover, .svc-next:hover { background: rgba(255,255,255,0.3); }
+
+  .svc-counter {
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    min-width: 4rem;
+    text-align: center;
+  }
+
+  .svc-modal-content--text {
+    align-items: stretch;
+    max-width: min(90vw, 720px);
+  }
+
+  .svc-text-body {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .svc-text-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+  }
+
+  .svc-text-para {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: #333;
+  }
+
+  .svc-text-cta {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #5a2a6e;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    align-self: flex-start;
+    transition: opacity 0.2s;
+  }
+  .svc-text-cta:hover { opacity: 0.7; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.service-galeri-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const modalId = btn.getAttribute('data-modal')!;
+      const modal = document.getElementById(modalId)!;
+      openModal(modal);
     });
+  });
 
-    document.querySelectorAll('[data-service-panel]').forEach((node) => {
-      if (node instanceof HTMLElement) {
-        node.setAttribute('hidden', '');
-      }
-    });
+  document.querySelectorAll('.svc-modal').forEach((modalEl) => {
+    const modal = modalEl as HTMLElement;
+    const slides = modal.querySelectorAll<HTMLElement>('.svc-slide');
+    const currentEl = modal.querySelector<HTMLElement>('.svc-current');
+    let current = 0;
 
-    if (!isOpen) {
-      button.setAttribute('aria-expanded', 'true');
-      panel.removeAttribute('hidden');
+    if (slides.length > 0 && currentEl) {
+      const show = (n: number) => {
+        slides[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        currentEl.textContent = String(current + 1);
+      };
+      (modal as any)._show = show;
+      (modal as any)._step = (dir: number) => show(current + dir);
+      modal.querySelector('.svc-prev')?.addEventListener('click', () => show(current - 1));
+      modal.querySelector('.svc-next')?.addEventListener('click', () => show(current + 1));
     }
+
+    modal.querySelector('.svc-modal-backdrop')!.addEventListener('click', () => closeModal(modal));
+    modal.querySelector('.svc-modal-close')!.addEventListener('click', () => closeModal(modal));
+
+    // "İletişime Geç" linki: modal kapat, sonra yönlendir
+    modal.querySelector('.svc-text-cta')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeModal(modal);
+      setTimeout(() => {
+        window.location.href = '#contact';
+      }, 320);
+    });
+  });
+
+  function openModal(modal: HTMLElement) {
+    if (typeof (modal as any)._show === 'function') (modal as any)._show(0);
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(modal: Element) {
+    modal.classList.remove('open');
+    (document.body.style as any).overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const open = document.querySelector<HTMLElement>('.svc-modal.open');
+    if (!open) return;
+    if (e.key === 'Escape') closeModal(open);
+    if (e.key === 'ArrowLeft' && typeof (open as any)._step === 'function') (open as any)._step(-1);
+    if (e.key === 'ArrowRight' && typeof (open as any)._step === 'function') (open as any)._step(1);
   });
 </script>

@@ -11,6 +11,8 @@ const { events } = Astro.props;
 const { eventsContent } = await getSiteData();
 const ap = eventsContent.appearance;
 const eventsStyle = `--events-title-size:${ap.titleSize}rem;--events-card-title-size:${ap.cardTitleSize}rem;--section-padding-y:${ap.paddingY}rem;--events-list-gap:${ap.listMarginTop}rem;`;
+
+const registrationEvents = events.filter(e => e.data.registrationUrl);
 ---
 
 <section class="section events snap-section" id="events" style={eventsStyle}>
@@ -39,9 +41,13 @@ const eventsStyle = `--events-title-size:${ap.titleSize}rem;--events-card-title-
                   </a>
                 )}
                 {event.data.registrationUrl && (
-                  <a href={event.data.registrationUrl} target="_blank" rel="noreferrer" class="event-action">
-                    Detayları Gör
-                  </a>
+                  <button
+                    type="button"
+                    class="event-action event-register-btn"
+                    data-reg-modal={`reg-modal-${index}`}
+                  >
+                    Yerini Ayırt
+                  </button>
                 )}
               </div>
             </div>
@@ -80,3 +86,156 @@ const eventsStyle = `--events-title-size:${ap.titleSize}rem;--events-card-title-
     )
   }
 </section>
+
+{events.map((event, index) => event.data.registrationUrl && (
+  <div id={`reg-modal-${index}`} class="reg-modal" role="dialog" aria-modal="true" aria-label="Kayıt Formu">
+    <div class="reg-modal-backdrop"></div>
+    <div class="reg-modal-content">
+      <button class="reg-modal-close" aria-label="Kapat">&#x2715;</button>
+      <div class="reg-modal-body">
+        <p class="reg-modal-eyebrow">Etkinlik Kaydı</p>
+        <h3 class="reg-modal-title">{event.data.registrationLabel ?? event.data.title}</h3>
+        <p class="reg-modal-desc">Formu doldurarak yerinizi ayırtabilirsiniz.</p>
+        <a
+          href={event.data.registrationUrl}
+          target="_blank"
+          rel="noreferrer"
+          class="reg-modal-cta"
+        >
+          Form Doldur →
+        </a>
+      </div>
+    </div>
+  </div>
+))}
+
+<style>
+  .event-register-btn {
+    background: none;
+    border: 1px solid currentColor;
+    cursor: pointer;
+    font: inherit;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .event-register-btn:hover {
+    background: currentColor;
+    color: #fff;
+  }
+
+  .reg-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .reg-modal.open {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .reg-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    cursor: pointer;
+  }
+
+  .reg-modal-content {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border-radius: 1.25rem;
+    padding: 2.5rem 2.75rem;
+    max-width: min(90vw, 480px);
+    width: 100%;
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    text-align: center;
+  }
+  .reg-modal.open .reg-modal-content {
+    transform: translateY(0) scale(1);
+  }
+
+  .reg-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+  }
+  .reg-modal-close:hover { color: #111; }
+
+  .reg-modal-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 0.5rem;
+  }
+
+  .reg-modal-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .reg-modal-desc {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.75rem;
+  }
+
+  .reg-modal-cta {
+    display: inline-block;
+    background: #3b1f55;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.97rem;
+    transition: opacity 0.2s;
+  }
+  .reg-modal-cta:hover { opacity: 0.85; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.event-register-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const modalId = btn.getAttribute('data-reg-modal')!;
+      const modal = document.getElementById(modalId)!;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  document.querySelectorAll('.reg-modal').forEach((modalEl) => {
+    const modal = modalEl as HTMLElement;
+    modal.querySelector('.reg-modal-backdrop')!.addEventListener('click', () => closeRegModal(modal));
+    modal.querySelector('.reg-modal-close')!.addEventListener('click', () => closeRegModal(modal));
+  });
+
+  function closeRegModal(modal: HTMLElement) {
+    modal.classList.remove('open');
+    (document.body.style as any).overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = document.querySelector<HTMLElement>('.reg-modal.open');
+    if (open) closeRegModal(open);
+  });
+</script>

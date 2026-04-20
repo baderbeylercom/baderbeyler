@@ -45,10 +45,27 @@ import Footer from '../components/sections/Footer.astro';
             <input id="pdfPhone" type="tel" placeholder="+90 5XX XXX XX XX" />
           </div>
           <div class="pdf-form-group">
+            <label>Görüşme Türü</label>
+            <div class="pdf-type-group">
+              <label class="pdf-type-option">
+                <input type="radio" name="meetingType" value="online" required />
+                <span>Online</span>
+              </label>
+              <label class="pdf-type-option">
+                <input type="radio" name="meetingType" value="yuzyuze" />
+                <span>Yüz Yüze</span>
+              </label>
+            </div>
+          </div>
+          <div class="pdf-form-group">
+            <label for="pdfDate">Randevu Tarihi</label>
+            <input id="pdfDate" type="date" required />
+          </div>
+          <div class="pdf-form-group">
             <label for="pdfMessage">Mesajınız</label>
             <textarea id="pdfMessage" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
           </div>
-          <button class="pdf-form-submit" type="submit">Ön Görüşme Talep Et →</button>
+          <button class="pdf-form-submit" type="submit" id="pdfSubmitBtn" disabled>Ön Görüşme Talep Et →</button>
         </form>
       </div>
     </div>
@@ -101,6 +118,15 @@ import Footer from '../components/sections/Footer.astro';
 
   prevBtn.addEventListener('click', () => { if (currentPage > 1) renderPage(--currentPage); });
   nextBtn.addEventListener('click', () => { if (currentPage < pdfDoc.numPages) renderPage(++currentPage); });
+
+  // Tarih seçilmeden buton disabled kalır
+  const dateInput = document.getElementById('pdfDate') as HTMLInputElement;
+  const submitBtn = document.getElementById('pdfSubmitBtn') as HTMLButtonElement;
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+  dateInput.addEventListener('change', () => {
+    submitBtn.disabled = !dateInput.value;
+  });
 </script>
 
 <style>
@@ -284,6 +310,34 @@ import Footer from '../components/sections/Footer.astro';
   }
 
   .pdf-form-submit:hover { opacity: 0.85; }
+  .pdf-form-submit:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .pdf-type-group {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .pdf-type-option {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.8);
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .pdf-type-option input[type="radio"] { accent-color: #3b1f55; }
+  .pdf-type-option:has(input:checked) {
+    border-color: #3b1f55;
+    background: rgba(59,31,85,0.06);
+  }
 
   /* Mobil */
   @media (max-width: 900px) {

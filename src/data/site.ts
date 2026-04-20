@@ -143,7 +143,6 @@ export const pageDots = [
   { target: '#collaborations', label: 'İş birlikleri' },
   { target: '#events', label: 'Etkinlikler' },
   { target: '#blog', label: 'Blog' },
-  { target: '#newsletter', label: 'E-bülten' },
   { target: '#contact', label: 'İletişim' },
 ];
 
@@ -152,9 +151,9 @@ export const heroContent = {
   bgText: isNonEmptyString(heroData.bgText) ? heroData.bgText : 'Bader Beyler',
   rightEyebrow: isNonEmptyString(heroData.rightEyebrow) ? heroData.rightEyebrow : 'Hakkında',
   stats: parseStats(heroData.stats, defaultHeroStats),
-  heroImage: '/assets/images/hero-person.png',
+  heroImage: '/assets/images/hero-person.webp',
   heroImageAlt: 'Bader Beyler ekip görseli',
-  focusImage: '/assets/images/hero-focus-portrait.png',
+  focusImage: '/assets/images/hero-focus-portrait.webp',
   focusImageAlt: 'Bader Beyler portre görseli',
   appearance: {
     rightPanelWidth: 480,
@@ -173,7 +172,7 @@ export const motionStories = [
       'Ömür boyu bedensel sisteminizi destekleyecek takviye ve beslenme önerileri; kişisel veriyi doğru okumakla mümkün.',
     ],
     note: 'Bilgiyi kişisel sağlık kararına dönüştüren başlangıç',
-    image: '/assets/images/story-one.png',
+    image: '/assets/images/story-one.webp',
     imageAlt: 'Bader Beyler motion görseli',
     appearance: { titleSize: 4, bodySize: 1.02, paddingY: 2, paddingBottom: 5.2 },
   },
@@ -186,7 +185,7 @@ export const motionStories = [
       "Bu sebeple, kırka varmadan kırkları; 40'dan sonra ise 60'lı yılları öngörebilen, klinik olarak hekim, diyetisyen ve sağlık profesyonellerine %99 oranında kişiselleştirilmiş bir araç olarak genetik analizler, önleyici hekimliğin bir parçası haline geliyor.",
     ],
     note: 'Sol fotoğraf · sağ metin devamı',
-    image: '/assets/images/story-two.png',
+    image: '/assets/images/story-two.webp',
     imageAlt: 'Bader Beyler motion görseli ikinci blok',
     appearance: { titleSize: 4, bodySize: 1.02, paddingY: 2, paddingBottom: 5.2 },
   },
@@ -195,9 +194,9 @@ export const motionStories = [
 export const aboutContent = {
   ...aboutData,
   images: {
-    main: '/assets/images/about-main.png',
+    main: '/assets/images/about-main.webp',
     mainAlt: 'Öne çıkan portre',
-    accent: '/assets/images/about-accent.png',
+    accent: '/assets/images/about-accent.webp',
     accentAlt: 'Vurgulu portre',
   },
   appearance: {
@@ -219,12 +218,13 @@ export const aboutContent = {
 export const servicesContent = {
   ...servicesData,
   marqueeImages: [
-    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1502767089025-6572583495f0?w=400&h=500&fit=crop',
-    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop',
+    '/assets/images/1.webp',
+    '/assets/images/2.webp',
+    '/assets/images/3.webp',
+    '/assets/images/4.webp',
+    '/assets/images/5.webp',
+    '/assets/images/6.webp',
+    '/assets/images/7.webp',
   ],
   appearance: {
     titleSize: 3.35,
@@ -241,7 +241,7 @@ export const collaborationsContent = {
   appearance: { gridGap: 1.2, gridMarginTop: 2.15, itemPaddingTop: 1.8, itemPaddingBottom: 1.45 },
   items: [
     {
-      image: '/assets/images/elvan-odabasi.png',
+      image: '/assets/images/elvan-odabasi.webp',
       logo: 'F',
       visualStyle: 'portrait',
       brandLine: 'Formeo by',
@@ -253,14 +253,14 @@ export const collaborationsContent = {
       design: { visualHeight: 240, imageWidth: 188, imageScale: 1.0, imageOffsetX: 30, imageOffsetY: 8, blobColor: '#e9ddd0', blobOpacity: 0.92, blobGradientColor: '#d8c9b9', blobGradientOpacity: 0.58, blobWidth: 194, blobHeight: 224, blobOffsetX: -16, blobOffsetY: 6, blobRadius: 44, blobBlur: 0, blobShadowBlur: 34, blobShadowOpacity: 0.16, copyOffsetY: 0.85, brandLineFontSize: 1.14, partnerFontSize: 1.6, leadFontSize: 1.04 },
     },
     {
-      image: '/assets/images/intergen-building.png',
+      image: '/assets/images/intergen-building.webp',
       logo: 'I',
       visualStyle: 'portrait',
       brandLine: 'İNTERGEN',
-      partnerName: 'Genetik Merkezi',
+      partnerName: 'Genetik Hastalıklar Değerlendirme Merkezi',
       imageAlt: 'İNTERGEN Genetik Hastalıklar Değerlendirme Merkezi',
-      leadStrong: 'Klinik Genetik İş Birliği',
-      leadText: ', İNTERGEN Genetik Hastalıklar Değerlendirme Merkezi ile yürütülen profesyonel iş birliği çerçevesinde vaka bazlı değerlendirme ve klinik destek sağlanmaktadır.',
+      leadStrong: 'İNTERGEN güvencesi',
+      leadText: ' ile yürütülen profesyonel iş birliği çerçevesinde Whole Genome Sequence (WGS) teknolojisiyle genetik analizler yüksek güvenilir, hassas ve spesifik süreçlerden geçerek yapılmaktadır.',
       description: '',
       design: { visualHeight: 214, imageWidth: 210, imageScale: 1.0, imageOffsetX: 18, imageOffsetY: 8, blobColor: '#d6e4e8', blobOpacity: 0.88, blobGradientColor: '#b8d0d8', blobGradientOpacity: 0.55, blobWidth: 194, blobHeight: 224, blobOffsetX: -12, blobOffsetY: 6, blobRadius: 44, blobBlur: 0, blobShadowBlur: 34, blobShadowOpacity: 0.14, copyOffsetY: 0.85, brandLineFontSize: 1.14, partnerFontSize: 1.6, leadFontSize: 1.04 },
     },

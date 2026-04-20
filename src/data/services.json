@@ -12,12 +12,24 @@
     {
       "icon": "◈",
       "title": "Seminer ve Eğitim Programları",
-      "description": "Kurumsal ekipler, topluluklar ve sağlık profesyonelleri için hazırlanan; bilimsel içeriği sade ve güçlü bir yapıda sunan eğitimler."
+      "description": "Kurumsal ekipler, topluluklar, sağlık profesyonelleri, wellbeing faaliyetleri için hazırlanan, bilimsel temelli eğitim, konferans vb. sunu hizmetleri",
+      "detailImages": [
+        "/assets/images/seminer-1.webp",
+        "/assets/images/seminer-2.webp",
+        "/assets/images/seminer-3.webp"
+      ]
     },
     {
       "icon": "❖",
       "title": "Klinik İş Birlikleri",
-      "description": "Hekim ve diyetisyenlerle birlikte ilerleyen, vaka yönetimini destekleyen ve kişiselleştirilmiş değerlendirmeyi güçlendiren iş ortaklığı yapısı."
+      "description": "Hekim ve diyetisyenlerle birlikte ilerleyen, vaka yönetimini destekleyen ve kişiselleştirilmiş değerlendirmeyi güçlendiren iş ortaklığı yapısı.",
+      "detailParagraphs": [
+        "Klinik ve sağlık profesyonellerine özgü iş birliği kapsamında, nutrigenetik analiz değerlendirme ve yorum raporları sunulur.",
+        "Hekim istemi üzerinde farmakogenetik analizlerle ilaç dozajlarının kişiselleştirilmesi, çeşitli etken maddelere verilecek yanıtların etkinliğinin öngörülmesi mümkün. Bunun yanı sıra, tedavi süreçlerinde beslenme protokollerine dahil edilebilecek supplement ve besin etken maddeleri listelenerek yaklaşık 1 saat süren danışmanlık randevusuyla aktarılır.",
+        "Hücresel biyokimya yolaklarında görev yapan enzimleri kodlayan gen bölgeleri ve bunların regülatör bölgeleri hedef alınarak Tüm Genom Sekanslama teknolojisiyle veriler değerlendirilir. Yorum raporları hekim istemi üzerine biyokimyasal bilgi içerecek şekilde donatılarak maksimum fayda gözetilmektedir. Prognoza destek, %99.9 oranında kişiselleştirilmiş klinik açıdan anlamlı benign SNP yorumlamaları yapılmaktadır.",
+        "Hekim, diyetisyen veya sağlık profesyoneliyseniz, kendi klinik deneyiminize premium ve kişiye özgü genetik analiz raporlamalarıyla fark yaratabilirsiniz.",
+        "Olası iş birlikleri için bizimle iletişime geçin."
+      ]
     }
   ]
 }

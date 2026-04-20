@@ -4,7 +4,7 @@ description: ACTN3 geni ve alfa-aktinin-3 proteinin atletik performans, kas tipi
 excerpt: Genetiğiniz hangi spor dalına daha uygun olduğunuzu söyleyebilir mi?
 category: Nutrigenetik
 date: 2026-04-02
-featuredImage: /assets/images/wellness-journey.png
+featuredImage: /assets/images/wellness-journey.webp
 featuredImageAlt: Kas genetiği ve spor performansı görseli
 draft: false
 featured: true

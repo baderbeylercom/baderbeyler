@@ -4,7 +4,7 @@ description: Genetik varyasyonların besin metabolizmasını ve fizyolojik yanı
 excerpt: Aynı beslenme planı, neden farklı bireylerde farklı sonuçlar üretir?
 category: Önleyici Sağlık
 date: 2026-03-28
-featuredImage: /assets/images/Gemini_Generated_Image_8ot8158ot8158ot8.png
+featuredImage: /assets/images/Gemini_Generated_Image_8ot8158ot8158ot8.webp
 featuredImageAlt: Genotip temelli beslenme görseli
 draft: false
 featured: true
