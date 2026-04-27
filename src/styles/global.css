@@ -1262,19 +1262,19 @@ img {
 
 .collab-item.concept-card {
   display: grid;
-  grid-template-columns: minmax(220px, 248px) minmax(0, 1fr);
-  gap: 1.9rem;
-  align-items: center;
-  min-height: 286px;
+  grid-template-columns: 212px minmax(0, 1fr);
+  gap: 1.65rem;
+  align-items: flex-start;
+  min-height: 268px;
   height: auto;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.5rem;
   overflow: hidden;
 }
 
 .collab-item.concept-card .collab-visual {
-  align-self: center;
-  margin-bottom: 0.25rem;
+  align-self: end;
+  margin-bottom: 0;
 }
 
 .collab-item.concept-card .collab-copy {
@@ -1283,8 +1283,8 @@ img {
 
 .collab-visual {
   position: relative;
-  min-height: var(--collab-visual-height, 230px);
-  height: var(--collab-visual-height, 230px);
+  min-height: calc(var(--collab-visual-height, 230px) + 8px);
+  height: calc(var(--collab-visual-height, 230px) + 8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1358,7 +1358,7 @@ img {
 .collab-visual.portrait img {
   width: min(100%, var(--collab-image-width, 206px));
   height: auto;
-  max-height: calc(var(--collab-visual-height, 230px) + 28px);
+  max-height: calc(var(--collab-visual-height, 230px) + 10px);
   object-fit: contain;
   filter: drop-shadow(0 4px 10px rgba(22, 19, 19, 0.22)) drop-shadow(0 16px 28px rgba(22, 19, 19, 0.18));
   margin-top: 0;

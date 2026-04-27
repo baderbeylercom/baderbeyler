@@ -165,6 +165,10 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     display: none;
   }
 
+  .collab-item-arrow {
+    display: none;
+  }
+
   /* ── Mobil: tıklanabilir satır ── */
   @media (max-width: 768px) {
     .collab-grid {
@@ -248,6 +252,7 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     }
 
     .collab-item-arrow {
+      display: inline-block;
       font-size: 1rem;
       color: var(--clr-terracotta);
       flex-shrink: 0;
