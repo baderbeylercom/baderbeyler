@@ -138,7 +138,6 @@ export const pageDots = [
   { target: '#home', label: 'Anasayfa' },
   { target: '#storyOne', label: 'Tanıtım 1' },
   { target: '#storyTwo', label: 'Tanıtım 2' },
-  { target: '#about', label: 'Hakkında' },
   { target: '#services', label: 'Hizmetler' },
   { target: '#collaborations', label: 'İş birlikleri' },
   { target: '#events', label: 'Etkinlikler' },

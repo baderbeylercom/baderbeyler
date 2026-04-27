@@ -5,7 +5,6 @@ import Navbar from '../components/sections/Navbar.astro';
 import PageDots from '../components/sections/PageDots.astro';
 import Hero from '../components/sections/Hero.astro';
 import MotionStory from '../components/sections/MotionStory.astro';
-import About from '../components/sections/About.astro';
 import Services from '../components/sections/Services.astro';
 import Collaborations from '../components/sections/Collaborations.astro';
 import Events from '../components/sections/Events.astro';
@@ -41,7 +40,6 @@ const events = await getFeaturedEvents(1);
       }
     </section>
 
-    <About />
     <Services />
     <Collaborations />
     <Events events={events} />

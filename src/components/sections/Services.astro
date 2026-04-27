@@ -28,12 +28,19 @@ const textModalItems = servicesContent.items.filter(
         return (
           <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
             <div class="service-icon">{item.icon}</div>
-            <button type="button" class="service-card-header" aria-expanded="false">
+            <div class="service-card-heading">
               <h3>{item.title}</h3>
-              <svg class="service-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
+              <button
+                type="button"
+                class="service-card-toggle"
+                aria-expanded="false"
+                aria-label={`${item.title} detaylarini goster`}
+              >
+                <svg class="service-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+            </div>
             <div class="service-card-body">
               <div class="service-card-body-inner">
                 <p>{item.description}</p>
@@ -111,15 +118,42 @@ const textModalItems = servicesContent.items.filter(
 })}
 
 <style>
-  .service-card-header {
+  .service-card-heading {
     display: block;
-    width: 100%;
+  }
+
+  .service-card-toggle {
+    display: none;
+    width: auto;
     padding: 0;
     border: 0;
     background: transparent;
-    text-align: left;
     color: inherit;
-    cursor: default;
+  }
+
+  .service-card-chevron {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  @media (max-width: 768px) {
+    .service-card-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .service-card-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      min-width: 2rem;
+      padding: 0.25rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
   }
 
   .service-card-body,
@@ -278,9 +312,9 @@ const textModalItems = servicesContent.items.filter(
 <script>
   const syncServiceAccordions = () => {
     document.querySelectorAll<HTMLElement>('.service-card').forEach((card) => {
-      const header = card.querySelector<HTMLButtonElement>('.service-card-header');
-      if (!header) return;
-      header.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
+      const toggle = card.querySelector<HTMLButtonElement>('.service-card-toggle');
+      if (!toggle) return;
+      toggle.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
     });
   };
 
@@ -290,10 +324,10 @@ const textModalItems = servicesContent.items.filter(
     });
   };
 
-  document.querySelectorAll<HTMLButtonElement>('.service-card-header').forEach((header) => {
-    header.addEventListener('click', () => {
+  document.querySelectorAll<HTMLButtonElement>('.service-card-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
       if (window.innerWidth > 768) return;
-      const card = header.closest<HTMLElement>('.service-card');
+      const card = toggle.closest<HTMLElement>('.service-card');
       if (!card) return;
       const isOpen = card.classList.contains('open');
       closeOpenServiceCards();

@@ -2627,17 +2627,25 @@ img {
   }
 
   /* Accordion başlık — her zaman görünür */
-  .service-card-header {
+  .service-card-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.05rem 0.75rem;
-    cursor: pointer;
     gap: 0.75rem;
-    width: 100%;
+    padding: 1.05rem 0.75rem;
+  }
+
+  .service-card-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    min-width: 2rem;
+    padding: 0.25rem;
+    cursor: pointer;
     border: 0;
     background: transparent;
-    text-align: left;
+    color: var(--clr-terracotta);
   }
 
   .service-card h3 {
