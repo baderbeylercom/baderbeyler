@@ -33,18 +33,6 @@ const contactStyle = `--contact-title-size:${ap.titleSize}rem;--contact-body-siz
     </div>
 
     <div class="contact-detail">
-      <div class="contact-detail-icon">📱</div>
-      <div>
-        <h4>Telefon</h4>
-        <p>
-          <a href={`tel:${contactContent.phone.replaceAll(' ', '')}`}>
-            {contactContent.phone}
-          </a>
-        </p>
-      </div>
-    </div>
-
-    <div class="contact-detail">
       <div class="contact-detail-icon">⏰</div>
       <div>
         <h4>Çalışma Saatleri</h4>
@@ -55,8 +43,23 @@ const contactStyle = `--contact-title-size:${ap.titleSize}rem;--contact-body-siz
     <div class="social-links">
       {
         contactContent.socialLinks.map((item) => (
-          <a href={item.href} class="social-link" aria-label={item.label}>
-            {item.shortLabel}
+          <a href={item.href} class="social-link" aria-label={item.label} target="_blank" rel="noreferrer">
+            {
+              item.label === 'Instagram' ? (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect>
+                  <circle cx="12" cy="12" r="4.1"></circle>
+                  <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6.8 9.2v7.9"></path>
+                  <path d="M6.8 6.5a.9.9 0 1 1 0 1.8a.9.9 0 0 1 0-1.8Z"></path>
+                  <path d="M10.8 9.2v7.9"></path>
+                  <path d="M10.8 12.6c0-2 1.2-3.4 3-3.4s2.9 1.4 2.9 3.4v4.5"></path>
+                </svg>
+              )
+            }
           </a>
         ))
       }

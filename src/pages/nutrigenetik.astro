@@ -152,9 +152,8 @@ import Footer from '../components/sections/Footer.astro';
         '15:30',
         '16:00',
         '16:30',
-        '17:00',
       ],
-      hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-17:00 arasinda her 30 dakikada bir planlanir.',
+      hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-16:30 arasinda her 30 dakikada bir planlanir.',
     },
     yuzyuze: {
       allowedDays: [3],
@@ -168,9 +167,8 @@ import Footer from '../components/sections/Footer.astro';
         '15:00',
         '16:00',
         '17:00',
-        '18:00',
       ],
-      hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-18:00 arasinda her saat basi planlanir.',
+      hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-17:00 arasinda her saat basi planlanir.',
     },
   } as const;
   const today = new Date().toISOString().split('T')[0];

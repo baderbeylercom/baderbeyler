@@ -288,6 +288,58 @@ img {
   transition: all 0.3s;
 }
 
+.nav-floating-socials {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 1rem);
+  transform: translateY(-50%) translateX(-10px);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.nav.scrolled .nav-floating-socials {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+.nav-floating-social {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #22303b;
+  background: rgba(239, 244, 246, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 14px 32px rgba(22, 19, 19, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: transform 0.25s var(--ease-out), background 0.25s var(--ease-out), color 0.25s var(--ease-out);
+}
+
+.nav-floating-social:hover {
+  transform: translateY(-2px);
+  background: var(--clr-terracotta);
+  color: var(--clr-white);
+}
+
+.nav-floating-social svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .hero {
   min-height: 100vh;
   position: relative;
@@ -384,9 +436,7 @@ img {
   z-index: 5;
   pointer-events: none;
   will-change: transform, opacity;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  display: none;
 }
 
 .hero-person img {
@@ -2007,22 +2057,33 @@ img {
 }
 
 .social-link {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: var(--clr-cream);
+  background: rgba(255, 255, 255, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   color: var(--clr-charcoal);
-  font-size: 1.1rem;
+  box-shadow: 0 16px 36px rgba(44, 24, 16, 0.1);
+  border: 1px solid rgba(22, 19, 19, 0.08);
 }
 
 .social-link:hover {
   background: var(--clr-terracotta);
   color: var(--clr-white);
   transform: translateY(-3px);
+}
+
+.social-link svg {
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .footer {
@@ -2471,6 +2532,10 @@ img {
 
 @media (max-width: 768px) {
   .page-dots {
+    display: none !important;
+  }
+
+  .nav-floating-socials {
     display: none !important;
   }
 

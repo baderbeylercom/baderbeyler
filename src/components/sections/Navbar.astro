@@ -1,8 +1,11 @@
 ---
 import { getSiteData } from '../../lib/site-data';
 
-const { navAppearance, navLinks, siteConfig } = await getSiteData();
+const { contactContent, navAppearance, navLinks, siteConfig } = await getSiteData();
 const navStyle = `--nav-brand-size:${navAppearance.brandFontSize}rem;--nav-link-size:${navAppearance.linkFontSize}rem;--nav-bg-opacity:${navAppearance.bgOpacity};--nav-padding-y:${navAppearance.paddingY}rem;--nav-blur:${navAppearance.blur}px;--nav-radius:${navAppearance.radius}px;`;
+const floatingSocials = contactContent.socialLinks.filter((item) =>
+  ['Instagram', 'LinkedIn'].includes(item.label),
+);
 ---
 
 <nav class="nav" id="nav" style={navStyle}>
@@ -28,4 +31,34 @@ const navStyle = `--nav-brand-size:${navAppearance.brandFontSize}rem;--nav-link-
     <span></span>
     <span></span>
   </button>
+  <div class="nav-floating-socials" aria-label="Sosyal medya bağlantıları">
+    {
+      floatingSocials.map((item) => (
+        <a
+          href={item.href}
+          class="nav-floating-social"
+          aria-label={item.label}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {
+            item.label === 'Instagram' ? (
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect>
+                <circle cx="12" cy="12" r="4.1"></circle>
+                <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle>
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6.8 9.2v7.9"></path>
+                <path d="M6.8 6.5a.9.9 0 1 1 0 1.8a.9.9 0 0 1 0-1.8Z"></path>
+                <path d="M10.8 9.2v7.9"></path>
+                <path d="M10.8 12.6c0-2 1.2-3.4 3-3.4s2.9 1.4 2.9 3.4v4.5"></path>
+              </svg>
+            )
+          }
+        </a>
+      ))
+    }
+  </div>
 </nav>
