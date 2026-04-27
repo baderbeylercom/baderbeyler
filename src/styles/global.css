@@ -868,7 +868,6 @@ img {
   color: #2c211c;
   opacity: 0.97;
   line-height: 1.86;
-  text-align: center;
 }
 
 .story-copy + .story-copy {
@@ -1876,8 +1875,8 @@ img {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
   border-bottom: 1px solid rgba(44, 24, 16, 0.06);
 }
 

@@ -5,7 +5,6 @@
     { "href": "/#collaborations", "label": "İş Birlikleri" },
     { "href": "/bilim-dunyasinda-sesimiz", "label": "Bilim Dünyasında Sesimiz" },
     { "href": "/#events", "label": "Etkinlikler" },
-    { "href": "/#blog", "label": "Blog" },
-    { "href": "/galeri", "label": "Galeri" }
+    { "href": "/#blog", "label": "Blog" }
   ]
 }

@@ -27,7 +27,7 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
         {events.map((event, index) => (
           <article class="event-card featured-event reveal" style={`transition-delay:.${index + 1}s`}>
             <div class="event-copy">
-              <div class="event-card-header">
+              <button type="button" class="event-card-header" aria-expanded="false">
                 <div class="event-header-title-wrap">
                   <h4 class="event-header-title">{event.data.title}</h4>
                   <div class="event-date-badge">{formatDateShort(event.data.startDate)}</div>
@@ -35,7 +35,7 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
                 <svg class="event-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="m6 9 6 6 6-6"/>
                 </svg>
-              </div>
+              </button>
               <div class="event-card-body">
                 <div class="event-card-body-inner">
                   <p class="event-address">{event.data.address ?? `${event.data.city}, ${event.data.venue}`}</p>
@@ -136,6 +136,10 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
       gap: 0.75rem;
       padding: 0.7rem 1rem;
       cursor: pointer;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      text-align: left;
     }
 
     .event-header-title-wrap {
@@ -175,18 +179,21 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
     .event-card.open .event-card-chevron { transform: rotate(180deg); }
 
     .event-card-body {
+      max-height: 0;
       overflow: hidden;
+      transition: max-height 0.28s ease;
     }
 
     .event-card-body-inner {
-      max-height: 0;
-      overflow: hidden;
       padding: 0 1rem;
-      transition: max-height 0.28s ease, padding 0.28s ease;
+      transition: padding 0.28s ease;
+    }
+
+    .event-card.open .event-card-body {
+      max-height: 420px;
     }
 
     .event-card.open .event-card-body-inner {
-      max-height: 400px;
       padding: 0.1rem 1rem 1rem;
     }
   }
@@ -294,19 +301,35 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
 </style>
 
 <script>
-  // Accordion — sadece mobilde
-  if (window.innerWidth <= 768) {
+  const syncEventAccordions = () => {
     document.querySelectorAll<HTMLElement>('.event-card').forEach((card) => {
-      card.querySelector('.event-card-header')?.addEventListener('click', () => {
-        const isOpen = card.classList.contains('open');
-        document.querySelectorAll('.event-card.open').forEach(c => c.classList.remove('open'));
-        if (!isOpen) card.classList.add('open');
-      });
+      const header = card.querySelector<HTMLButtonElement>('.event-card-header');
+      if (!header) return;
+      header.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
     });
-  }
+  };
+
+  const closeOpenEventCards = () => {
+    document.querySelectorAll<HTMLElement>('.event-card.open').forEach((card) => {
+      card.classList.remove('open');
+    });
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('.event-card-header').forEach((header) => {
+    header.addEventListener('click', () => {
+      if (window.innerWidth > 768) return;
+      const card = header.closest<HTMLElement>('.event-card');
+      if (!card) return;
+      const isOpen = card.classList.contains('open');
+      closeOpenEventCards();
+      if (!isOpen) card.classList.add('open');
+      syncEventAccordions();
+    });
+  });
 
   document.querySelectorAll<HTMLButtonElement>('.event-register-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
       const modalId = btn.getAttribute('data-reg-modal')!;
       const modal = document.getElementById(modalId)!;
       modal.classList.add('open');
@@ -330,4 +353,6 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
     const open = document.querySelector<HTMLElement>('.reg-modal.open');
     if (open) closeRegModal(open);
   });
+
+  syncEventAccordions();
 </script>

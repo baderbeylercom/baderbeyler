@@ -34,6 +34,7 @@ const personJsonLd = {
   description,
   url: siteConfig.siteUrl,
   email: contactContent.email,
+  telephone: contactContent.phone,
   sameAs: contactContent.socialLinks
     .map((item) => item.href)
     .filter((href) => href.startsWith('http')),
