@@ -1262,41 +1262,29 @@ img {
 
 .collab-item.concept-card {
   display: grid;
-  grid-template-columns: 212px minmax(0, 1fr);
-  gap: 1.65rem;
-  align-items: flex-start;
-  height: 270px;
-  padding-top: 2px;
-  padding-bottom: 4px;
+  grid-template-columns: minmax(220px, 248px) minmax(0, 1fr);
+  gap: 1.9rem;
+  align-items: center;
+  min-height: 286px;
+  height: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   overflow: hidden;
 }
 
 .collab-item.concept-card .collab-visual {
-  align-self: end;
-  margin-bottom: 0;
+  align-self: center;
+  margin-bottom: 0.25rem;
 }
 
 .collab-item.concept-card .collab-copy {
   align-self: center;
 }
 
-.collab-item.concept-card .collab-visual.portrait img {
-  transform: translate(var(--collab-image-offset-x, 8px), 0)
-    scale(var(--collab-image-scale, 1.05));
-}
-
-.collab-item.concept-card[data-collab-index="0"] .collab-visual.portrait img {
-  transform: translate(14px, 0) scale(1.05) !important;
-}
-
-[data-collab-index="0"] .collab-blob {
-  transform: translate(calc(-50% + 6px), calc(-50% + 28px)) !important;
-}
-
-
 .collab-visual {
   position: relative;
-  min-height: 230px;
+  min-height: var(--collab-visual-height, 230px);
+  height: var(--collab-visual-height, 230px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1351,7 +1339,7 @@ img {
     radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0) 52%),
     linear-gradient(160deg, var(--collab-blob-fill, rgba(233, 221, 208, 0.92)), var(--collab-blob-gradient-fill, rgba(216, 201, 185, 0.58)));
   filter: blur(var(--collab-blob-blur, 0px));
-  box-shadow: 0 24px var(--collab-blob-shadow-blur, 34px) var(--collab-blob-shadow-fill, rgba(233, 221, 208, 0.16));
+  box-shadow: 0 18px var(--collab-blob-shadow-blur, 34px) var(--collab-blob-shadow-fill, rgba(233, 221, 208, 0.16));
   z-index: 0;
   transition:
     transform 0.25s ease,
@@ -1368,11 +1356,11 @@ img {
 }
 
 .collab-visual.portrait img {
-  width: auto;
-  height: 280px;
-  max-height: 280px;
+  width: min(100%, var(--collab-image-width, 206px));
+  height: auto;
+  max-height: calc(var(--collab-visual-height, 230px) + 28px);
   object-fit: contain;
-  filter: drop-shadow(0 4px 10px rgba(22, 19, 19, 0.40)) drop-shadow(0 18px 36px rgba(22, 19, 19, 0.32)) drop-shadow(0 36px 64px rgba(22, 19, 19, 0.18));
+  filter: drop-shadow(0 4px 10px rgba(22, 19, 19, 0.22)) drop-shadow(0 16px 28px rgba(22, 19, 19, 0.18));
   margin-top: 0;
   transform: translate(var(--collab-image-offset-x, 8px), var(--collab-image-offset-y, 12px))
     scale(var(--collab-image-scale, 1.05));
