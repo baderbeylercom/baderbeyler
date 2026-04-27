@@ -123,9 +123,303 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
               {item.leadText}
             </p>
             <p>{item.description}</p>
+            {item.image && (
+              <button type="button" class="collab-hakkinda-btn" data-collab-open={`collab-modal-${index}`}>
+                Hakkında →
+              </button>
+            )}
           </div>
+          <span class="collab-item-arrow" aria-hidden="true">›</span>
         </article>
       ))
     }
   </div>
 </section>
+
+{collaborationsContent.items.map((item, index) => (
+  <div class="collab-modal" id={`collab-modal-${index}`} role="dialog" aria-modal="true">
+    <div class="collab-modal-backdrop"></div>
+    <div class="collab-modal-content">
+      <button class="collab-modal-close" aria-label="Kapat">&#x2715;</button>
+      {item.image && (
+        <div class="collab-modal-cover">
+          <img src={item.image} alt={item.imageAlt ?? item.partnerName ?? ''} />
+          <div class="collab-modal-cover-overlay"></div>
+        </div>
+      )}
+      <div class="collab-modal-body">
+        <p class="collab-modal-brand">{item.brandLine}</p>
+        <h3 class="collab-modal-name">{item.partnerName}</h3>
+        <p class="collab-modal-lead">
+          {item.leadStrong && <strong>{item.leadStrong}</strong>}
+          {item.leadText}
+        </p>
+        {item.description && <p class="collab-modal-desc">{item.description}</p>}
+      </div>
+    </div>
+  </div>
+))}
+
+<style>
+  .collab-hakkinda-btn {
+    display: none;
+  }
+
+  /* ── Mobil: tıklanabilir satır ── */
+  @media (max-width: 768px) {
+    .collab-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 1.2rem;
+    }
+
+    .collab-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.3rem 1.1rem !important;
+      border-radius: 14px !important;
+      background: rgba(220, 229, 234, 0.55) !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      border-bottom: none;
+      text-align: left !important;
+    }
+
+    .collab-visual {
+      display: none !important;
+    }
+
+    .collab-copy {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .collab-brand-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .collab-brandline {
+      font-size: 0.72rem;
+      opacity: 0.6;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .collab-partner {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--clr-deep);
+      line-height: 1.2;
+    }
+
+    .collab-lead,
+    .collab-copy > p:last-child {
+      display: none;
+    }
+
+    .collab-hakkinda-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      background: linear-gradient(135deg, var(--clr-deep), #41576b);
+      border: none;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--clr-cream);
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      align-self: flex-start;
+    }
+
+    .collab-item::after {
+      content: none;
+    }
+
+    .collab-item-arrow {
+      font-size: 1rem;
+      color: var(--clr-terracotta);
+      flex-shrink: 0;
+      margin-left: 0.5rem;
+    }
+  }
+
+  /* ── Modal ── */
+  .collab-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .collab-modal.open {
+    display: flex;
+  }
+
+  .collab-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+  }
+
+  .collab-modal-content {
+    position: relative;
+    z-index: 1;
+    background: #f5f3ef;
+    border-radius: 1.25rem 1.25rem 0 0;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .collab-modal.open .collab-modal-content {
+    transform: translateY(0);
+  }
+
+  .collab-modal-close {
+    position: absolute;
+    top: 0.9rem;
+    right: 1.1rem;
+    z-index: 2;
+    background: rgba(255,255,255,0.7);
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    backdrop-filter: blur(4px);
+  }
+
+  .collab-modal-cover {
+    position: relative;
+    width: 100%;
+    height: min(72vw, 360px);
+    overflow: hidden;
+    border-radius: 1.25rem 1.25rem 0 0;
+  }
+
+  .collab-modal-cover img {
+    width: 70%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .collab-modal-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(245, 243, 239, 0.9) 100%);
+  }
+
+  .collab-modal-body {
+    padding: 1.5rem 1.5rem 3rem;
+  }
+
+  .collab-modal-brand {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--clr-terracotta);
+    margin-bottom: 0.25rem;
+  }
+
+  .collab-modal-name {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 700;
+    color: var(--clr-deep);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .collab-modal-lead {
+    font-size: 0.93rem;
+    line-height: 1.75;
+    color: #2e231d;
+    margin-bottom: 0.75rem;
+  }
+
+  .collab-modal-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    opacity: 0.75;
+    margin-bottom: 0.75rem;
+  }
+
+  .collab-modal-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg, var(--clr-deep), #41576b);
+    color: var(--clr-cream);
+    text-decoration: none;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+</style>
+
+<script>
+  const isMobileCollab = () => window.innerWidth <= 768;
+
+  function openCollabModal(id: string) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCollabModal(modal: HTMLElement) {
+    modal.classList.remove('open');
+    (document.body.style as any).overflow = '';
+  }
+
+  document.querySelectorAll<HTMLElement>('.collab-hakkinda-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-collab-open')!;
+      openCollabModal(id);
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>('.collab-modal').forEach((modal) => {
+    modal.querySelector('.collab-modal-backdrop')?.addEventListener('click', () => closeCollabModal(modal));
+    modal.querySelector('.collab-modal-close')?.addEventListener('click', () => closeCollabModal(modal));
+    modal.querySelector('.collab-modal-cta')?.addEventListener('click', () => closeCollabModal(modal));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const open = document.querySelector<HTMLElement>('.collab-modal.open');
+      if (open) closeCollabModal(open);
+    }
+  });
+</script>

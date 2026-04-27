@@ -868,6 +868,7 @@ img {
   color: #2c211c;
   opacity: 0.97;
   line-height: 1.86;
+  text-align: center;
 }
 
 .story-copy + .story-copy {
@@ -1875,8 +1876,8 @@ img {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid rgba(44, 24, 16, 0.06);
 }
 
@@ -2453,7 +2454,12 @@ img {
 
 @media (max-width: 768px) {
   .page-dots {
-    display: none;
+    display: none !important;
+  }
+
+  /* Hakkımda bölümü mobilde gizli — /hakkimda sayfasından erişilir */
+  .about {
+    display: none !important;
   }
 
   .section {
@@ -2462,7 +2468,10 @@ img {
 
   .nav {
     top: 0.75rem;
-    width: calc(100% - 1rem);
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    transform: none; /* transform kaldırıldı: fixed nav-links viewport'a göre konumlanabilsin */
     padding: 0.82rem 1.1rem 0.82rem 1.1rem;
     border-radius: 999px;
   }
@@ -2476,6 +2485,7 @@ img {
     display: none;
     position: fixed;
     inset: 0;
+    z-index: 9998;
     background: rgba(250, 246, 240, 0.94);
     backdrop-filter: blur(18px);
     flex-direction: column;
@@ -2486,6 +2496,7 @@ img {
 
   .nav-links.open {
     display: flex;
+    z-index: 9998;
   }
 
   .nav-links a {
@@ -2495,6 +2506,7 @@ img {
   .nav-toggle {
     display: flex;
     z-index: 1001;
+    margin-left: auto;
   }
 
   .nav-logo {
@@ -2515,7 +2527,7 @@ img {
 
   .hero-bg-text {
     font-size: 3.2rem;
-    top: 7rem;
+    top: 3.5rem;
     transform: translate(-50%, 0);
   }
 
@@ -2532,33 +2544,15 @@ img {
 
   .hero-left {
     max-width: 100%;
-    padding: 23rem 1.35rem 1rem;
+    padding: 2rem 1.35rem 1rem;
     align-items: center;
     text-align: center;
     order: 2;
   }
 
-  .hero-person {
-    position: absolute;
-    top: 5.4rem;
-    left: 50%;
-    bottom: auto;
-    transform: translateX(-50%);
-    order: 1;
-    display: flex;
-    justify-content: center;
-    width: min(88vw, 620px);
-  }
-
+  .hero-person,
   .hero-focus-portrait {
     display: none;
-  }
-
-  .hero-person img {
-    width: 100%;
-    height: auto;
-    max-height: 42vh;
-    animation: personEntranceMobile 1s var(--ease-out) 0.3s both;
   }
 
   .hero-base {
@@ -2572,12 +2566,7 @@ img {
   }
 
   .hero-right {
-    max-width: 100%;
-    margin-left: 0;
-    padding: 1rem 1.5rem 3rem;
-    align-items: center;
-    text-align: center;
-    order: 3;
+    display: none !important;
   }
 
   .hero-right-panel {
@@ -2611,10 +2600,138 @@ img {
     word-break: break-word;
   }
 
-  .services-grid,
   .blog-grid,
   .content-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* ── Hizmetler: yatay kaydırmalı kart sırası ── */
+  .services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
+  }
+
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(44, 24, 16, 0.1);
+  }
+
+  .service-card:first-child {
+    border-top: 1px solid rgba(44, 24, 16, 0.1);
+  }
+
+  /* Accordion başlık — her zaman görünür */
+  .service-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.05rem 0.75rem;
+    cursor: pointer;
+    gap: 0.75rem;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+  }
+
+  .service-card h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--clr-deep) !important;
+    margin: 0;
+    flex: 1;
+    line-height: 1.3;
+  }
+
+  .service-card-chevron {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    color: var(--clr-terracotta);
+    transition: transform 0.28s ease;
+  }
+
+  .service-card.open .service-card-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Accordion body — kapalıyken gizli */
+  .service-card-body {
+    max-height: 0;
+    transition: max-height 0.28s ease;
+    overflow: hidden;
+  }
+
+  .service-card.open .service-card-body {
+    max-height: 420px;
+  }
+
+  .service-card-body-inner {
+    padding: 0 0.75rem;
+    transition: padding 0.28s ease;
+  }
+
+  .service-card.open .service-card-body-inner {
+    padding: 0.1rem 0.75rem 1rem;
+  }
+
+  .service-card p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    opacity: 0.78;
+    margin-bottom: 0.6rem;
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
+
+  .service-link {
+    margin-top: 0.1rem;
+  }
+
+  .service-icon {
+    display: none;
+  }
+
+  /* Marquee slider mobilde gizli */
+  .photo-marquee {
+    display: none !important;
+  }
+
+  /* ── Hizmetler başlık kompakt ── */
+  .services {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .services-header {
+    text-align: left;
+  }
+
+  .services-header .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .collaborations {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .events {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .blog {
+    padding-top: 6px !important;
   }
 
   .collab-grid {
@@ -2719,6 +2836,32 @@ img {
     height: 350px;
   }
 
+  /* ── Hakkımda istatistik grid ── */
+  .about-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .about-stats .stat-number {
+    font-size: 1.6rem;
+  }
+
+  /* ── İletişim bölümü ── */
+  .contact {
+    gap: 2rem;
+  }
+
+  .contact-form-wrapper {
+    padding: 1.5rem;
+  }
+
+  /* ── Site logosu ── */
+  .site-brand img {
+    height: 110px;
+  }
+
   .page-shell {
     padding-top: 6.9rem;
   }
@@ -2753,7 +2896,14 @@ img {
   .story-media,
   .motion-story.reverse .story-media {
     min-height: 220px;
-    transform: translateY(20px) scale(0.95);
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .story-text,
+  .motion-story.reverse .story-text {
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .story-media img {
@@ -2763,6 +2913,12 @@ img {
   .story-title {
     font-size: clamp(1.65rem, 6vw, 2rem);
     line-height: 1.1;
+  }
+
+  .story-tag,
+  .story-title,
+  .story-copy {
+    text-align: center;
   }
 
   .story-copy {

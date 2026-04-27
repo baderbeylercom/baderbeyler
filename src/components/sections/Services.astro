@@ -28,17 +28,26 @@ const textModalItems = servicesContent.items.filter(
         return (
           <div class="service-card reveal" style={`transition-delay:.${index + 1}s`}>
             <div class="service-icon">{item.icon}</div>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-            {hasGallery || hasText ? (
-              <button
-                type="button"
-                class="service-link service-galeri-btn"
-                data-modal={modalId}
-              >Detaylı Bilgi →</button>
-            ) : (
-              <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
-            )}
+            <button type="button" class="service-card-header" aria-expanded="false">
+              <h3>{item.title}</h3>
+              <svg class="service-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+            <div class="service-card-body">
+              <div class="service-card-body-inner">
+                <p>{item.description}</p>
+                {hasGallery || hasText ? (
+                  <button
+                    type="button"
+                    class="service-link service-galeri-btn"
+                    data-modal={modalId}
+                  >Detaylı Bilgi →</button>
+                ) : (
+                  <a href={index === 0 ? '/nutrigenetik' : '#contact'} class="service-link">Detaylı Bilgi →</a>
+                )}
+              </div>
+            </div>
           </div>
         );
       })
@@ -251,8 +260,35 @@ const textModalItems = servicesContent.items.filter(
 </style>
 
 <script>
+  const syncServiceAccordions = () => {
+    document.querySelectorAll<HTMLElement>('.service-card').forEach((card) => {
+      const header = card.querySelector<HTMLButtonElement>('.service-card-header');
+      if (!header) return;
+      header.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
+    });
+  };
+
+  const closeOpenServiceCards = () => {
+    document.querySelectorAll<HTMLElement>('.service-card.open').forEach((card) => {
+      card.classList.remove('open');
+    });
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('.service-card-header').forEach((header) => {
+    header.addEventListener('click', () => {
+      if (window.innerWidth > 768) return;
+      const card = header.closest<HTMLElement>('.service-card');
+      if (!card) return;
+      const isOpen = card.classList.contains('open');
+      closeOpenServiceCards();
+      if (!isOpen) card.classList.add('open');
+      syncServiceAccordions();
+    });
+  });
+
   document.querySelectorAll<HTMLButtonElement>('.service-galeri-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
       const modalId = btn.getAttribute('data-modal')!;
       const modal = document.getElementById(modalId)!;
       openModal(modal);
@@ -309,4 +345,6 @@ const textModalItems = servicesContent.items.filter(
     if (e.key === 'ArrowLeft' && typeof (open as any)._step === 'function') (open as any)._step(-1);
     if (e.key === 'ArrowRight' && typeof (open as any)._step === 'function') (open as any)._step(1);
   });
+
+  syncServiceAccordions();
 </script>

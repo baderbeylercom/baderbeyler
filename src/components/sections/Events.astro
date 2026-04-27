@@ -27,28 +27,37 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
         {events.map((event, index) => (
           <article class="event-card featured-event reveal" style={`transition-delay:.${index + 1}s`}>
             <div class="event-copy">
-              <div class="event-date-badge">{formatDateShort(event.data.startDate)}</div>
-              <div class="event-info">
-                <h4>{event.data.title}</h4>
-                <p class="event-address">{event.data.address ?? `${event.data.city}, ${event.data.venue}`}</p>
-                <p class="event-time">{event.data.timeLabel}</p>
-                <p>{event.data.description}</p>
+              <div class="event-card-header">
+                <div class="event-header-title-wrap">
+                  <h4 class="event-header-title">{event.data.title}</h4>
+                  <div class="event-date-badge">{formatDateShort(event.data.startDate)}</div>
+                </div>
+                <svg class="event-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
               </div>
-              <div class="event-actions">
-                {event.data.mapUrl && (
-                  <a href={event.data.mapUrl} target="_blank" rel="noreferrer" class="event-action primary">
-                    Haritada Aç
-                  </a>
-                )}
-                {event.data.registrationUrl && (
-                  <button
-                    type="button"
-                    class="event-action event-register-btn"
-                    data-reg-modal={`reg-modal-${index}`}
-                  >
-                    Yerini Ayırt
-                  </button>
-                )}
+              <div class="event-card-body">
+                <div class="event-card-body-inner">
+                  <p class="event-address">{event.data.address ?? `${event.data.city}, ${event.data.venue}`}</p>
+                  <p class="event-time">{event.data.timeLabel}</p>
+                  <p>{event.data.description}</p>
+                  <div class="event-actions">
+                    {event.data.mapUrl && (
+                      <a href={event.data.mapUrl} target="_blank" rel="noreferrer" class="event-action primary">
+                        Haritada Aç
+                      </a>
+                    )}
+                    {event.data.registrationUrl && (
+                      <button
+                        type="button"
+                        class="event-action event-register-btn"
+                        data-reg-modal={`reg-modal-${index}`}
+                      >
+                        Yerini Ayırt
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -110,6 +119,78 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
 ))}
 
 <style>
+  /* ── Mobil Accordion ── */
+  @media (max-width: 768px) {
+    .event-card {
+      padding: 0 !important;
+      min-height: unset !important;
+      height: auto !important;
+    }
+
+    .event-map { display: none !important; }
+
+    .event-card-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+    }
+
+    .event-header-title-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .event-header-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--clr-deep);
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .event-date-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--clr-terracotta);
+      background: rgba(53, 73, 92, 0.08);
+      padding: 0.18rem 0.45rem;
+      border-radius: 5px;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+
+    .event-card-chevron {
+      width: 1.1rem;
+      height: 1.1rem;
+      flex-shrink: 0;
+      color: var(--clr-terracotta);
+      transition: transform 0.28s ease;
+    }
+
+    .event-card.open .event-card-chevron { transform: rotate(180deg); }
+
+    .event-card-body {
+      overflow: hidden;
+    }
+
+    .event-card-body-inner {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1rem;
+      transition: max-height 0.28s ease, padding 0.28s ease;
+    }
+
+    .event-card.open .event-card-body-inner {
+      max-height: 400px;
+      padding: 0.1rem 1rem 1rem;
+    }
+  }
+
   .event-register-btn {
     background: none;
     border: 1px solid currentColor;
@@ -213,6 +294,17 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
 </style>
 
 <script>
+  // Accordion — sadece mobilde
+  if (window.innerWidth <= 768) {
+    document.querySelectorAll<HTMLElement>('.event-card').forEach((card) => {
+      card.querySelector('.event-card-header')?.addEventListener('click', () => {
+        const isOpen = card.classList.contains('open');
+        document.querySelectorAll('.event-card.open').forEach(c => c.classList.remove('open'));
+        if (!isOpen) card.classList.add('open');
+      });
+    });
+  }
+
   document.querySelectorAll<HTMLButtonElement>('.event-register-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const modalId = btn.getAttribute('data-reg-modal')!;

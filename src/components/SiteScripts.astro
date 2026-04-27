@@ -297,6 +297,12 @@
 
   runScrollFx();
 
+  // Mobilde "Hakkımda" linkini ayrı sayfaya yönlendir
+  if (window.innerWidth <= 768) {
+    const aboutLink = document.querySelector<HTMLAnchorElement>('a[href="/#about"]');
+    if (aboutLink) aboutLink.href = '/hakkimda';
+  }
+
   document.querySelector('.form-submit')?.addEventListener('click', function () {
     if (!(this instanceof HTMLButtonElement)) return;
     this.textContent = 'Gönderildi ✓';
