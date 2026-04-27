@@ -114,15 +114,21 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
             ></div>
           </div>
           <div class="collab-copy">
+            <div class="collab-editorial-kicker">
+              <span class="collab-editorial-rule"></span>
+              Editör Seçkisi
+            </div>
             <div class="collab-brand-row">
               {item.brandLine && <span class="collab-brandline">{item.brandLine}</span>}
               {item.partnerName && <span class="collab-partner">{item.partnerName}</span>}
             </div>
-            <p class="collab-lead">
+            <p class="collab-lead collab-editorial-quote">
               {item.leadStrong && <strong>{item.leadStrong}</strong>}
               {item.leadText}
             </p>
-            <p>{item.description}</p>
+            <p class="collab-editorial-body">
+              {item.description || 'Genetik yorumu, uygulamaya dönük karar alma ve danışan deneyimini güçlendiren ortak iş akışı.'}
+            </p>
             {item.image && (
               <button type="button" class="collab-hakkinda-btn" data-collab-open={`collab-modal-${index}`}>
                 Hakkında →
@@ -169,6 +175,145 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     display: none;
   }
 
+  .collab-editorial-kicker {
+    display: none;
+  }
+
+  @media (min-width: 769px) {
+    .collab-grid--partners {
+      gap: 1.45rem;
+    }
+
+    .collab-item.concept-card {
+      grid-template-columns: minmax(220px, 248px) minmax(0, 1fr);
+      gap: 2rem;
+      min-height: 326px;
+      height: auto;
+      padding: 1.15rem 1.35rem 1.25rem;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.86), rgba(255,255,255,0) 32%),
+        linear-gradient(180deg, rgba(252, 250, 246, 0.96), rgba(239, 236, 230, 0.9));
+      border-color: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 24px 56px rgba(27, 36, 45, 0.08), inset 0 1px 0 rgba(255,255,255,0.82);
+    }
+
+    .collab-item.concept-card:nth-child(2) {
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.84), rgba(255,255,255,0) 32%),
+        linear-gradient(180deg, rgba(246, 250, 251, 0.96), rgba(229, 236, 239, 0.92));
+    }
+
+    .collab-item.concept-card .collab-copy {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem 1.25rem;
+      align-items: start;
+      align-self: stretch;
+      transform: none;
+      padding: 0.5rem 0.1rem 0.25rem 0;
+    }
+
+    .collab-editorial-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      grid-column: 1 / -1;
+      font-size: 0.74rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #5a7081;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .collab-editorial-rule {
+      width: 42px;
+      height: 1px;
+      background: rgba(90, 112, 129, 0.52);
+    }
+
+    .collab-brand-row {
+      margin-bottom: 0;
+      gap: 0.24rem;
+    }
+
+    .collab-brandline {
+      color: #687c8b;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .collab-partner {
+      font-size: clamp(1.8rem, 2vw, 2.25rem);
+      line-height: 1.03;
+      max-width: 18ch;
+      color: #15212b;
+      text-shadow: none;
+    }
+
+    .collab-editorial-quote {
+      position: relative;
+      grid-column: 1 / 2;
+      margin: 0;
+      padding: 1rem 1.1rem 1rem 1.3rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.66);
+      border: 1px solid rgba(255,255,255,0.72);
+      color: #3f4f5d !important;
+      line-height: 1.78 !important;
+      box-shadow: 0 18px 36px rgba(23, 34, 45, 0.05);
+    }
+
+    .collab-editorial-quote::before {
+      content: '“';
+      position: absolute;
+      top: 0.35rem;
+      left: 0.68rem;
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      line-height: 1;
+      color: rgba(90, 112, 129, 0.38);
+    }
+
+    .collab-editorial-body {
+      grid-column: 1 / 2;
+      margin: 0;
+      max-width: 42ch;
+      color: #536271 !important;
+      line-height: 1.76 !important;
+    }
+
+    .collab-hakkinda-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: start;
+      grid-column: 2 / 3;
+      grid-row: 2 / 5;
+      margin-top: 0.15rem;
+      padding: 0.82rem 1.05rem;
+      border: 1px solid rgba(22, 32, 42, 0.08);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #182631, #41576b);
+      color: #f4f6f7;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      box-shadow: 0 16px 32px rgba(24, 38, 49, 0.16);
+      cursor: pointer;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+    }
+
+    .collab-hakkinda-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 38px rgba(24, 38, 49, 0.2);
+      background: linear-gradient(135deg, #15232d, #3f617b);
+    }
+  }
+
   /* ── Mobil: tıklanabilir satır ── */
   @media (max-width: 768px) {
     .collab-grid {
@@ -182,7 +327,7 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.3rem 1.1rem !important;
+      padding: 0.45rem 0.9rem !important;
       border-radius: 14px !important;
       background: rgba(220, 229, 234, 0.55) !important;
       box-shadow: none !important;
@@ -191,33 +336,49 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
       text-align: left !important;
     }
 
-    .collab-visual {
+    .collab-item.concept-card {
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between;
+      grid-template-columns: none !important;
+      gap: 0.75rem !important;
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible;
+    }
+
+    .collab-visual,
+    .collab-item.concept-card .collab-visual {
       display: none !important;
     }
 
     .collab-copy {
       flex: 1;
+      width: 100%;
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
     }
 
     .collab-brand-row {
       display: flex;
       flex-direction: column;
       gap: 0.1rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0;
+      min-width: 0;
+      flex: 1;
     }
 
     .collab-brandline {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       opacity: 0.6;
       font-weight: 500;
       letter-spacing: 0.04em;
     }
 
     .collab-partner {
-      font-size: 1rem;
+      font-size: 0.96rem;
       font-weight: 700;
       color: var(--clr-deep);
       line-height: 1.2;
@@ -232,19 +393,21 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      margin-top: 0.5rem;
-      padding: 0.5rem 1.25rem;
+      margin-top: 0;
+      padding: 0.38rem 0.72rem;
       background: linear-gradient(135deg, var(--clr-deep), #41576b);
       border: none;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.68rem;
       font-weight: 600;
       color: var(--clr-cream);
       cursor: pointer;
       font-family: inherit;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      align-self: flex-start;
+      align-self: center;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .collab-item::after {
@@ -252,7 +415,7 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     }
 
     .collab-item-arrow {
-      display: inline-block;
+      display: none;
       font-size: 1rem;
       color: var(--clr-terracotta);
       flex-shrink: 0;

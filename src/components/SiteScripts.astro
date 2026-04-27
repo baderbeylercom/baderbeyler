@@ -21,6 +21,9 @@
     if (!navLinks || !navToggle) return;
 
     navLinks.classList.remove('open');
+    nav.classList.remove('menu-open');
+    document.body.classList.remove('mobile-menu-open');
+    navToggle.setAttribute('aria-expanded', 'false');
     navToggle.querySelectorAll('span').forEach((span) => {
       span.style.transform = '';
       span.style.opacity = '';
@@ -31,9 +34,13 @@
     if (!navLinks) return;
 
     navLinks.classList.toggle('open');
+    const isOpen = navLinks.classList.contains('open');
+    nav?.classList.toggle('menu-open', isOpen);
+    document.body.classList.toggle('mobile-menu-open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     const spans = navToggle.querySelectorAll('span');
 
-    if (navLinks.classList.contains('open')) {
+    if (isOpen) {
       spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
       spans[1].style.opacity = '0';
       spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
@@ -44,6 +51,26 @@
       span.style.transform = '';
       span.style.opacity = '';
     });
+  });
+
+  navLinks?.addEventListener('click', (event) => {
+    if (window.innerWidth > 768) return;
+    if (event.target === navLinks) closeMenu();
+  });
+
+  document.addEventListener('pointerdown', (event) => {
+    if (window.innerWidth > 768) return;
+    if (!navLinks?.classList.contains('open')) return;
+    if (!(event.target instanceof Element)) return;
+    if (event.target.closest('#navToggle')) return;
+    if (event.target.closest('#navLinks a')) return;
+    closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (window.innerWidth > 768) return;
+    closeMenu();
   });
 
   document.querySelectorAll('[data-close-menu]').forEach((link) => {
@@ -174,6 +201,7 @@
 
   window.addEventListener('resize', () => {
     isMobile = window.innerWidth <= 768;
+    if (!isMobile) closeMenu();
     runScrollFx();
   });
 

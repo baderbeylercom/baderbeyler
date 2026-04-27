@@ -1517,6 +1517,26 @@ img {
   margin-bottom: 0;
 }
 
+@media (min-width: 769px) {
+  .section-tag {
+    color: #5a6f80;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+  }
+
+  .section-title {
+    color: #14222d;
+  }
+
+  .motion-story .story-text p,
+  .contact-intro,
+  .blog-card p,
+  .collab-item p {
+    color: #455867;
+    opacity: 0.98;
+  }
+}
+
 .events {
   background: var(--section-events-bg);
 }
@@ -1846,6 +1866,99 @@ img {
   margin-top: 1rem;
 }
 
+.blog-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.blog-card-readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #172633;
+}
+
+@media (min-width: 769px) {
+  .blog {
+    background:
+      radial-gradient(circle at top left, rgba(255,255,255,0.78), rgba(255,255,255,0) 28%),
+      linear-gradient(180deg, #e8eef1 0%, #dde6eb 100%);
+  }
+
+  .blog-grid {
+    grid-template-columns: minmax(0, 1.22fr) minmax(0, 0.78fr) minmax(0, 0.78fr);
+    gap: 1.35rem;
+  }
+
+  .blog-card {
+    background:
+      radial-gradient(circle at top left, rgba(255,255,255,0.94), rgba(255,255,255,0) 34%),
+      linear-gradient(180deg, rgba(252,250,246,0.98), rgba(241,237,231,0.94));
+    border: 1px solid rgba(255,255,255,0.82);
+    box-shadow: 0 22px 48px rgba(22, 33, 44, 0.08);
+  }
+
+  .blog-card:hover {
+    box-shadow: 0 28px 60px rgba(22, 33, 44, 0.12);
+  }
+
+  .blog-card--featured {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: 28px;
+  }
+
+  .blog-card--featured .blog-card-img {
+    aspect-ratio: 1.95;
+  }
+
+  .blog-card-body {
+    padding: 1.45rem 1.5rem 1.55rem;
+  }
+
+  .blog-card--featured .blog-card-body {
+    padding: 1.7rem 1.7rem 1.8rem;
+  }
+
+  .blog-card-tag {
+    color: #6a7d8b;
+    font-weight: 800;
+  }
+
+  .blog-card h3 {
+    font-size: 1.36rem;
+    line-height: 1.18;
+    margin-top: 0.85rem;
+    margin-bottom: 0.7rem;
+    color: #14212c;
+  }
+
+  .blog-card--featured h3 {
+    font-size: clamp(1.8rem, 2.15vw, 2.25rem);
+    line-height: 1.04;
+    max-width: 14ch;
+  }
+
+  .blog-card p {
+    line-height: 1.8;
+  }
+
+  .blog-card-date {
+    margin-top: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7d8c97;
+  }
+}
+
 .newsletter {
   background: linear-gradient(
     135deg,
@@ -1990,6 +2103,103 @@ img {
   padding: 3rem;
 }
 
+.contact-concierge-panel,
+.contact-form-assurance {
+  display: grid;
+  gap: 1rem;
+}
+
+.contact-concierge-panel {
+  margin-bottom: 1.35rem;
+}
+
+.contact-concierge-tag,
+.contact-assurance-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #65798a;
+}
+
+.contact-concierge-copy h3 {
+  margin: 0.55rem 0 0.7rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 2vw, 2.15rem);
+  line-height: 1.04;
+  color: #14222c;
+}
+
+.contact-concierge-copy p:last-child {
+  margin: 0;
+  line-height: 1.75;
+  color: #4f6272;
+}
+
+.contact-concierge-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.contact-concierge-point,
+.contact-assurance-item,
+.contact-form-panel {
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255,255,255,0.56);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.78);
+}
+
+.contact-concierge-point {
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.contact-concierge-point span {
+  display: inline-flex;
+  margin-bottom: 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #6d8293;
+}
+
+.contact-concierge-point strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+  color: #172530;
+}
+
+.contact-concierge-point p,
+.contact-assurance-item strong {
+  margin: 0;
+  line-height: 1.62;
+  color: #4c5e6d;
+}
+
+.contact-form-assurance {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.contact-assurance-item {
+  border-radius: 18px;
+  padding: 0.95rem 1rem;
+}
+
+.contact-assurance-item strong {
+  display: block;
+  margin-top: 0.45rem;
+  color: #172530;
+}
+
+.contact-form-panel {
+  padding: 1.05rem;
+  border-radius: 22px;
+  margin-bottom: 1rem;
+}
+
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -2084,6 +2294,91 @@ img {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+@media (min-width: 769px) {
+  .contact {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3rem;
+    align-items: start;
+    background:
+      radial-gradient(circle at top left, rgba(255,255,255,0.76), rgba(255,255,255,0) 28%),
+      linear-gradient(180deg, #e7edf0 0%, #dce5e9 100%);
+  }
+
+  .contact-info {
+    padding-top: 1rem;
+  }
+
+  .contact-detail {
+    border-bottom-color: rgba(22, 32, 42, 0.08);
+  }
+
+  .contact-detail-icon {
+    background: linear-gradient(135deg, #eef3f5, #dbe5ea);
+    color: #12202b;
+    box-shadow: 0 14px 24px rgba(23, 34, 45, 0.08);
+  }
+
+  .contact-form-wrapper {
+    padding: 1.35rem;
+    border-radius: 30px;
+    background:
+      radial-gradient(circle at top left, rgba(255,255,255,0.92), rgba(255,255,255,0) 35%),
+      linear-gradient(180deg, rgba(247,250,251,0.98), rgba(234,240,243,0.95));
+    border: 1px solid rgba(255,255,255,0.82);
+    box-shadow: 0 28px 56px rgba(22, 33, 44, 0.1);
+  }
+
+  .form-group label {
+    color: #455867;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(255,255,255,0.92);
+    border-color: rgba(22, 32, 42, 0.08);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: rgba(83, 110, 132, 0.35);
+    box-shadow: 0 0 0 4px rgba(95, 122, 146, 0.08);
+  }
+
+  .form-submit {
+    width: auto;
+    min-width: 220px;
+    padding-inline: 1.45rem;
+    border-radius: 999px;
+    box-shadow: 0 18px 34px rgba(22, 33, 44, 0.16);
+  }
+}
+
+@media (max-width: 768px) {
+  .blog-card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .blog-card-readmore {
+    margin-top: 0.9rem;
+  }
+
+  .contact-concierge-points,
+  .contact-form-assurance {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-panel {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
 }
 
 .footer {
@@ -2563,6 +2858,10 @@ img {
     padding: 0.74rem 1.05rem 0.74rem 1.05rem;
   }
 
+  .nav.menu-open {
+    z-index: 10001;
+  }
+
   .nav-links {
     display: none;
     position: fixed;
@@ -2587,8 +2886,16 @@ img {
 
   .nav-toggle {
     display: flex;
-    z-index: 1001;
+    z-index: 10000;
     margin-left: auto;
+  }
+
+  .nav.menu-open .nav-toggle {
+    position: fixed;
+    top: 1.4rem;
+    right: 1.25rem;
+    margin-left: 0;
+    z-index: 10002;
   }
 
   .nav-logo {
@@ -2703,6 +3010,7 @@ img {
     background: none !important;
     box-shadow: none !important;
     border-bottom: 1px solid rgba(44, 24, 16, 0.1);
+    cursor: pointer;
   }
 
   .service-card:first-child {
@@ -2824,14 +3132,25 @@ img {
     padding-top: 6px !important;
   }
 
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
   .collab-grid {
     grid-template-columns: 1fr;
   }
 
   .collab-item.concept-card {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 1.3rem;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    grid-template-columns: none !important;
+    height: auto;
+    min-height: 0;
+    gap: 0.85rem !important;
+    padding: 0.62rem 0.9rem !important;
+    text-align: left !important;
   }
 
   .collab-visual {
@@ -2875,12 +3194,49 @@ img {
     gap: 0.35rem;
   }
 
-  .collab-partner {
-    font-size: 1.38rem;
+  .collab-item.concept-card .collab-visual {
+    display: none !important;
   }
 
+  .collab-item.concept-card .collab-copy {
+    width: 100%;
+    align-self: auto;
+    transform: none;
+  }
+
+  .collab-item.concept-card .collab-brand-row {
+    justify-content: flex-start;
+    margin-bottom: 0;
+  }
+
+  .collab-item.concept-card .collab-partner {
+    font-size: 0.96rem;
+  }
+
+  .blog-card {
+    width: 100%;
+  }
+
+  .blog-card:first-child {
+    grid-column: auto;
+  }
+
+  .blog-card-img,
   .blog-card:first-child .blog-card-img {
-    height: 220px;
+    height: auto;
+    aspect-ratio: 1.9;
+  }
+
+  .blog-card-body {
+    padding: 1.2rem 1.05rem 1.15rem;
+  }
+
+  .blog-card h3 {
+    font-size: 1.12rem;
+  }
+
+  .blog-card p {
+    font-size: 0.84rem;
   }
 
   .events-list {
