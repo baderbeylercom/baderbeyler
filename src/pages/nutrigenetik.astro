@@ -56,10 +56,17 @@ import Footer from '../components/sections/Footer.astro';
                 <span>Yüz Yüze</span>
               </label>
             </div>
+            <p class="pdf-helper" id="pdfScheduleHint">Önce görüşme türünü seçin.</p>
           </div>
           <div class="pdf-form-group">
             <label for="pdfDate">Randevu Tarihi</label>
-            <input id="pdfDate" type="date" required />
+            <input id="pdfDate" type="date" required disabled />
+          </div>
+          <div class="pdf-form-group">
+            <label for="pdfTime">Randevu Saati</label>
+            <select id="pdfTime" required disabled>
+              <option value="">Önce tarih seçin</option>
+            </select>
           </div>
           <div class="pdf-form-group">
             <label for="pdfMessage">Mesajınız</label>
@@ -121,12 +128,174 @@ import Footer from '../components/sections/Footer.astro';
 
   // Tarih seçilmeden buton disabled kalır
   const dateInput = document.getElementById('pdfDate') as HTMLInputElement;
+  const timeInput = document.getElementById('pdfTime') as HTMLSelectElement;
   const submitBtn = document.getElementById('pdfSubmitBtn') as HTMLButtonElement;
+  const scheduleHint = document.getElementById('pdfScheduleHint') as HTMLParagraphElement;
+  const meetingTypeInputs = [
+    ...document.querySelectorAll<HTMLInputElement>('input[name="meetingType"]'),
+  ];
+  const SCHEDULE_RULES = {
+    online: {
+      allowedDays: [1, 2, 4, 5],
+      timeSlots: [
+        '10:00',
+        '10:30',
+        '11:00',
+        '11:30',
+        '12:00',
+        '12:30',
+        '13:00',
+        '13:30',
+        '14:00',
+        '14:30',
+        '15:00',
+        '15:30',
+        '16:00',
+        '16:30',
+        '17:00',
+      ],
+      hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-17:00 arasinda her 30 dakikada bir planlanir.',
+    },
+    yuzyuze: {
+      allowedDays: [3],
+      timeSlots: [
+        '09:00',
+        '10:00',
+        '11:00',
+        '12:00',
+        '13:00',
+        '14:00',
+        '15:00',
+        '16:00',
+        '17:00',
+        '18:00',
+      ],
+      hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-18:00 arasinda her saat basi planlanir.',
+    },
+  } as const;
   const today = new Date().toISOString().split('T')[0];
+
+  const formatDateValue = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getSelectedMeetingType = () =>
+    meetingTypeInputs.find((input) => input.checked)?.value as keyof typeof SCHEDULE_RULES | undefined;
+
+  const getNextAllowedDate = (meetingType: keyof typeof SCHEDULE_RULES) => {
+    const candidate = new Date();
+    candidate.setHours(0, 0, 0, 0);
+
+    for (let offset = 0; offset < 21; offset += 1) {
+      const next = new Date(candidate);
+      next.setDate(candidate.getDate() + offset);
+      if (SCHEDULE_RULES[meetingType].allowedDays.includes(next.getDay())) {
+        return formatDateValue(next);
+      }
+    }
+
+    return today;
+  };
+
+  const populateTimeSlots = (meetingType: keyof typeof SCHEDULE_RULES | undefined) => {
+    timeInput.innerHTML = '';
+
+    if (!meetingType || !dateInput.value) {
+      timeInput.innerHTML = '<option value="">Once tarih secin</option>';
+      timeInput.disabled = true;
+      return;
+    }
+
+    timeInput.disabled = false;
+    timeInput.innerHTML = '<option value="">Saat secin</option>';
+    const now = new Date();
+    const selectedDate = new Date(`${dateInput.value}T00:00:00`);
+    const isToday = dateInput.value === formatDateValue(now);
+    const availableSlots = SCHEDULE_RULES[meetingType].timeSlots.filter((slot) => {
+      if (!isToday) return true;
+      const [hours, minutes] = slot.split(':').map(Number);
+      const slotDate = new Date(selectedDate);
+      slotDate.setHours(hours, minutes, 0, 0);
+      return slotDate.getTime() > now.getTime();
+    });
+
+    if (!availableSlots.length) {
+      timeInput.innerHTML = '<option value="">Bu tarih icin uygun saat kalmadi</option>';
+      timeInput.disabled = true;
+      return;
+    }
+
+    availableSlots.forEach((slot) => {
+      const option = document.createElement('option');
+      option.value = slot;
+      option.textContent = slot;
+      timeInput.append(option);
+    });
+  };
+
+  const validateSelectedDate = () => {
+    const meetingType = getSelectedMeetingType();
+    if (!meetingType || !dateInput.value) return;
+
+    const selectedDate = new Date(`${dateInput.value}T00:00:00`);
+    const isAllowed = SCHEDULE_RULES[meetingType].allowedDays.includes(selectedDate.getDay());
+
+    if (!isAllowed) {
+      dateInput.value = '';
+      timeInput.value = '';
+      timeInput.disabled = true;
+      timeInput.innerHTML = '<option value="">Uygun tarih secin</option>';
+      dateInput.setCustomValidity('Sectiginiz gorusme turu icin bu tarih uygun degil.');
+      dateInput.reportValidity();
+      return false;
+    }
+
+    dateInput.setCustomValidity('');
+    return true;
+  };
+
+  const updateSubmitState = () => {
+    submitBtn.disabled = !(getSelectedMeetingType() && dateInput.value && timeInput.value);
+  };
+
+  const applyMeetingType = () => {
+    const meetingType = getSelectedMeetingType();
+
+    dateInput.value = '';
+    timeInput.value = '';
+
+    if (!meetingType) {
+      dateInput.disabled = true;
+      timeInput.disabled = true;
+      timeInput.innerHTML = '<option value="">Once tarih secin</option>';
+      scheduleHint.textContent = 'Once gorusme turunu secin.';
+      updateSubmitState();
+      return;
+    }
+
+    dateInput.disabled = false;
+    dateInput.min = getNextAllowedDate(meetingType);
+    scheduleHint.textContent = SCHEDULE_RULES[meetingType].hint;
+    timeInput.disabled = true;
+    timeInput.innerHTML = '<option value="">Once tarih secin</option>';
+    updateSubmitState();
+  };
+
+  meetingTypeInputs.forEach((input) => {
+    input.addEventListener('change', applyMeetingType);
+  });
+
   dateInput.min = today;
   dateInput.addEventListener('change', () => {
-    submitBtn.disabled = !dateInput.value;
+    const isValid = validateSelectedDate();
+    populateTimeSlots(isValid ? getSelectedMeetingType() : undefined);
+    updateSubmitState();
   });
+
+  timeInput.addEventListener('change', updateSubmitState);
 </script>
 
 <style>
@@ -274,6 +443,7 @@ import Footer from '../components/sections/Footer.astro';
   }
 
   .pdf-form-group input,
+  .pdf-form-group select,
   .pdf-form-group textarea {
     border: 1px solid rgba(0,0,0,0.12);
     border-radius: 8px;
@@ -287,8 +457,16 @@ import Footer from '../components/sections/Footer.astro';
   }
 
   .pdf-form-group input:focus,
+  .pdf-form-group select:focus,
   .pdf-form-group textarea:focus {
     border-color: rgba(0,0,0,0.35);
+  }
+
+  .pdf-form-group input:disabled,
+  .pdf-form-group select:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: rgba(239,239,239,0.75);
   }
 
   .pdf-form-group textarea {
@@ -337,6 +515,13 @@ import Footer from '../components/sections/Footer.astro';
   .pdf-type-option:has(input:checked) {
     border-color: #3b1f55;
     background: rgba(59,31,85,0.06);
+  }
+
+  .pdf-helper {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #6b5c51;
+    opacity: 0.9;
   }
 
   /* Mobil */
