@@ -325,46 +325,59 @@
 
   runScrollFx();
 
-  document.querySelector('.form-submit')?.addEventListener('click', function () {
-    if (!(this instanceof HTMLButtonElement)) return;
+  const formSubmitEndpoint = 'https://formsubmit.co/ajax/iletisim@baderbeyler.com';
+  const formSubmitCc = 'baderbeylercom@gmail.com';
 
-    const fullName = document.getElementById('fullName') as HTMLInputElement | null;
-    const emailAddress = document.getElementById('emailAddress') as HTMLInputElement | null;
-    const contactTopic = document.getElementById('contactTopic') as HTMLSelectElement | null;
-    const contactMessage = document.getElementById('contactMessage') as HTMLTextAreaElement | null;
+  document.getElementById('contactForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-    if (!fullName || !emailAddress || !contactTopic || !contactMessage) return;
+    if (!(event.currentTarget instanceof HTMLFormElement)) return;
 
-    const requiredFields = [fullName, emailAddress, contactMessage];
-    const firstInvalidField = requiredFields.find((field) => !field.reportValidity());
+    const submitButton = event.currentTarget.querySelector('.form-submit');
+    if (!(submitButton instanceof HTMLButtonElement)) return;
 
-    if (firstInvalidField) {
-      firstInvalidField.focus();
-      return;
+    if (!event.currentTarget.reportValidity()) return;
+
+    const formData = new FormData(event.currentTarget);
+    const topic = String(formData.get('topic') || '').trim();
+
+    formData.append('_subject', topic ? `Iletisim Formu: ${topic}` : 'Iletisim Formu');
+    formData.append('_cc', formSubmitCc);
+    formData.append('_template', 'table');
+    formData.append('_url', 'https://baderbeyler.com/#contact');
+    formData.append('_honey', '');
+
+    const previousLabel = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Gonderiliyor...';
+
+    try {
+      const response = await fetch(formSubmitEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`FormSubmit request failed with ${response.status}`);
+      }
+
+      submitButton.textContent = 'Gonderildi ✓';
+      submitButton.style.background = 'var(--clr-sage)';
+      event.currentTarget.reset();
+    } catch (error) {
+      console.error(error);
+      submitButton.textContent = 'Gonderilemedi';
+      submitButton.style.background = '#8f4a43';
+    } finally {
+      window.setTimeout(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = previousLabel || 'Gonder';
+        submitButton.style.background = '';
+      }, 2500);
     }
-
-    const recipients = ['iletisim@baderbeyler.com', 'baderbeylercom@gmail.com'];
-    const subject = contactTopic.value
-      ? `Iletisim Formu: ${contactTopic.value}`
-      : 'Iletisim Formu';
-    const body = [
-      `Ad Soyad: ${fullName.value.trim()}`,
-      `E-posta: ${emailAddress.value.trim()}`,
-      `Konu: ${contactTopic.value || 'Belirtilmedi'}`,
-      '',
-      'Mesaj:',
-      contactMessage.value.trim(),
-    ].join('\n');
-
-    window.location.href = `mailto:${recipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    this.textContent = 'Mail aciliyor...';
-    this.style.background = 'var(--clr-sage)';
-
-    window.setTimeout(() => {
-      this.textContent = 'Gonder';
-      this.style.background = '';
-    }, 2000);
   });
 
   document

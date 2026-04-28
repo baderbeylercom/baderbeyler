@@ -32,15 +32,15 @@ import Footer from '../components/sections/Footer.astro';
         <form class="pdf-form" id="pdfContactForm">
           <div class="pdf-form-group">
             <label for="pdfName">Ad Soyad</label>
-            <input id="pdfName" type="text" placeholder="Adınız Soyadınız" required />
+            <input id="pdfName" name="name" type="text" placeholder="Adınız Soyadınız" required />
           </div>
           <div class="pdf-form-group">
             <label for="pdfEmail">E-posta</label>
-            <input id="pdfEmail" type="email" placeholder="ornek@mail.com" required />
+            <input id="pdfEmail" name="email" type="email" placeholder="ornek@mail.com" required />
           </div>
           <div class="pdf-form-group">
             <label for="pdfPhone">Telefon</label>
-            <input id="pdfPhone" type="tel" placeholder="+90 5XX XXX XX XX" />
+            <input id="pdfPhone" name="phone" type="tel" placeholder="+90 5XX XXX XX XX" />
           </div>
           <div class="pdf-form-group">
             <label>Görüşme Türü</label>
@@ -58,17 +58,17 @@ import Footer from '../components/sections/Footer.astro';
           </div>
           <div class="pdf-form-group">
             <label for="pdfDate">Randevu Tarihi</label>
-            <input id="pdfDate" type="date" required disabled />
+            <input id="pdfDate" name="date" type="date" required disabled />
           </div>
           <div class="pdf-form-group">
             <label for="pdfTime">Randevu Saati</label>
-            <select id="pdfTime" required disabled>
+            <select id="pdfTime" name="time" required disabled>
               <option value="">Önce tarih seçin</option>
             </select>
           </div>
           <div class="pdf-form-group">
             <label for="pdfMessage">Mesajınız</label>
-            <textarea id="pdfMessage" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
+            <textarea id="pdfMessage" name="message" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
           </div>
           <button class="pdf-form-submit" type="submit" id="pdfSubmitBtn" disabled>Ön Görüşme Talep Et →</button>
         </form>
@@ -137,7 +137,8 @@ import Footer from '../components/sections/Footer.astro';
   const meetingTypeInputs = [
     ...document.querySelectorAll<HTMLInputElement>('input[name="meetingType"]'),
   ];
-  const mailRecipients = ['iletisim@baderbeyler.com', 'baderbeylercom@gmail.com'];
+  const formSubmitEndpoint = 'https://formsubmit.co/ajax/iletisim@baderbeyler.com';
+  const formSubmitCc = 'baderbeylercom@gmail.com';
 
   const SCHEDULE_RULES = {
     online: {
@@ -262,29 +263,6 @@ import Footer from '../components/sections/Footer.astro';
     updateSubmitState();
   };
 
-  const openPdfMailDraft = () => {
-    const pdfName = document.getElementById('pdfName') as HTMLInputElement;
-    const pdfEmail = document.getElementById('pdfEmail') as HTMLInputElement;
-    const pdfPhone = document.getElementById('pdfPhone') as HTMLInputElement;
-    const pdfMessage = document.getElementById('pdfMessage') as HTMLTextAreaElement;
-    const meetingType = getSelectedMeetingType();
-    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
-    const subject = `Nutrigenetik On Gorusme Talebi: ${meetingTypeLabel}`;
-    const body = [
-      `Ad Soyad: ${pdfName.value.trim()}`,
-      `E-posta: ${pdfEmail.value.trim()}`,
-      `Telefon: ${pdfPhone.value.trim() || 'Belirtilmedi'}`,
-      `Gorusme Turu: ${meetingTypeLabel}`,
-      `Tarih: ${dateInput.value}`,
-      `Saat: ${timeInput.value}`,
-      '',
-      'Mesaj:',
-      pdfMessage.value.trim() || 'Belirtilmedi',
-    ].join('\n');
-
-    window.location.href = `mailto:${mailRecipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
-
   meetingTypeInputs.forEach((input) => {
     input.addEventListener('change', applyMeetingType);
   });
@@ -298,16 +276,52 @@ import Footer from '../components/sections/Footer.astro';
 
   timeInput.addEventListener('change', updateSubmitState);
 
-  pdfForm.addEventListener('submit', (event) => {
+  pdfForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!pdfForm.reportValidity()) return;
-    openPdfMailDraft();
-    submitBtn.textContent = 'Mail aciliyor...';
-    submitBtn.style.background = 'var(--clr-sage)';
-    window.setTimeout(() => {
-      submitBtn.textContent = 'On Gorusme Talep Et →';
-      submitBtn.style.background = '';
-    }, 2000);
+
+    const formData = new FormData(pdfForm);
+    const meetingType = getSelectedMeetingType();
+    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
+
+    formData.set('meetingType', meetingTypeLabel);
+    formData.append('_subject', `Nutrigenetik On Gorusme Talebi: ${meetingTypeLabel}`);
+    formData.append('_cc', formSubmitCc);
+    formData.append('_template', 'table');
+    formData.append('_url', 'https://baderbeyler.com/nutrigenetik/');
+    formData.append('_honey', '');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Gonderiliyor...';
+
+    try {
+      const response = await fetch(formSubmitEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`FormSubmit request failed with ${response.status}`);
+      }
+
+      submitBtn.textContent = 'Gonderildi ✓';
+      submitBtn.style.background = 'var(--clr-sage)';
+      pdfForm.reset();
+      applyMeetingType();
+    } catch (error) {
+      console.error(error);
+      submitBtn.textContent = 'Gonderilemedi';
+      submitBtn.style.background = '#8f4a43';
+    } finally {
+      window.setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'On Gorusme Talep Et →';
+        submitBtn.style.background = '';
+      }, 2500);
+    }
   });
 </script>
 

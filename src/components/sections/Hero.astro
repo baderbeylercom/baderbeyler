@@ -64,28 +64,28 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
       <div class="og-row">
         <div class="og-group">
           <label for="ogName">Ad Soyad</label>
-          <input id="ogName" type="text" placeholder="Adınız Soyadınız" required />
+          <input id="ogName" name="name" type="text" placeholder="Adınız Soyadınız" required />
         </div>
         <div class="og-group">
           <label for="ogEmail">E-posta</label>
-          <input id="ogEmail" type="email" placeholder="ornek@mail.com" required />
+          <input id="ogEmail" name="email" type="email" placeholder="ornek@mail.com" required />
         </div>
       </div>
       <div class="og-row">
         <div class="og-group">
           <label for="ogPhone">Telefon</label>
-          <input id="ogPhone" type="tel" placeholder="+90 5XX XXX XX XX" />
+          <input id="ogPhone" name="phone" type="tel" placeholder="+90 5XX XXX XX XX" />
         </div>
       </div>
       <div class="og-group">
         <label>Görüşme Türü</label>
         <div class="og-type-group">
           <label class="og-type-option">
-            <input type="radio" name="ogMeetingType" value="online" required />
+            <input type="radio" name="meetingType" value="online" required />
             <span>Online</span>
           </label>
           <label class="og-type-option">
-            <input type="radio" name="ogMeetingType" value="yuzyuze" />
+            <input type="radio" name="meetingType" value="yuzyuze" />
             <span>Yüz Yüze</span>
           </label>
         </div>
@@ -94,18 +94,18 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
       <div class="og-row">
         <div class="og-group">
           <label for="ogDate">Randevu Tarihi</label>
-          <input id="ogDate" type="date" required disabled />
+          <input id="ogDate" name="date" type="date" required disabled />
         </div>
         <div class="og-group">
           <label for="ogTime">Randevu Saati</label>
-          <select id="ogTime" required disabled>
+          <select id="ogTime" name="time" required disabled>
             <option value="">Önce tarih seçin</option>
           </select>
         </div>
       </div>
       <div class="og-group">
         <label for="ogMessage">Mesajınız</label>
-        <textarea id="ogMessage" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
+        <textarea id="ogMessage" name="message" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
       </div>
       <button class="og-submit" type="submit" id="ogSubmitBtn" disabled>Ön Görüşme Talep Et →</button>
     </form>
@@ -331,7 +331,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   const ogScheduleHint = document.getElementById('ogScheduleHint') as HTMLParagraphElement;
   const ogForm = document.getElementById('ogForm') as HTMLFormElement;
   const ogMeetingTypeInputs = [
-    ...document.querySelectorAll<HTMLInputElement>('input[name="ogMeetingType"]'),
+    ...document.querySelectorAll<HTMLInputElement>('input[name="meetingType"]'),
   ];
 
   const SCHEDULE_RULES = {
@@ -347,7 +347,8 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     },
   } as const;
 
-  const ogRecipients = ['iletisim@baderbeyler.com', 'baderbeylercom@gmail.com'];
+  const formSubmitEndpoint = 'https://formsubmit.co/ajax/iletisim@baderbeyler.com';
+  const formSubmitCc = 'baderbeylercom@gmail.com';
   const today = new Date().toISOString().split('T')[0];
   ogDateInput.min = today;
 
@@ -460,29 +461,6 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     updateSubmitState();
   };
 
-  const openHeroMailDraft = () => {
-    const ogName = document.getElementById('ogName') as HTMLInputElement;
-    const ogEmail = document.getElementById('ogEmail') as HTMLInputElement;
-    const ogPhone = document.getElementById('ogPhone') as HTMLInputElement;
-    const ogMessage = document.getElementById('ogMessage') as HTMLTextAreaElement;
-    const meetingType = getSelectedMeetingType();
-    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
-    const subject = `On Gorusme Talebi: ${meetingTypeLabel}`;
-    const body = [
-      `Ad Soyad: ${ogName.value.trim()}`,
-      `E-posta: ${ogEmail.value.trim()}`,
-      `Telefon: ${ogPhone.value.trim() || 'Belirtilmedi'}`,
-      `Gorusme Turu: ${meetingTypeLabel}`,
-      `Tarih: ${ogDateInput.value}`,
-      `Saat: ${ogTimeInput.value}`,
-      '',
-      'Mesaj:',
-      ogMessage.value.trim() || 'Belirtilmedi',
-    ].join('\n');
-
-    window.location.href = `mailto:${ogRecipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
-
   ogMeetingTypeInputs.forEach((input) => {
     input.addEventListener('change', applyMeetingType);
   });
@@ -495,16 +473,53 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
 
   ogTimeInput.addEventListener('change', updateSubmitState);
 
-  ogForm.addEventListener('submit', (event) => {
+  ogForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!ogForm.reportValidity()) return;
-    openHeroMailDraft();
-    ogSubmitBtn.textContent = 'Mail aciliyor...';
-    ogSubmitBtn.style.background = 'var(--clr-sage)';
-    window.setTimeout(() => {
-      ogSubmitBtn.textContent = 'On Gorusme Talep Et →';
-      ogSubmitBtn.style.background = '';
-    }, 2000);
+
+    const formData = new FormData(ogForm);
+    const meetingType = getSelectedMeetingType();
+    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
+
+    formData.set('meetingType', meetingTypeLabel);
+    formData.append('_subject', `On Gorusme Talebi: ${meetingTypeLabel}`);
+    formData.append('_cc', formSubmitCc);
+    formData.append('_template', 'table');
+    formData.append('_url', 'https://baderbeyler.com/#home');
+    formData.append('_honey', '');
+
+    ogSubmitBtn.disabled = true;
+    ogSubmitBtn.textContent = 'Gonderiliyor...';
+
+    try {
+      const response = await fetch(formSubmitEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`FormSubmit request failed with ${response.status}`);
+      }
+
+      ogSubmitBtn.textContent = 'Gonderildi ✓';
+      ogSubmitBtn.style.background = 'var(--clr-sage)';
+      ogForm.reset();
+      applyMeetingType();
+      closeOgModal();
+    } catch (error) {
+      console.error(error);
+      ogSubmitBtn.textContent = 'Gonderilemedi';
+      ogSubmitBtn.style.background = '#8f4a43';
+    } finally {
+      window.setTimeout(() => {
+        ogSubmitBtn.disabled = false;
+        ogSubmitBtn.textContent = 'On Gorusme Talep Et →';
+        ogSubmitBtn.style.background = '';
+      }, 2500);
+    }
   });
 
   document.getElementById('heroCtaBtn')!.addEventListener('click', () => {
