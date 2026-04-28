@@ -51,7 +51,6 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   </div>
 </section>
 
-<!-- Ön Görüşme Modal -->
 <div id="ongorusme-modal" class="og-modal" role="dialog" aria-modal="true" aria-label="Ücretsiz Ön Görüşme">
   <div class="og-backdrop"></div>
   <div class="og-content">
@@ -129,6 +128,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     opacity: 0;
     transition: opacity 0.3s ease;
   }
+
   .og-modal.open {
     pointer-events: auto;
     opacity: 1;
@@ -137,7 +137,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   .og-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
     cursor: pointer;
   }
 
@@ -154,6 +154,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     transform: translateY(24px) scale(0.97);
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .og-modal.open .og-content {
     transform: translateY(0) scale(1);
   }
@@ -169,9 +170,15 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     color: #888;
     transition: color 0.2s;
   }
-  .og-close:hover { color: #111; }
 
-  .og-header { margin-bottom: 1.5rem; }
+  .og-close:hover {
+    color: #111;
+  }
+
+  .og-header {
+    margin-bottom: 1.5rem;
+  }
+
   .og-eyebrow {
     font-size: 0.78rem;
     letter-spacing: 0.1em;
@@ -179,28 +186,44 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     color: #888;
     margin-bottom: 0.4rem;
   }
+
   .og-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
     line-height: 1.25;
   }
-  .og-desc { font-size: 0.93rem; opacity: 0.65; line-height: 1.65; }
 
-  .og-form { display: flex; flex-direction: column; gap: 1rem; }
+  .og-desc {
+    font-size: 0.93rem;
+    opacity: 0.65;
+    line-height: 1.65;
+  }
+
+  .og-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
   .og-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
-  @media (max-width: 520px) { .og-row { grid-template-columns: 1fr; } }
+
+  @media (max-width: 520px) {
+    .og-row {
+      grid-template-columns: 1fr;
+    }
+  }
 
   .og-group {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
   }
+
   .og-group label {
     font-size: 0.8rem;
     font-weight: 500;
@@ -208,23 +231,31 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+
   .og-group input,
   .og-group select,
   .og-group textarea {
-    border: 1px solid rgba(0,0,0,0.12);
+    border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 8px;
     padding: 0.65rem 0.9rem;
     font-size: 0.93rem;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.85);
     font-family: inherit;
     color: inherit;
     outline: none;
     transition: border-color 0.2s;
   }
+
   .og-group input:focus,
   .og-group select:focus,
-  .og-group textarea:focus { border-color: rgba(0,0,0,0.35); }
-  .og-group textarea { min-height: 80px; resize: vertical; }
+  .og-group textarea:focus {
+    border-color: rgba(0, 0, 0, 0.35);
+  }
+
+  .og-group textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
 
   .og-group input:disabled,
   .og-group select:disabled {
@@ -233,7 +264,11 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     background: rgba(239, 239, 239, 0.75);
   }
 
-  .og-type-group { display: flex; gap: 0.65rem; }
+  .og-type-group {
+    display: flex;
+    gap: 0.65rem;
+  }
+
   .og-type-option {
     display: flex;
     align-items: center;
@@ -241,16 +276,20 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     cursor: pointer;
     font-size: 0.93rem;
     padding: 0.5rem 1rem;
-    border: 1px solid rgba(0,0,0,0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.85);
     transition: border-color 0.2s, background 0.2s;
     user-select: none;
   }
-  .og-type-option input[type="radio"] { accent-color: #3b1f55; }
+
+  .og-type-option input[type='radio'] {
+    accent-color: #3b1f55;
+  }
+
   .og-type-option:has(input:checked) {
     border-color: #3b1f55;
-    background: rgba(59,31,85,0.06);
+    background: rgba(59, 31, 85, 0.06);
   }
 
   .og-helper {
@@ -273,8 +312,15 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     transition: opacity 0.2s;
     align-self: stretch;
   }
-  .og-submit:hover { opacity: 0.85; }
-  .og-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .og-submit:hover {
+    opacity: 0.85;
+  }
+
+  .og-submit:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
 </style>
 
 <script>
@@ -283,6 +329,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   const ogTimeInput = document.getElementById('ogTime') as HTMLSelectElement;
   const ogSubmitBtn = document.getElementById('ogSubmitBtn') as HTMLButtonElement;
   const ogScheduleHint = document.getElementById('ogScheduleHint') as HTMLParagraphElement;
+  const ogForm = document.getElementById('ogForm') as HTMLFormElement;
   const ogMeetingTypeInputs = [
     ...document.querySelectorAll<HTMLInputElement>('input[name="ogMeetingType"]'),
   ];
@@ -290,41 +337,17 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   const SCHEDULE_RULES = {
     online: {
       allowedDays: [1, 2, 4, 5],
-      timeSlots: [
-        '10:00',
-        '10:30',
-        '11:00',
-        '11:30',
-        '12:00',
-        '12:30',
-        '13:00',
-        '13:30',
-        '14:00',
-        '14:30',
-        '15:00',
-        '15:30',
-        '16:00',
-        '16:30',
-      ],
+      timeSlots: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'],
       hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-16:30 arasinda her 30 dakikada bir planlanir.',
     },
     yuzyuze: {
       allowedDays: [3],
-      timeSlots: [
-        '09:00',
-        '10:00',
-        '11:00',
-        '12:00',
-        '13:00',
-        '14:00',
-        '15:00',
-        '16:00',
-        '17:00',
-      ],
+      timeSlots: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
       hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-17:00 arasinda her saat basi planlanir.',
     },
   } as const;
 
+  const ogRecipients = ['iletisim@baderbeyler.com', 'baderbeylercom@gmail.com'];
   const today = new Date().toISOString().split('T')[0];
   ogDateInput.min = today;
 
@@ -437,6 +460,29 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     updateSubmitState();
   };
 
+  const openHeroMailDraft = () => {
+    const ogName = document.getElementById('ogName') as HTMLInputElement;
+    const ogEmail = document.getElementById('ogEmail') as HTMLInputElement;
+    const ogPhone = document.getElementById('ogPhone') as HTMLInputElement;
+    const ogMessage = document.getElementById('ogMessage') as HTMLTextAreaElement;
+    const meetingType = getSelectedMeetingType();
+    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
+    const subject = `On Gorusme Talebi: ${meetingTypeLabel}`;
+    const body = [
+      `Ad Soyad: ${ogName.value.trim()}`,
+      `E-posta: ${ogEmail.value.trim()}`,
+      `Telefon: ${ogPhone.value.trim() || 'Belirtilmedi'}`,
+      `Gorusme Turu: ${meetingTypeLabel}`,
+      `Tarih: ${ogDateInput.value}`,
+      `Saat: ${ogTimeInput.value}`,
+      '',
+      'Mesaj:',
+      ogMessage.value.trim() || 'Belirtilmedi',
+    ].join('\n');
+
+    window.location.href = `mailto:${ogRecipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   ogMeetingTypeInputs.forEach((input) => {
     input.addEventListener('change', applyMeetingType);
   });
@@ -448,6 +494,18 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   });
 
   ogTimeInput.addEventListener('change', updateSubmitState);
+
+  ogForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!ogForm.reportValidity()) return;
+    openHeroMailDraft();
+    ogSubmitBtn.textContent = 'Mail aciliyor...';
+    ogSubmitBtn.style.background = 'var(--clr-sage)';
+    window.setTimeout(() => {
+      ogSubmitBtn.textContent = 'On Gorusme Talep Et →';
+      ogSubmitBtn.style.background = '';
+    }, 2000);
+  });
 
   document.getElementById('heroCtaBtn')!.addEventListener('click', () => {
     ogModal.classList.add('open');

@@ -16,14 +16,12 @@ import Footer from '../components/sections/Footer.astro';
     </div>
 
     <div class="pdf-layout">
-      <!-- Sol: PDF Görüntüleyici -->
       <div class="pdf-left">
         <div class="pdf-viewer-wrap">
           <canvas id="pdfCanvas"></canvas>
         </div>
       </div>
 
-      <!-- Sağ: Başlık + Form -->
       <div class="pdf-right">
         <div class="pdf-cta-block">
           <p class="section-tag">Ücretsiz Ön Görüşme</p>
@@ -99,6 +97,7 @@ import Footer from '../components/sections/Footer.astro';
   const pageInfo = document.getElementById('pageInfo')!;
   const prevBtn = document.getElementById('prevPage')!;
   const nextBtn = document.getElementById('nextPage')!;
+  const pdfForm = document.getElementById('pdfContactForm') as HTMLFormElement;
 
   let pdfDoc: any = null;
   let currentPage = 1;
@@ -123,10 +122,14 @@ import Footer from '../components/sections/Footer.astro';
     renderPage(1);
   });
 
-  prevBtn.addEventListener('click', () => { if (currentPage > 1) renderPage(--currentPage); });
-  nextBtn.addEventListener('click', () => { if (currentPage < pdfDoc.numPages) renderPage(++currentPage); });
+  prevBtn.addEventListener('click', () => {
+    if (currentPage > 1) renderPage(--currentPage);
+  });
 
-  // Tarih seçilmeden buton disabled kalır
+  nextBtn.addEventListener('click', () => {
+    if (currentPage < pdfDoc.numPages) renderPage(++currentPage);
+  });
+
   const dateInput = document.getElementById('pdfDate') as HTMLInputElement;
   const timeInput = document.getElementById('pdfTime') as HTMLSelectElement;
   const submitBtn = document.getElementById('pdfSubmitBtn') as HTMLButtonElement;
@@ -134,40 +137,17 @@ import Footer from '../components/sections/Footer.astro';
   const meetingTypeInputs = [
     ...document.querySelectorAll<HTMLInputElement>('input[name="meetingType"]'),
   ];
+  const mailRecipients = ['iletisim@baderbeyler.com', 'baderbeylercom@gmail.com'];
+
   const SCHEDULE_RULES = {
     online: {
       allowedDays: [1, 2, 4, 5],
-      timeSlots: [
-        '10:00',
-        '10:30',
-        '11:00',
-        '11:30',
-        '12:00',
-        '12:30',
-        '13:00',
-        '13:30',
-        '14:00',
-        '14:30',
-        '15:00',
-        '15:30',
-        '16:00',
-        '16:30',
-      ],
+      timeSlots: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'],
       hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-16:30 arasinda her 30 dakikada bir planlanir.',
     },
     yuzyuze: {
       allowedDays: [3],
-      timeSlots: [
-        '09:00',
-        '10:00',
-        '11:00',
-        '12:00',
-        '13:00',
-        '14:00',
-        '15:00',
-        '16:00',
-        '17:00',
-      ],
+      timeSlots: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
       hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-17:00 arasinda her saat basi planlanir.',
     },
   } as const;
@@ -282,6 +262,29 @@ import Footer from '../components/sections/Footer.astro';
     updateSubmitState();
   };
 
+  const openPdfMailDraft = () => {
+    const pdfName = document.getElementById('pdfName') as HTMLInputElement;
+    const pdfEmail = document.getElementById('pdfEmail') as HTMLInputElement;
+    const pdfPhone = document.getElementById('pdfPhone') as HTMLInputElement;
+    const pdfMessage = document.getElementById('pdfMessage') as HTMLTextAreaElement;
+    const meetingType = getSelectedMeetingType();
+    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
+    const subject = `Nutrigenetik On Gorusme Talebi: ${meetingTypeLabel}`;
+    const body = [
+      `Ad Soyad: ${pdfName.value.trim()}`,
+      `E-posta: ${pdfEmail.value.trim()}`,
+      `Telefon: ${pdfPhone.value.trim() || 'Belirtilmedi'}`,
+      `Gorusme Turu: ${meetingTypeLabel}`,
+      `Tarih: ${dateInput.value}`,
+      `Saat: ${timeInput.value}`,
+      '',
+      'Mesaj:',
+      pdfMessage.value.trim() || 'Belirtilmedi',
+    ].join('\n');
+
+    window.location.href = `mailto:${mailRecipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   meetingTypeInputs.forEach((input) => {
     input.addEventListener('change', applyMeetingType);
   });
@@ -294,6 +297,18 @@ import Footer from '../components/sections/Footer.astro';
   });
 
   timeInput.addEventListener('change', updateSubmitState);
+
+  pdfForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!pdfForm.reportValidity()) return;
+    openPdfMailDraft();
+    submitBtn.textContent = 'Mail aciliyor...';
+    submitBtn.style.background = 'var(--clr-sage)';
+    window.setTimeout(() => {
+      submitBtn.textContent = 'On Gorusme Talep Et →';
+      submitBtn.style.background = '';
+    }, 2000);
+  });
 </script>
 
 <style>
@@ -318,7 +333,9 @@ import Footer from '../components/sections/Footer.astro';
     transition: opacity 0.2s;
   }
 
-  .pdf-back:hover { opacity: 1; }
+  .pdf-back:hover {
+    opacity: 1;
+  }
 
   .pdf-layout {
     max-width: 1200px;
@@ -330,12 +347,11 @@ import Footer from '../components/sections/Footer.astro';
     align-items: start;
   }
 
-  /* PDF Sol */
   #pdfCanvas {
     width: 100%;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
     display: block;
   }
 
@@ -359,7 +375,10 @@ import Footer from '../components/sections/Footer.astro';
     transition: opacity 0.2s;
   }
 
-  .pdf-controls button:hover { opacity: 1; }
+  .pdf-controls button:hover {
+    opacity: 1;
+  }
+
   .pdf-controls-bar {
     position: fixed;
     bottom: 2rem;
@@ -373,7 +392,7 @@ import Footer from '../components/sections/Footer.astro';
     border-radius: 999px;
     padding: 0.6rem 1.5rem;
     backdrop-filter: blur(12px);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
     z-index: 100;
   }
 
@@ -388,11 +407,22 @@ import Footer from '../components/sections/Footer.astro';
     padding: 0.2rem 0.4rem;
   }
 
-  .pdf-controls-bar button:hover { opacity: 1; }
-  .pdf-controls-bar button[disabled] { opacity: 0.2; cursor: default; }
-  #pageInfo { font-size: 0.88rem; opacity: 0.7; min-width: 3.5rem; text-align: center; }
+  .pdf-controls-bar button:hover {
+    opacity: 1;
+  }
 
-  /* Sağ Panel */
+  .pdf-controls-bar button[disabled] {
+    opacity: 0.2;
+    cursor: default;
+  }
+
+  #pageInfo {
+    font-size: 0.88rem;
+    opacity: 0.7;
+    min-width: 3.5rem;
+    text-align: center;
+  }
+
   .pdf-right {
     position: sticky;
     top: 7rem;
@@ -414,13 +444,12 @@ import Footer from '../components/sections/Footer.astro';
     line-height: 1.7;
   }
 
-  /* Form */
   .pdf-form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    background: rgba(255,255,255,0.6);
-    border: 1px solid rgba(0,0,0,0.07);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.07);
     border-radius: 16px;
     padding: 1.75rem;
     backdrop-filter: blur(8px);
@@ -443,11 +472,11 @@ import Footer from '../components/sections/Footer.astro';
   .pdf-form-group input,
   .pdf-form-group select,
   .pdf-form-group textarea {
-    border: 1px solid rgba(0,0,0,0.12);
+    border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 8px;
     padding: 0.7rem 1rem;
     font-size: 0.95rem;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.8);
     font-family: inherit;
     color: inherit;
     transition: border-color 0.2s;
@@ -457,14 +486,14 @@ import Footer from '../components/sections/Footer.astro';
   .pdf-form-group input:focus,
   .pdf-form-group select:focus,
   .pdf-form-group textarea:focus {
-    border-color: rgba(0,0,0,0.35);
+    border-color: rgba(0, 0, 0, 0.35);
   }
 
   .pdf-form-group input:disabled,
   .pdf-form-group select:disabled {
     opacity: 0.55;
     cursor: not-allowed;
-    background: rgba(239,239,239,0.75);
+    background: rgba(239, 239, 239, 0.75);
   }
 
   .pdf-form-group textarea {
@@ -485,7 +514,10 @@ import Footer from '../components/sections/Footer.astro';
     transition: opacity 0.2s;
   }
 
-  .pdf-form-submit:hover { opacity: 0.85; }
+  .pdf-form-submit:hover {
+    opacity: 0.85;
+  }
+
   .pdf-form-submit:disabled {
     opacity: 0.35;
     cursor: not-allowed;
@@ -503,16 +535,20 @@ import Footer from '../components/sections/Footer.astro';
     cursor: pointer;
     font-size: 0.95rem;
     padding: 0.55rem 1.1rem;
-    border: 1px solid rgba(0,0,0,0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.8);
     transition: border-color 0.2s, background 0.2s;
     user-select: none;
   }
-  .pdf-type-option input[type="radio"] { accent-color: #3b1f55; }
+
+  .pdf-type-option input[type='radio'] {
+    accent-color: #3b1f55;
+  }
+
   .pdf-type-option:has(input:checked) {
     border-color: #3b1f55;
-    background: rgba(59,31,85,0.06);
+    background: rgba(59, 31, 85, 0.06);
   }
 
   .pdf-helper {
@@ -522,7 +558,6 @@ import Footer from '../components/sections/Footer.astro';
     opacity: 0.9;
   }
 
-  /* Mobil */
   @media (max-width: 900px) {
     .pdf-layout {
       grid-template-columns: 1fr;

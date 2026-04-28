@@ -327,11 +327,42 @@
 
   document.querySelector('.form-submit')?.addEventListener('click', function () {
     if (!(this instanceof HTMLButtonElement)) return;
-    this.textContent = 'Gönderildi ✓';
+
+    const fullName = document.getElementById('fullName') as HTMLInputElement | null;
+    const emailAddress = document.getElementById('emailAddress') as HTMLInputElement | null;
+    const contactTopic = document.getElementById('contactTopic') as HTMLSelectElement | null;
+    const contactMessage = document.getElementById('contactMessage') as HTMLTextAreaElement | null;
+
+    if (!fullName || !emailAddress || !contactTopic || !contactMessage) return;
+
+    const requiredFields = [fullName, emailAddress, contactMessage];
+    const firstInvalidField = requiredFields.find((field) => !field.reportValidity());
+
+    if (firstInvalidField) {
+      firstInvalidField.focus();
+      return;
+    }
+
+    const recipients = ['iletisim@baderbeyler.com', 'baderbeylercom@gmail.com'];
+    const subject = contactTopic.value
+      ? `Iletisim Formu: ${contactTopic.value}`
+      : 'Iletisim Formu';
+    const body = [
+      `Ad Soyad: ${fullName.value.trim()}`,
+      `E-posta: ${emailAddress.value.trim()}`,
+      `Konu: ${contactTopic.value || 'Belirtilmedi'}`,
+      '',
+      'Mesaj:',
+      contactMessage.value.trim(),
+    ].join('\n');
+
+    window.location.href = `mailto:${recipients.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    this.textContent = 'Mail aciliyor...';
     this.style.background = 'var(--clr-sage)';
 
     window.setTimeout(() => {
-      this.textContent = 'Gönder';
+      this.textContent = 'Gonder';
       this.style.background = '';
     }, 2000);
   });
