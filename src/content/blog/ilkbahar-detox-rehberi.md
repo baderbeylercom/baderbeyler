@@ -4,8 +4,8 @@ description: Beslenme kararlarında genetik varyantların tek başına değil, k
 excerpt: Veriyi doğru okumak, kişiselleştirilmiş beslenmenin temelidir.
 category: Klinik Yaklaşım
 date: 2026-03-15
-featuredImage: https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&h=300&fit=crop
-featuredImageAlt: Genetik ve beslenme temalı görsel
+featuredImage: /assets/images/hero-genetic-dna.webp
+featuredImageAlt: Suluboya DNA sarmalı illüstrasyonu
 draft: false
 featured: true
 seoTitle: Kişiselleştirilmiş beslenmede genetik veri nasıl okunmalı? | Bader Beyler
