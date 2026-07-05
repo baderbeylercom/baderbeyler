@@ -151,7 +151,7 @@ export const heroContent = {
   stats: parseStats(heroData.stats, defaultHeroStats),
   heroImage: '/assets/images/hero-person.webp',
   heroImageAlt: 'Bader Beyler ekip görseli',
-  focusImage: '/assets/images/hero-focus-portrait.webp',
+  focusImage: '/assets/images/hero-focus-portrait.webp?v=2',
   focusImageAlt: 'Bader Beyler portre görseli',
   appearance: {
     rightPanelWidth: 480,
@@ -223,6 +223,9 @@ export const servicesContent = {
     '/assets/images/5.webp',
     '/assets/images/6.webp',
     '/assets/images/7.webp',
+    '/assets/images/8.webp',
+    '/assets/images/9.webp',
+    '/assets/images/10.webp',
   ],
   appearance: {
     titleSize: 3.35,

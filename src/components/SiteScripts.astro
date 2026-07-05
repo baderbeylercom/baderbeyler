@@ -79,7 +79,10 @@
 
   let snapLock = false;
   let wheelAccumulator = 0;
-  let wheelResetTimer;
+  let gestureConsumed = false;
+  let lastWheelTime = 0;
+  let lastWheelDir = 0;
+  const WHEEL_GESTURE_GAP = 180;
 
   const desktopSnapEnabled = () => window.innerWidth > 768;
 
@@ -130,18 +133,30 @@
       }
 
       event.preventDefault();
-      if (snapLock) return;
+
+      // Tek jest = tek bölüm: trackpad ataleti kesintisiz event akışı ürettiği için,
+      // yeni jest ancak kısa bir sessizlikten veya yön değişiminden sonra tanınır.
+      const now = performance.now();
+      const dir = event.deltaY > 0 ? 1 : event.deltaY < 0 ? -1 : 0;
+      const isNewGesture =
+        now - lastWheelTime > WHEEL_GESTURE_GAP ||
+        (dir !== 0 && lastWheelDir !== 0 && dir !== lastWheelDir);
+      lastWheelTime = now;
+      if (dir !== 0) lastWheelDir = dir;
+
+      if (isNewGesture) {
+        gestureConsumed = false;
+        wheelAccumulator = 0;
+      }
+
+      if (snapLock || gestureConsumed) return;
 
       wheelAccumulator += event.deltaY;
-      clearTimeout(wheelResetTimer);
-      wheelResetTimer = window.setTimeout(() => {
-        wheelAccumulator = 0;
-      }, 140);
-
       if (Math.abs(wheelAccumulator) < 42) return;
 
       const direction = wheelAccumulator > 0 ? 1 : -1;
       wheelAccumulator = 0;
+      gestureConsumed = true;
       goToSection(currentSectionIndex() + direction);
     },
     { passive: false },
