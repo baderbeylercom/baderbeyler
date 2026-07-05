@@ -348,7 +348,7 @@
     const formData = new FormData(event.currentTarget);
     const topic = String(formData.get('topic') || '').trim();
 
-    formData.append('_subject', topic ? `Iletisim Formu: ${topic}` : 'Iletisim Formu');
+    formData.append('_subject', topic ? `İletişim Formu: ${topic}` : 'İletişim Formu');
     formData.append('_cc', formSubmitCc);
     formData.append('_template', 'table');
     formData.append('_url', 'https://baderbeyler.com/#contact');
@@ -356,7 +356,7 @@
 
     const previousLabel = submitButton.textContent;
     submitButton.disabled = true;
-    submitButton.textContent = 'Gonderiliyor...';
+    submitButton.textContent = 'Gönderiliyor...';
 
     try {
       const response = await fetch(formSubmitEndpoint, {
@@ -371,17 +371,17 @@
         throw new Error(`FormSubmit request failed with ${response.status}`);
       }
 
-      submitButton.textContent = 'Gonderildi ✓';
+      submitButton.textContent = 'Gönderildi ✓';
       submitButton.style.background = 'var(--clr-sage)';
       event.currentTarget.reset();
     } catch (error) {
       console.error(error);
-      submitButton.textContent = 'Gonderilemedi';
+      submitButton.textContent = 'Gönderilemedi';
       submitButton.style.background = '#8f4a43';
     } finally {
       window.setTimeout(() => {
         submitButton.disabled = false;
-        submitButton.textContent = previousLabel || 'Gonder';
+        submitButton.textContent = previousLabel || 'Gönder';
         submitButton.style.background = '';
       }, 2500);
     }

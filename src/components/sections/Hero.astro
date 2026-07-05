@@ -338,12 +338,12 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     online: {
       allowedDays: [1, 2, 4, 5],
       timeSlots: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'],
-      hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-16:30 arasinda her 30 dakikada bir planlanir.',
+      hint: 'Online görüşmeler Pazartesi, Salı, Perşembe ve Cuma günleri 10:00-16:30 arasında her 30 dakikada bir planlanır.',
     },
     yuzyuze: {
       allowedDays: [3],
       timeSlots: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
-      hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-17:00 arasinda her saat basi planlanir.',
+      hint: 'Yüz yüze görüşmeler yalnızca Çarşamba günleri 09:00-17:00 arasında her saat başı planlanır.',
     },
   } as const;
 
@@ -381,13 +381,13 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     ogTimeInput.innerHTML = '';
 
     if (!meetingType || !ogDateInput.value) {
-      ogTimeInput.innerHTML = '<option value="">Once tarih secin</option>';
+      ogTimeInput.innerHTML = '<option value="">Önce tarih seçin</option>';
       ogTimeInput.disabled = true;
       return;
     }
 
     ogTimeInput.disabled = false;
-    ogTimeInput.innerHTML = '<option value="">Saat secin</option>';
+    ogTimeInput.innerHTML = '<option value="">Saat seçin</option>';
     const now = new Date();
     const selectedDate = new Date(`${ogDateInput.value}T00:00:00`);
     const isToday = ogDateInput.value === formatDateValue(now);
@@ -400,7 +400,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     });
 
     if (!availableSlots.length) {
-      ogTimeInput.innerHTML = '<option value="">Bu tarih icin uygun saat kalmadi</option>';
+      ogTimeInput.innerHTML = '<option value="">Bu tarih için uygun saat kalmadı</option>';
       ogTimeInput.disabled = true;
       return;
     }
@@ -424,8 +424,8 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
       ogDateInput.value = '';
       ogTimeInput.value = '';
       ogTimeInput.disabled = true;
-      ogTimeInput.innerHTML = '<option value="">Uygun tarih secin</option>';
-      ogDateInput.setCustomValidity('Sectiginiz gorusme turu icin bu tarih uygun degil.');
+      ogTimeInput.innerHTML = '<option value="">Uygun tarih seçin</option>';
+      ogDateInput.setCustomValidity('Seçtiğiniz görüşme türü için bu tarih uygun değil.');
       ogDateInput.reportValidity();
       return false;
     }
@@ -447,8 +447,8 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     if (!meetingType) {
       ogDateInput.disabled = true;
       ogTimeInput.disabled = true;
-      ogTimeInput.innerHTML = '<option value="">Once tarih secin</option>';
-      ogScheduleHint.textContent = 'Once gorusme turunu secin.';
+      ogTimeInput.innerHTML = '<option value="">Önce tarih seçin</option>';
+      ogScheduleHint.textContent = 'Önce görüşme türünü seçin.';
       updateSubmitState();
       return;
     }
@@ -456,7 +456,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     ogDateInput.disabled = false;
     ogDateInput.min = getNextAllowedDate(meetingType);
     ogScheduleHint.textContent = SCHEDULE_RULES[meetingType].hint;
-    ogTimeInput.innerHTML = '<option value="">Once tarih secin</option>';
+    ogTimeInput.innerHTML = '<option value="">Önce tarih seçin</option>';
     ogTimeInput.disabled = true;
     updateSubmitState();
   };
@@ -479,17 +479,17 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
 
     const formData = new FormData(ogForm);
     const meetingType = getSelectedMeetingType();
-    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
+    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yüz Yüze' : 'Online';
 
     formData.set('meetingType', meetingTypeLabel);
-    formData.append('_subject', `On Gorusme Talebi: ${meetingTypeLabel}`);
+    formData.append('_subject', `Ön Görüşme Talebi: ${meetingTypeLabel}`);
     formData.append('_cc', formSubmitCc);
     formData.append('_template', 'table');
     formData.append('_url', 'https://baderbeyler.com/#home');
     formData.append('_honey', '');
 
     ogSubmitBtn.disabled = true;
-    ogSubmitBtn.textContent = 'Gonderiliyor...';
+    ogSubmitBtn.textContent = 'Gönderiliyor...';
 
     try {
       const response = await fetch(formSubmitEndpoint, {
@@ -504,19 +504,19 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
         throw new Error(`FormSubmit request failed with ${response.status}`);
       }
 
-      ogSubmitBtn.textContent = 'Gonderildi ✓';
+      ogSubmitBtn.textContent = 'Gönderildi ✓';
       ogSubmitBtn.style.background = 'var(--clr-sage)';
       ogForm.reset();
       applyMeetingType();
       closeOgModal();
     } catch (error) {
       console.error(error);
-      ogSubmitBtn.textContent = 'Gonderilemedi';
+      ogSubmitBtn.textContent = 'Gönderilemedi';
       ogSubmitBtn.style.background = '#8f4a43';
     } finally {
       window.setTimeout(() => {
         ogSubmitBtn.disabled = false;
-        ogSubmitBtn.textContent = 'On Gorusme Talep Et →';
+        ogSubmitBtn.textContent = 'Ön Görüşme Talep Et →';
         ogSubmitBtn.style.background = '';
       }, 2500);
     }

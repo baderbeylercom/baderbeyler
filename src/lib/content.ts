@@ -129,7 +129,10 @@ export async function getAllBlogPostSlugs() {
 
 export async function getFeaturedEvents(limit?: number) {
   const events = await getCollection('events', ({ data }) => data.featured);
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
   const sorted = events
+    .filter((event) => event.data.startDate.getTime() >= startOfToday.getTime())
     .sort((left, right) => left.data.startDate.getTime() - right.data.startDate.getTime())
     .map(mapLocalEvent);
   return typeof limit === 'number' ? sorted.slice(0, limit) : sorted;
