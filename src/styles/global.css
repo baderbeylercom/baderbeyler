@@ -3104,11 +3104,6 @@ img {
     display: none;
   }
 
-  /* Marquee slider mobilde gizli */
-  .photo-marquee {
-    display: none !important;
-  }
-
   /* ── Hizmetler başlık kompakt ── */
   .services {
     padding-left: 1.5rem !important;
