@@ -13,7 +13,7 @@ type StatItem = {
 
 const defaultHeroStats: StatItem[] = [
   { value: 'Moleküler Biyoloji ve Genetik', label: 'Uludağ Üniversitesi' },
-  { value: 'Nutrigenetik', label: 'İngiltere · İspanya · TOBB ETÜ' },
+  { value: 'Nutrigenetik', label: 'İngiltere · İspanya' },
 ];
 
 function isNonEmptyString(value: unknown): value is string {
@@ -137,7 +137,6 @@ export const navAppearance = {
 export const pageDots = [
   { target: '#home', label: 'Anasayfa' },
   { target: '#storyOne', label: 'Tanıtım 1' },
-  { target: '#storyTwo', label: 'Tanıtım 2' },
   { target: '#services', label: 'Hizmetler' },
   { target: '#collaborations', label: 'İş birlikleri' },
   { target: '#events', label: 'Etkinlikler' },

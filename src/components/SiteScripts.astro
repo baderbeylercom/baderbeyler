@@ -63,7 +63,7 @@
     if (!navLinks?.classList.contains('open')) return;
     if (!(event.target instanceof Element)) return;
     if (event.target.closest('#navToggle')) return;
-    if (event.target.closest('#navLinks a')) return;
+    if (event.target.closest('#navLinks')) return;
     closeMenu();
   });
 
@@ -226,14 +226,6 @@
     if (!heroPerson || !hero) return;
 
     if (isMobile) {
-      heroPerson.style.opacity = '1';
-      heroPerson.style.transform = 'translateX(-50%)';
-
-      if (heroFocusPortrait) {
-        heroFocusPortrait.style.opacity = '0';
-        heroFocusPortrait.style.transform = 'translateX(-42%)';
-      }
-
       return;
     }
 
