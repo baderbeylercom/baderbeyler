@@ -135,17 +135,16 @@ img {
   align-items: center;
   flex-shrink: 0;
   padding: 0;
-  margin-top: 46px;
   text-decoration: none;
   transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
 }
 
 .site-brand img {
-  height: 118px;
+  height: 58px;
   width: auto;
   display: block;
   object-fit: contain;
-  filter: drop-shadow(0 10px 30px rgba(22, 50, 70, 0.4)) drop-shadow(0 3px 9px rgba(22, 50, 70, 0.28));
+  filter: drop-shadow(0 2px 6px rgba(22, 50, 70, 0.18));
 }
 
 .site-brand:hover {
@@ -161,7 +160,7 @@ img {
   width: max-content;
   max-width: calc(100% - 2rem);
   z-index: 1000;
-  height: 62px;
+  height: 76px;
   padding: 0 1.15rem 0 1.1rem;
   display: flex;
   align-items: center;
@@ -3323,12 +3322,8 @@ img {
   }
 
   /* ── Site logosu ── */
-  .site-brand {
-    margin-top: 30px;
-  }
-
   .site-brand img {
-    height: 76px;
+    height: 44px;
   }
 
   .page-shell {
