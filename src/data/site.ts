@@ -151,7 +151,7 @@ export const heroContent = {
   stats: parseStats(heroData.stats, defaultHeroStats),
   heroImage: '/assets/images/hero-person.webp',
   heroImageAlt: 'Bader Beyler ekip görseli',
-  focusImage: '/assets/images/hero-focus-portrait.webp?v=2',
+  focusImage: '/assets/images/hero-focus-portrait.webp?v=3',
   focusImageAlt: 'Bader Beyler portre görseli',
   appearance: {
     rightPanelWidth: 480,
