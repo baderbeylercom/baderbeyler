@@ -65,7 +65,7 @@ const textModalItems = servicesContent.items.filter(
     <div class="marquee-track">
       {[...servicesContent.marqueeImages, ...servicesContent.marqueeImages].map((src: string) => (
         <div class="marquee-item">
-          <img src={src} alt="" loading="lazy" />
+          <img src={src} alt="" loading="lazy" decoding="async" width="480" height="560" />
         </div>
       ))}
     </div>
