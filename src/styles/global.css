@@ -2939,9 +2939,15 @@ img {
     order: 2;
   }
 
-  .hero-person,
   .hero-focus-portrait {
-    display: none;
+    position: relative;
+    order: 1;
+    left: auto;
+    top: auto;
+    inset: auto;
+    transform: none;
+    width: min(62vw, 300px);
+    margin: 0 auto 1.25rem;
   }
 
   .hero-base {
