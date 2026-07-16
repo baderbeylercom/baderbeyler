@@ -246,6 +246,8 @@ export const collaborationsContent = {
       brandLine: 'Formeo by',
       partnerName: 'Elvan Odabaşı',
       imageAlt: 'Elvan Odabaşı iş birliği görseli',
+      accent: '#c0954e',
+      accent2: '#e4c078',
       leadStrong: '40+ Genetik Analiz Paneli',
       leadText: ', kişiye özgü varyantları değerlendirerek beslenme, metabolizma ve yaşam tarzı başlıklarında daha hassas bir yorumlama zemini oluşturur. İş birliği yapısı; veriyi yalnızca ölçmek değil, güncel literatür eşliğinde anlamlandırmak ve pratiğe taşımak üzerine kuruludur.',
       description: '',
@@ -258,6 +260,8 @@ export const collaborationsContent = {
       brandLine: 'Raw Data',
       partnerName: 'Dyt. Esin Çağlayan',
       imageAlt: 'Dyt. Esin Çağlayan iş birliği görseli',
+      accent: '#9f79c4',
+      accent2: '#c6a9e0',
       leadStrong: 'Raw Data üzerinden',
       leadText: ' pratikte kullanılabilir kişiselleştirilmiş Nutrigenetik raporların tasarlanması ve ileri seviye nutrigenetik eğitimleriyle iş birliği modeli sağlanmıştır.',
       description: '',
@@ -270,6 +274,8 @@ export const collaborationsContent = {
       brandLine: 'İNTERGEN',
       partnerName: 'Genetik Hastalıklar Değerlendirme Merkezi',
       imageAlt: 'İNTERGEN Genetik Hastalıklar Değerlendirme Merkezi',
+      accent: '#2f9e8f',
+      accent2: '#66c7ba',
       leadStrong: 'İNTERGEN güvencesi',
       leadText: ' ile yürütülen profesyonel iş birliği çerçevesinde Whole Genome Sequence (WGS) teknolojisiyle genetik analizler yüksek güvenilir, hassas ve spesifik süreçlerden geçerek yapılmaktadır.',
       description: '',
@@ -295,12 +301,6 @@ export const eventsContent = {
   emptyTitle: 'Yeni duyurular <em>çok yakında</em>',
   emptyText: 'Yeni tarih ve şehir bilgileri netleştikçe bu alan güncellenecek.',
   appearance: { titleSize: 3.35, cardTitleSize: 2.2, paddingY: 7, listMarginTop: 3 },
-  pastTitle: 'Geçmiş <em>etkinliklerden</em>',
-  pastEvents: [
-    { image: '/assets/images/seminer-1.webp?v=2', title: 'Diyetisyenler İçin Nutrigenetiğe Giriş' },
-    { image: '/assets/images/seminer-2.webp?v=2', title: '40+ Kadın Sağlığı Paneli' },
-    { image: '/assets/images/seminer-3.webp?v=2', title: 'Aşkın ve Ayrılığın Genetiği; Ruh Sağlığı Panelleri' },
-  ],
 };
 
 export const blogContent = {
