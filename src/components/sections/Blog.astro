@@ -9,44 +9,193 @@ interface Props {
 
 const { posts } = Astro.props;
 const { blogContent } = await getSiteData();
-const ap = blogContent.appearance;
-const blogStyle = `--blog-title-size:${ap.titleSize}rem;--blog-card-title-size:${ap.cardTitleSize}rem;--section-padding-y:${ap.paddingY}rem;--blog-grid-gap:${ap.gridGap}rem;`;
+const [featured, ...rest] = posts;
 ---
 
-<section class="section blog snap-section" id="blog" style={blogStyle}>
+<section class="section blog snap-section" id="blog">
   <div class="reveal">
     <p class="section-tag">{blogContent.eyebrow}</p>
     <h2 class="section-title" set:html={blogContent.title}></h2>
   </div>
 
-  <div class="blog-grid">
-    {
-      posts.map((post, index) => (
-        <a
-          class="blog-card reveal"
-          style={`transition-delay:.${index + 1}s`}
-          href={`/blog/${post.slug}/`}
-        >
-          <div class="blog-card-img">
-            <img src={post.data.featuredImage} alt={post.data.featuredImageAlt} loading="lazy" />
-            {
-              index === 0 && (
-                <div
-                  class="editor-resize-handle editor-resize-handle--blog-image"
-                  data-editor-resize="blog-image-ratio"
-                  aria-hidden="true"
-                ></div>
-              )
-            }
+  {
+    featured && (
+      <div class="blog-news reveal">
+        <a class="bn-featured" href={`/blog/${featured.slug}/`}>
+          <div class="bn-feat-img">
+            <img src={featured.data.featuredImage} alt={featured.data.featuredImageAlt} loading="lazy" />
           </div>
-          <div class="blog-card-body">
-            <div class="blog-card-tag">{post.data.category}</div>
-            <h3>{post.data.title}</h3>
-            <p>{post.data.excerpt}</p>
-            <div class="blog-card-date">{formatDateLong(post.data.date)}</div>
+          <div class="bn-feat-body">
+            <span class="bn-tag">{featured.data.category}</span>
+            <h3>{featured.data.title}</h3>
+            <p>{featured.data.excerpt}</p>
+            <span class="bn-date">{formatDateLong(featured.data.date)}</span>
           </div>
         </a>
-      ))
-    }
-  </div>
+
+        <div class="bn-list">
+          {rest.map((post) => (
+            <a class="bn-row" href={`/blog/${post.slug}/`}>
+              <div class="bn-thumb">
+                <img src={post.data.featuredImage} alt={post.data.featuredImageAlt} loading="lazy" />
+              </div>
+              <div class="bn-row-text">
+                <span class="bn-tag">{post.data.category}</span>
+                <h4>{post.data.title}</h4>
+                <span class="bn-date">{formatDateLong(post.data.date)}</span>
+              </div>
+            </a>
+          ))}
+          <a class="bn-all" href="/blog/">Tüm Yazılar →</a>
+        </div>
+      </div>
+    )
+  }
 </section>
+
+<style>
+  .blog-news {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 1.6rem;
+    margin-top: 2.6rem;
+    align-items: start;
+  }
+
+  .bn-featured {
+    display: block;
+    background: var(--clr-white, #fff);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(44, 24, 16, 0.09);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+  }
+  .bn-featured:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 52px rgba(44, 24, 16, 0.15);
+  }
+  .bn-feat-img {
+    aspect-ratio: 1.75;
+    overflow: hidden;
+  }
+  .bn-feat-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+  }
+  .bn-featured:hover .bn-feat-img img {
+    transform: scale(1.05);
+  }
+  .bn-feat-body {
+    padding: 1.3rem 1.5rem 1.6rem;
+  }
+  .bn-feat-body h3 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--clr-deep);
+    line-height: 1.25;
+    margin: 0.4rem 0 0.5rem;
+  }
+  .bn-feat-body p {
+    font-size: 0.92rem;
+    color: var(--text-blog-card-body, #4a545f);
+    line-height: 1.6;
+    opacity: 0.92;
+  }
+
+  .bn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .bn-row {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    background: var(--clr-white, #fff);
+    border-radius: 14px;
+    padding: 0.55rem 0.9rem 0.55rem 0.55rem;
+    box-shadow: 0 10px 24px rgba(44, 24, 16, 0.07);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  }
+  .bn-row:hover {
+    transform: translateX(4px);
+    box-shadow: 0 14px 30px rgba(44, 24, 16, 0.12);
+  }
+  .bn-thumb {
+    width: 108px;
+    height: 74px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .bn-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .bn-row-text h4 {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    font-weight: 500;
+    color: var(--clr-deep);
+    line-height: 1.28;
+    margin: 0.15rem 0 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .bn-tag {
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--clr-caramel, #b07a3c);
+  }
+  .bn-date {
+    font-size: 0.72rem;
+    color: #6a747f;
+    display: block;
+    margin-top: 0.3rem;
+  }
+  .bn-all {
+    align-self: flex-start;
+    margin-top: 0.3rem;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--clr-deep);
+    border: 1.5px solid var(--clr-deep);
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+  }
+  .bn-all:hover {
+    background: var(--clr-deep);
+    color: var(--clr-cream, #f6f2ea);
+  }
+
+  @media (max-width: 860px) {
+    .blog-news {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 768px) {
+    .blog-news {
+      margin-top: 1.4rem;
+    }
+    .bn-feat-body h3 {
+      font-size: 1.3rem;
+    }
+  }
+</style>

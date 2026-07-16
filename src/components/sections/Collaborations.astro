@@ -2,134 +2,51 @@
 import { getSiteData } from '../../lib/site-data';
 
 const { collaborationsContent } = await getSiteData();
-const sectionStyle = `--collab-grid-gap:${collaborationsContent.appearance.gridGap}rem;--collab-grid-margin-top:${collaborationsContent.appearance.gridMarginTop}rem;--collab-item-padding-top:${collaborationsContent.appearance.itemPaddingTop}rem;--collab-item-padding-bottom:${collaborationsContent.appearance.itemPaddingBottom}rem;`;
+const items = collaborationsContent.items;
 
-function hexToRgba(hex: string | undefined, alpha: number | undefined) {
-  const safeHex = (hex ?? '#e9ddd0').replace('#', '');
-  const normalized =
-    safeHex.length === 3
-      ? safeHex
-          .split('')
-          .map((char) => `${char}${char}`)
-          .join('')
-      : safeHex;
-
-  const int = Number.parseInt(normalized, 16);
-  const red = (int >> 16) & 255;
-  const green = (int >> 8) & 255;
-  const blue = int & 255;
-  const safeAlpha = Math.max(0, Math.min(alpha ?? 1, 1));
-
-  return `rgba(${red}, ${green}, ${blue}, ${safeAlpha})`;
-}
-
-function getItemStyle(item: (typeof collaborationsContent.items)[number], index: number) {
-  return [
-    `transition-delay:.${index + 1}s`,
-    `--collab-visual-height:${item.design.visualHeight}px`,
-    `--collab-image-width:${item.design.imageWidth}px`,
-    `--collab-image-scale:${item.design.imageScale}`,
-    `--collab-image-offset-x:${item.design.imageOffsetX}px`,
-    `--collab-image-offset-y:${item.design.imageOffsetY}px`,
-    `--collab-blob-fill:${hexToRgba(item.design.blobColor, item.design.blobOpacity)}`,
-    `--collab-blob-gradient-fill:${hexToRgba(item.design.blobGradientColor, item.design.blobGradientOpacity)}`,
-    `--collab-blob-shadow-fill:${hexToRgba(item.design.blobColor, item.design.blobShadowOpacity)}`,
-    `--collab-blob-width:${item.design.blobWidth}px`,
-    `--collab-blob-height:${item.design.blobHeight}px`,
-    `--collab-blob-offset-x:${item.design.blobOffsetX}px`,
-    `--collab-blob-offset-y:${item.design.blobOffsetY}px`,
-    `--collab-blob-radius:${item.design.blobRadius}%`,
-    `--collab-blob-blur:${item.design.blobBlur}px`,
-    `--collab-blob-shadow-blur:${item.design.blobShadowBlur}px`,
-    `--collab-copy-offset-y:${item.design.copyOffsetY}rem`,
-    `--collab-brandline-size:${item.design.brandLineFontSize}rem`,
-    `--collab-partner-size:${item.design.partnerFontSize}rem`,
-    `--collab-lead-size:${item.design.leadFontSize}rem`,
-  ].join(';');
+function short(text: string, n = 120) {
+  return text.length > n ? text.slice(0, n).trimEnd() + '…' : text;
 }
 ---
 
-<section class="section collaborations snap-section" id="collaborations" style={sectionStyle}>
+<section class="section collaborations snap-section" id="collaborations">
   <div class="reveal">
     <p class="section-tag">{collaborationsContent.eyebrow}</p>
     <h2 class="section-title" set:html={collaborationsContent.title}></h2>
   </div>
 
-  <div class="collab-grid collab-grid--partners">
+  <div class="collab-panels reveal">
     {
-      collaborationsContent.items.map((item, index) => (
+      items.map((item, index) => (
         <article
-          class:list={['collab-item', 'concept-card', `collab-item--${item.visualStyle ?? 'cover'}`, 'reveal']}
-          style={getItemStyle(item, index)}
-          data-collab-index={index}
+          class="collab-panel"
+          style={`--ac:${item.accent ?? '#c0954e'};--ac2:${item.accent2 ?? '#e4c078'}`}
+          tabindex="0"
+          role="button"
+          aria-label={`${item.partnerName} — detaylar`}
+          data-collab-open={`collab-modal-${index}`}
         >
-          <div class:list={['collab-visual', item.visualStyle ?? 'cover']}>
-            {
-              item.visualStyle === 'portrait' && (
-                <div
-                  class="collab-blob"
-                  aria-hidden="true"
-                  data-collab-drag="blob"
-                  data-collab-index={index}
-                ></div>
-              )
-            }
-            {
-              item.image ? (
-                <img
-                  src={item.image}
-                  alt={item.imageAlt ?? item.partnerName ?? item.brandLine}
-                  loading="lazy"
-                  draggable="false"
-                  data-collab-drag={item.visualStyle === 'portrait' ? 'image' : undefined}
-                  data-collab-index={item.visualStyle === 'portrait' ? index : undefined}
-                />
-              ) : (
-                <div class="collab-fallback">{item.logo}</div>
-              )
-            }
-            {
-              item.visualStyle === 'portrait' && (
-                <>
-                  <div
-                    class="editor-resize-handle editor-resize-handle--collab-blob"
-                    aria-hidden="true"
-                    data-editor-resize="collab-blob"
-                    data-collab-index={index}
-                  ></div>
-                  <div
-                    class="editor-resize-handle editor-resize-handle--collab-image"
-                    aria-hidden="true"
-                    data-editor-resize="collab-image"
-                    data-collab-index={index}
-                  ></div>
-                </>
-              )
-            }
-            <div
-              class="editor-resize-handle editor-resize-handle--collab-visual"
-              aria-hidden="true"
-              data-editor-resize="collab-visual"
-              data-collab-index={index}
-            ></div>
+          <img
+            class="cp-photo"
+            src={item.image}
+            alt={item.imageAlt ?? item.partnerName}
+            loading="lazy"
+            draggable="false"
+          />
+          <div class="cp-scrim" aria-hidden="true"></div>
+          <div class="cp-min">
+            <span class="cp-brand">{item.brandLine}</span>
+            <span class="cp-name">{item.partnerName}</span>
           </div>
-          <div class="collab-copy">
-            <div class="collab-brand-row">
-              {item.brandLine && <span class="collab-brandline">{item.brandLine}</span>}
-              {item.partnerName && <span class="collab-partner">{item.partnerName}</span>}
-            </div>
-            <p class="collab-lead">
+          <div class="cp-full">
+            <span class="cp-brand">{item.brandLine}</span>
+            <h3 class="cp-name-lg">{item.partnerName}</h3>
+            <p class="cp-desc">
               {item.leadStrong && <strong>{item.leadStrong}</strong>}
-              {item.leadText}
+              {short(item.leadText)}
             </p>
-            <p>{item.description}</p>
-            {item.image && (
-              <button type="button" class="collab-hakkinda-btn" data-collab-open={`collab-modal-${index}`}>
-                Hakkında →
-              </button>
-            )}
+            <span class="cp-cta">Hakkında →</span>
           </div>
-          <span class="collab-item-arrow" aria-hidden="true">›</span>
         </article>
       ))
     }
@@ -139,7 +56,7 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
 {collaborationsContent.items.map((item, index) => (
   <div class="collab-modal" id={`collab-modal-${index}`} role="dialog" aria-modal="true">
     <div class="collab-modal-backdrop"></div>
-    <div class="collab-modal-content">
+    <div class="collab-modal-content" style={`--ac:${item.accent ?? '#c0954e'}`}>
       <button class="collab-modal-close" aria-label="Kapat">&#x2715;</button>
       {item.image && (
         <div class="collab-modal-cover">
@@ -161,121 +78,198 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
 ))}
 
 <style>
-  .collab-hakkinda-btn {
-    display: none;
+  .collab-panels {
+    display: flex;
+    gap: 0.7rem;
+    height: min(52vh, 430px);
+    margin-top: 2.4rem;
   }
 
-  .collab-item-arrow {
-    display: none;
+  .collab-panel {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    background:
+      radial-gradient(46% 50% at 50% 44%, rgba(174, 158, 138, 0.24), transparent 68%),
+      linear-gradient(165deg, #f1ece3, #e6dccd);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    transition: flex 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    outline: none;
   }
 
-  /* ── Mobil: tıklanabilir satır ── */
+  .cp-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    filter: grayscale(0.12);
+    transition: filter 0.6s, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .cp-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 56%, rgba(233, 224, 211, 0.5) 80%, rgba(233, 224, 211, 0.9));
+  }
+
+  .cp-min {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    transition: opacity 0.4s;
+  }
+
+  .cp-brand {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--ac) 74%, #35291a);
+  }
+
+  .cp-min .cp-name {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.35rem;
+    color: var(--clr-deep, #2e3a44);
+    line-height: 1.14;
+  }
+
+  .cp-full {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 1.7rem 1.9rem;
+    max-width: 540px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s 0.1s, transform 0.5s 0.1s;
+    pointer-events: none;
+  }
+
+  .cp-name-lg {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.75rem;
+    color: var(--clr-deep, #2e3a44);
+    margin: 0.2rem 0 0.55rem;
+    line-height: 1.12;
+  }
+
+  .cp-desc {
+    font-size: 0.9rem;
+    color: #4a413a;
+    margin: 0 0 1rem;
+    line-height: 1.55;
+  }
+
+  .cp-desc strong {
+    color: var(--clr-deep, #2e3a44);
+    font-weight: 600;
+  }
+
+  .cp-cta {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--clr-deep, #2e3a44);
+    border: 1px solid rgba(46, 58, 68, 0.4);
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    display: inline-block;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+  }
+
+  .collab-panel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--ac);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s;
+  }
+
+  .collab-panels:hover .collab-panel {
+    flex: 0.68;
+  }
+  .collab-panels:hover .cp-min {
+    opacity: 0;
+  }
+  .collab-panels:hover .collab-panel:hover,
+  .collab-panel:focus-visible {
+    flex: 2.5;
+  }
+  .collab-panel:hover .cp-photo,
+  .collab-panel:focus-visible .cp-photo {
+    filter: grayscale(0);
+  }
+  .collab-panel:hover .cp-min,
+  .collab-panel:focus-visible .cp-min {
+    opacity: 0;
+  }
+  .collab-panel:hover .cp-full,
+  .collab-panel:focus-visible .cp-full {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .collab-panel:hover .cp-cta,
+  .collab-panel:focus-visible .cp-cta {
+    background: var(--ac);
+    border-color: var(--ac);
+    color: #fff;
+  }
+  .collab-panel:hover::after,
+  .collab-panel:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* ── Mobil: dikey istifleme, dokun → modal ── */
   @media (max-width: 768px) {
-    .collab-grid {
-      display: flex;
+    .collab-panels {
       flex-direction: column;
-      gap: 0.65rem;
-      margin-top: 1.2rem;
+      height: auto;
+      gap: 0.7rem;
+      margin-top: 1.4rem;
     }
-
-    .collab-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.45rem 0.9rem !important;
-      border-radius: 14px !important;
-      background: rgba(220, 229, 234, 0.55) !important;
-      box-shadow: none !important;
-      cursor: pointer;
-      border-bottom: none;
-      text-align: left !important;
+    .collab-panel {
+      height: 230px;
+      flex: none !important;
     }
-
-    .collab-item.concept-card {
-      display: flex !important;
-      align-items: center;
-      justify-content: space-between;
-      grid-template-columns: none !important;
-      gap: 0.75rem !important;
-      height: auto !important;
-      min-height: 0 !important;
-      overflow: visible;
+    .cp-photo {
+      object-fit: cover;
+      object-position: center 16%;
     }
-
-    .collab-visual,
-    .collab-item.concept-card .collab-visual {
-      display: none !important;
+    .cp-scrim {
+      background: linear-gradient(180deg, transparent 40%, rgba(20, 26, 32, 0.82));
     }
-
-    .collab-copy {
-      flex: 1;
-      min-width: 0;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
+    .cp-brand {
+      color: var(--ac2);
     }
-
-    .collab-brand-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-      margin-bottom: 0;
-      min-width: 0;
-      flex: 1;
+    .cp-min .cp-name {
+      color: #fff;
+      font-size: 1.28rem;
     }
-
-    .collab-brandline {
-      font-size: 0.68rem;
-      opacity: 0.6;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-    }
-
-    .collab-partner {
-      font-size: 0.96rem;
-      font-weight: 700;
-      color: var(--clr-deep);
-      line-height: 1.2;
-    }
-
-    .collab-lead,
-    .collab-copy > p:last-child {
+    .cp-full {
       display: none;
     }
-
-    .collab-hakkinda-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      margin-top: 0;
-      padding: 0.38rem 0.72rem;
-      background: linear-gradient(135deg, var(--clr-deep), #41576b);
-      border: none;
-      border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: var(--clr-cream);
-      cursor: pointer;
-      font-family: inherit;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      align-self: center;
-      flex-shrink: 0;
-      white-space: nowrap;
+    .cp-min {
+      opacity: 1 !important;
     }
-
-    .collab-item::after {
-      content: none;
-    }
-
-    .collab-item-arrow {
+    .collab-panel::after {
       display: none;
-      font-size: 1rem;
-      color: var(--clr-terracotta);
-      flex-shrink: 0;
-      margin-left: 0.5rem;
     }
   }
 
@@ -288,40 +282,48 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     align-items: flex-end;
     justify-content: center;
   }
-
   .collab-modal.open {
     display: flex;
   }
-
   .collab-modal-backdrop {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     cursor: pointer;
   }
-
   .collab-modal-content {
     position: relative;
     z-index: 1;
     background: #f5f3ef;
     border-radius: 1.25rem 1.25rem 0 0;
     width: 100%;
+    max-width: 560px;
     max-height: 90vh;
     overflow-y: auto;
     transform: translateY(100%);
     transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
   }
-
   .collab-modal.open .collab-modal-content {
     transform: translateY(0);
   }
-
+  @media (min-width: 769px) {
+    .collab-modal {
+      align-items: center;
+    }
+    .collab-modal-content {
+      border-radius: 1.25rem;
+      transform: translateY(24px) scale(0.97);
+    }
+    .collab-modal.open .collab-modal-content {
+      transform: translateY(0) scale(1);
+    }
+  }
   .collab-modal-close {
     position: absolute;
     top: 0.9rem;
     right: 1.1rem;
     z-index: 2;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.7);
     border: none;
     border-radius: 50%;
     width: 2rem;
@@ -334,86 +336,63 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     color: #333;
     backdrop-filter: blur(4px);
   }
-
   .collab-modal-cover {
     position: relative;
     width: 100%;
-    height: min(72vw, 360px);
+    height: min(60vw, 340px);
     overflow: hidden;
     border-radius: 1.25rem 1.25rem 0 0;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--ac) 14%, #f5f3ef), #f5f3ef);
   }
-
   .collab-modal-cover img {
-    width: 70%;
+    width: 62%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
     display: block;
     margin: 0 auto;
   }
-
   .collab-modal-cover-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(245, 243, 239, 0.9) 100%);
+    background: linear-gradient(to bottom, transparent 45%, rgba(245, 243, 239, 0.92) 100%);
   }
-
   .collab-modal-body {
-    padding: 1.5rem 1.5rem 3rem;
+    padding: 1.5rem 1.6rem 2.4rem;
   }
-
   .collab-modal-brand {
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--clr-gold-dark);
+    color: var(--ac);
     margin-bottom: 0.25rem;
   }
-
   .collab-modal-name {
     font-family: var(--font-serif);
-    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-size: clamp(1.5rem, 4.5vw, 2rem);
     font-weight: 700;
     color: var(--clr-deep);
     line-height: 1.2;
     margin-bottom: 1rem;
   }
-
   .collab-modal-lead {
-    font-size: 0.93rem;
+    font-size: 0.94rem;
     line-height: 1.75;
     color: #2e231d;
-    margin-bottom: 0.75rem;
   }
-
+  .collab-modal-lead strong {
+    color: var(--clr-deep);
+  }
   .collab-modal-desc {
     font-size: 0.9rem;
     line-height: 1.7;
     opacity: 0.75;
-    margin-bottom: 0.75rem;
-  }
-
-  .collab-modal-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem 1.75rem;
-    background: linear-gradient(135deg, var(--clr-deep), #41576b);
-    color: var(--clr-cream);
-    text-decoration: none;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
+    margin-top: 0.75rem;
   }
 </style>
 
 <script>
-  const isMobileCollab = () => window.innerWidth <= 768;
-
   function openCollabModal(id: string) {
     const modal = document.getElementById(id);
     if (!modal) return;
@@ -426,18 +405,20 @@ function getItemStyle(item: (typeof collaborationsContent.items)[number], index:
     (document.body.style as any).overflow = '';
   }
 
-  document.querySelectorAll<HTMLElement>('.collab-hakkinda-btn').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const id = btn.getAttribute('data-collab-open')!;
-      openCollabModal(id);
+  document.querySelectorAll<HTMLElement>('.collab-panel[data-collab-open]').forEach((panel) => {
+    const id = panel.getAttribute('data-collab-open')!;
+    panel.addEventListener('click', () => openCollabModal(id));
+    panel.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCollabModal(id);
+      }
     });
   });
 
   document.querySelectorAll<HTMLElement>('.collab-modal').forEach((modal) => {
     modal.querySelector('.collab-modal-backdrop')?.addEventListener('click', () => closeCollabModal(modal));
     modal.querySelector('.collab-modal-close')?.addEventListener('click', () => closeCollabModal(modal));
-    modal.querySelector('.collab-modal-cta')?.addEventListener('click', () => closeCollabModal(modal));
   });
 
   document.addEventListener('keydown', (e) => {
