@@ -252,6 +252,18 @@ export const collaborationsContent = {
       design: { visualHeight: 240, imageWidth: 188, imageScale: 1.0, imageOffsetX: 30, imageOffsetY: 8, blobColor: '#e9ddd0', blobOpacity: 0.92, blobGradientColor: '#d8c9b9', blobGradientOpacity: 0.58, blobWidth: 194, blobHeight: 224, blobOffsetX: -16, blobOffsetY: 6, blobRadius: 44, blobBlur: 0, blobShadowBlur: 34, blobShadowOpacity: 0.16, copyOffsetY: 0.85, brandLineFontSize: 1.14, partnerFontSize: 1.6, leadFontSize: 1.04 },
     },
     {
+      image: '/assets/images/esin-caglayan.webp',
+      logo: 'R',
+      visualStyle: 'portrait',
+      brandLine: 'Raw Data',
+      partnerName: 'Dyt. Esin Çağlayan',
+      imageAlt: 'Dyt. Esin Çağlayan iş birliği görseli',
+      leadStrong: 'Raw Data üzerinden',
+      leadText: ' pratikte kullanılabilir kişiselleştirilmiş Nutrigenetik raporların tasarlanması ve ileri seviye nutrigenetik eğitimleriyle iş birliği modeli sağlanmıştır.',
+      description: '',
+      design: { visualHeight: 240, imageWidth: 188, imageScale: 1.0, imageOffsetX: 26, imageOffsetY: 8, blobColor: '#e7dcea', blobOpacity: 0.9, blobGradientColor: '#d5c3dc', blobGradientOpacity: 0.55, blobWidth: 194, blobHeight: 224, blobOffsetX: -14, blobOffsetY: 6, blobRadius: 44, blobBlur: 0, blobShadowBlur: 34, blobShadowOpacity: 0.15, copyOffsetY: 0.85, brandLineFontSize: 1.14, partnerFontSize: 1.6, leadFontSize: 1.04 },
+    },
+    {
       image: '/assets/images/intergen-building.webp',
       logo: 'I',
       visualStyle: 'portrait',
