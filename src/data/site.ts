@@ -149,9 +149,7 @@ export const heroContent = {
   bgText: isNonEmptyString(heroData.bgText) ? heroData.bgText : 'Bader Beyler',
   rightEyebrow: isNonEmptyString(heroData.rightEyebrow) ? heroData.rightEyebrow : 'Hakkında',
   stats: parseStats(heroData.stats, defaultHeroStats),
-  heroImage: '/assets/images/hero-person.webp',
-  heroImageAlt: 'Bader Beyler ekip görseli',
-  focusImage: '/assets/images/hero-focus-portrait.webp?v=4',
+  focusImage: '/assets/images/hero-focus-portrait.webp?v=5',
   focusImageAlt: 'Bader Beyler portre görseli',
   appearance: {
     rightPanelWidth: 480,
@@ -285,6 +283,12 @@ export const eventsContent = {
   emptyTitle: 'Yeni duyurular <em>çok yakında</em>',
   emptyText: 'Yeni tarih ve şehir bilgileri netleştikçe bu alan güncellenecek.',
   appearance: { titleSize: 3.35, cardTitleSize: 2.2, paddingY: 7, listMarginTop: 3 },
+  pastTitle: 'Geçmiş <em>etkinliklerden</em>',
+  pastEvents: [
+    { image: '/assets/images/seminer-1.webp?v=2', title: 'Diyetisyenler İçin Nutrigenetiğe Giriş' },
+    { image: '/assets/images/seminer-2.webp?v=2', title: '40+ Kadın Sağlığı Paneli' },
+    { image: '/assets/images/seminer-3.webp?v=2', title: 'Aşkın ve Ayrılığın Genetiği; Ruh Sağlığı Panelleri' },
+  ],
 };
 
 export const blogContent = {
