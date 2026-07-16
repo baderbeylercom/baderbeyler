@@ -137,8 +137,38 @@ const contactStyle = `--contact-title-size:${ap.titleSize}rem;--contact-body-siz
         </div>
       </div>
 
+      <label class="kvkk-consent">
+        <input type="checkbox" id="kvkkContact" name="kvkkOnay" value="Onaylandı" required />
+        <span><a href="/gizlilik-politikasi" target="_blank" rel="noopener">Aydınlatma Metni</a>'ni okudum; kişisel verilerimin iletişim ve randevu amaçlarıyla işlenmesini kabul ediyorum.</span>
+      </label>
+
       <button class="form-submit" type="submit">Gönder</button>
     </form>
     <div class="editor-resize-handle editor-resize-handle--contact-form" data-editor-resize="contact-form-height" aria-hidden="true"></div>
   </div>
 </section>
+
+<style>
+  .kvkk-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #4c5e6d;
+    margin: 0.35rem 0 0.75rem;
+    cursor: pointer;
+  }
+
+  .kvkk-consent input {
+    margin-top: 0.2rem;
+    accent-color: #35495c;
+    flex-shrink: 0;
+  }
+
+  .kvkk-consent a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+</style>

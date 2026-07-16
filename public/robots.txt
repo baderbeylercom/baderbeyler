@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /duzenleme-modu
+
+Sitemap: https://baderbeyler.com/sitemap-index.xml

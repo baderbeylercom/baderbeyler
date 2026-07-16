@@ -70,6 +70,10 @@ import Footer from '../components/sections/Footer.astro';
             <label for="pdfMessage">Mesajınız</label>
             <textarea id="pdfMessage" name="message" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
           </div>
+          <label class="kvkk-consent">
+            <input type="checkbox" id="kvkkPdf" name="kvkkOnay" value="Onaylandı" required />
+            <span><a href="/gizlilik-politikasi" target="_blank" rel="noopener">Aydınlatma Metni</a>'ni okudum; kişisel verilerimin iletişim ve randevu amaçlarıyla işlenmesini kabul ediyorum.</span>
+          </label>
           <button class="pdf-form-submit" type="submit" id="pdfSubmitBtn" disabled>Ön Görüşme Talep Et →</button>
         </form>
       </div>
@@ -571,6 +575,29 @@ import Footer from '../components/sections/Footer.astro';
     line-height: 1.5;
     color: #6b5c51;
     opacity: 0.9;
+  }
+
+  .kvkk-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #6b5c51;
+    margin: 0.35rem 0 0.75rem;
+    cursor: pointer;
+  }
+
+  .kvkk-consent input {
+    margin-top: 0.2rem;
+    accent-color: #3b1f55;
+    flex-shrink: 0;
+  }
+
+  .kvkk-consent a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
   }
 
   @media (max-width: 900px) {

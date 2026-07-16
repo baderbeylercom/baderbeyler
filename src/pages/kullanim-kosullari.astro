@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteScripts from '../components/SiteScripts.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import Footer from '../components/sections/Footer.astro';
+import { getSiteData } from '../lib/site-data';
+
+const { siteConfig } = await getSiteData();
+---
+
+<BaseLayout
+  title={`Kullanım Koşulları | ${siteConfig.brandName}`}
+  description="baderbeyler.com kullanım koşulları: sitenin bilgilendirme amacı, içeriklerin tıbbi tavsiye niteliği taşımadığı, telif hakları ve sorumluluk sınırları."
+>
+  <Navbar />
+
+  <main class="content-page">
+    <article class="content-shell content-article">
+      <a class="content-back" href="/">← Anasayfaya Dön</a>
+
+      <header class="content-header">
+        <p class="section-tag">Yasal Bilgilendirme</p>
+        <h1 class="section-title">Kullanım Koşulları</h1>
+        <p class="content-lead">
+          baderbeyler.com adresli internet sitesini ("Site") ziyaret ederek veya kullanarak aşağıda yer alan
+          kullanım koşullarını kabul etmiş sayılırsınız. Lütfen siteyi kullanmadan önce bu metni dikkatle
+          okuyunuz.
+        </p>
+      </header>
+
+      <div class="content-prose">
+        <h2>1. Sitenin Amacı</h2>
+        <p>
+          Bu site, Bader Beyler'in nutrigenetik, önleyici sağlık, genetik analiz ve ilgili alanlardaki
+          çalışmaları, hizmetleri ve içerikleri hakkında genel bilgilendirme yapmak amacıyla hazırlanmıştır.
+          Sitede yer alan tüm bilgiler tanıtım ve bilgilendirme niteliğindedir.
+        </p>
+
+        <h2>2. İçerikler Tıbbi Tavsiye Niteliği Taşımaz</h2>
+        <div class="content-notice">
+          <p>
+            <strong
+              >Sitede yer alan hiçbir içerik (metin, makale, blog yazısı, görsel, video veya form aracılığıyla
+              verilen ön bilgi dahil) tıbbi tavsiye, tanı veya tedavi yerine geçmez.</strong
+            >
+          </p>
+          <p>
+            İçerikler genel bilgilendirme amaçlıdır ve bireysel sağlık durumunuza yönelik profesyonel bir
+            değerlendirme anlamına gelmez. Sağlığınıza ilişkin her türlü karar öncesinde mutlaka bir hekime veya
+            ilgili sağlık profesyoneline danışmanız gerekmektedir. Acil bir sağlık sorunu yaşıyorsanız
+            gecikmeksizin en yakın sağlık kuruluşuna başvurunuz.
+          </p>
+          <p>
+            Sitedeki içeriklere dayanılarak alınan kararlardan veya bu kararların sonuçlarından Bader Beyler
+            sorumlu tutulamaz.
+          </p>
+        </div>
+
+        <h2>3. Telif Hakları</h2>
+        <p>
+          Sitede yer alan tüm metin, görsel, logo, grafik ve diğer içerikler, aksi belirtilmedikçe Bader
+          Beyler'e aittir ve telif hakları ile korunmaktadır. Bu içerikler önceden yazılı izin alınmaksızın
+          çoğaltılamaz, dağıtılamaz, ticari amaçla kullanılamaz veya başka bir mecrada yayımlanamaz.
+        </p>
+
+        <h2>4. Dış Bağlantılar</h2>
+        <p>
+          Site içerisinde üçüncü taraflara ait internet sitelerine yönlendiren bağlantılar yer alabilir. Bu
+          bağlantılar yalnızca bilgilendirme amacıyla sunulmakta olup, ilgili sitelerin içeriği, güvenliği veya
+          gizlilik uygulamaları üzerinde herhangi bir kontrolümüz bulunmamaktadır. Bu sitelerin kullanımından
+          doğabilecek zararlardan Bader Beyler sorumlu tutulamaz.
+        </p>
+
+        <h2>5. Değişiklikler</h2>
+        <p>
+          Bu Kullanım Koşulları, gerekli görüldüğü hâllerde önceden bildirim yapılmaksızın güncellenebilir.
+          Güncel metin her zaman bu sayfada yayımlanır; sitenin kullanımına devam edilmesi, güncellenen
+          koşulların kabul edildiği anlamına gelir.
+        </p>
+        <p>
+          Bu Kullanım Koşulları <strong>05.07.2026</strong> tarihinde yürürlüğe girmiştir.
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+  <SiteScripts />
+</BaseLayout>
+
+<style>
+  .content-notice {
+    margin-top: 1rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: 16px;
+    background: rgba(143, 82, 49, 0.07);
+    border: 1px solid rgba(143, 82, 49, 0.24);
+    border-left: 4px solid var(--clr-terracotta);
+  }
+
+  .content-notice p + p {
+    margin-top: 0.75rem;
+  }
+
+  .content-prose strong {
+    color: var(--clr-deep);
+  }
+</style>

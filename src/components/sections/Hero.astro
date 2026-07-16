@@ -24,11 +24,6 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     </button>
   </div>
 
-  <div class="hero-person" id="heroPerson">
-    <div class="hero-base" aria-hidden="true"></div>
-    <img src={heroContent.heroImage} alt={heroContent.heroImageAlt} />
-  </div>
-
   <div class="hero-focus-portrait" id="heroFocusPortrait" aria-hidden="true">
     <img src={heroContent.focusImage} alt={heroContent.focusImageAlt} />
   </div>
@@ -107,6 +102,10 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
         <label for="ogMessage">Mesajınız</label>
         <textarea id="ogMessage" name="message" placeholder="Bize bir şey iletmek ister misiniz?"></textarea>
       </div>
+      <label class="kvkk-consent">
+        <input type="checkbox" id="kvkkOg" name="kvkkOnay" value="Onaylandı" required />
+        <span><a href="/gizlilik-politikasi" target="_blank" rel="noopener">Aydınlatma Metni</a>'ni okudum; kişisel verilerimin iletişim ve randevu amaçlarıyla işlenmesini kabul ediyorum.</span>
+      </label>
       <button class="og-submit" type="submit" id="ogSubmitBtn" disabled>Ön Görüşme Talep Et →</button>
     </form>
   </div>
@@ -305,7 +304,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     background: #161313;
     color: #f8f5f1;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     font-size: 0.95rem;
     font-family: inherit;
     cursor: pointer;
@@ -320,6 +319,29 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
   .og-submit:disabled {
     opacity: 0.35;
     cursor: not-allowed;
+  }
+
+  .kvkk-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: #4c5e6d;
+    margin: 0.35rem 0 0.75rem;
+    cursor: pointer;
+  }
+
+  .kvkk-consent input {
+    margin-top: 0.2rem;
+    accent-color: #35495c;
+    flex-shrink: 0;
+  }
+
+  .kvkk-consent a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
   }
 </style>
 

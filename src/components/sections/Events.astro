@@ -92,13 +92,33 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
 
   {
     events.length === 0 && (
-      <div class="agenda-block reveal">
-        <div class="agenda-header">
-          <p class="section-tag">Etkinlik Takvimi</p>
-          <h3 class="agenda-title" set:html={eventsContent.emptyTitle}></h3>
-          <p>{eventsContent.emptyText}</p>
+      <>
+        <div class="agenda-block reveal">
+          <div class="agenda-header">
+            <p class="section-tag">Etkinlik Takvimi</p>
+            <h3 class="agenda-title" set:html={eventsContent.emptyTitle}></h3>
+            <p>{eventsContent.emptyText}</p>
+          </div>
         </div>
-      </div>
+
+        <div class="past-events reveal">
+          <h3 class="agenda-title" set:html={eventsContent.pastTitle}></h3>
+          <div class="past-events-grid">
+            {eventsContent.pastEvents.map((item) => (
+              <div class="past-event-card">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  width="480"
+                  height="270"
+                />
+                <p>{item.title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
     )
   }
 </section>
@@ -330,6 +350,59 @@ const registrationEvents = events.filter(e => e.data.registrationUrl);
     transition: opacity 0.2s;
   }
   .reg-modal-cta:hover { opacity: 0.85; }
+
+  /* ── Geçmiş etkinlikler vitrini ── */
+  .past-events {
+    margin-top: 2.75rem;
+  }
+
+  .past-events .agenda-title {
+    margin-bottom: 1.75rem;
+  }
+
+  .past-events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .past-event-card {
+    padding: 0.9rem;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(246, 242, 234, 0.9));
+    border: 1px solid rgba(22, 19, 19, 0.08);
+    box-shadow: 0 14px 32px rgba(44, 24, 16, 0.06);
+    transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  }
+
+  .past-event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 44px rgba(44, 24, 16, 0.1);
+  }
+
+  .past-event-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 18px;
+  }
+
+  .past-event-card p {
+    margin-top: 0.9rem;
+    font-family: var(--font-serif);
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--clr-deep);
+    line-height: 1.35;
+  }
+
+  @media (max-width: 768px) {
+    .past-events-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <script>

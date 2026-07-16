@@ -13,6 +13,7 @@
     "cms:deploy": "sanity deploy"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.0.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
