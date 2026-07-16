@@ -261,7 +261,7 @@ export const collaborationsContent = {
       leadStrong: 'Raw Data üzerinden',
       leadText: ' pratikte kullanılabilir kişiselleştirilmiş Nutrigenetik raporların tasarlanması ve ileri seviye nutrigenetik eğitimleriyle iş birliği modeli sağlanmıştır.',
       description: '',
-      design: { visualHeight: 240, imageWidth: 188, imageScale: 1.0, imageOffsetX: 26, imageOffsetY: 8, blobColor: '#e7dcea', blobOpacity: 0.9, blobGradientColor: '#d5c3dc', blobGradientOpacity: 0.55, blobWidth: 194, blobHeight: 224, blobOffsetX: -14, blobOffsetY: 6, blobRadius: 44, blobBlur: 0, blobShadowBlur: 34, blobShadowOpacity: 0.15, copyOffsetY: 0.85, brandLineFontSize: 1.14, partnerFontSize: 1.6, leadFontSize: 1.04 },
+      design: { visualHeight: 240, imageWidth: 188, imageScale: 1.02, imageOffsetX: 20, imageOffsetY: 8, blobColor: '#e7dcea', blobOpacity: 0.9, blobGradientColor: '#d5c3dc', blobGradientOpacity: 0.55, blobWidth: 202, blobHeight: 240, blobOffsetX: 34, blobOffsetY: 16, blobRadius: 44, blobBlur: 0, blobShadowBlur: 34, blobShadowOpacity: 0.15, copyOffsetY: 0.85, brandLineFontSize: 1.14, partnerFontSize: 1.6, leadFontSize: 1.04 },
     },
     {
       image: '/assets/images/intergen-building.webp',
