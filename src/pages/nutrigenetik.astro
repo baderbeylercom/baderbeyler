@@ -137,19 +137,19 @@ import Footer from '../components/sections/Footer.astro';
   const meetingTypeInputs = [
     ...document.querySelectorAll<HTMLInputElement>('input[name="meetingType"]'),
   ];
-  const formSubmitEndpoint = 'https://formsubmit.co/ajax/iletisim@baderbeyler.com';
+  const formSubmitEndpoint = 'https://formsubmit.co/ajax/randevu@baderbeyler.com';
   const formSubmitCc = 'baderbeylercom@gmail.com';
 
   const SCHEDULE_RULES = {
     online: {
       allowedDays: [1, 2, 4, 5],
       timeSlots: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'],
-      hint: 'Online gorusmeler Pazartesi, Sali, Persembe ve Cuma gunleri 10:00-16:30 arasinda her 30 dakikada bir planlanir.',
+      hint: 'Online görüşmeler Pazartesi, Salı, Perşembe ve Cuma günleri 10:00-16:30 arasında her 30 dakikada bir planlanır.',
     },
     yuzyuze: {
       allowedDays: [3],
       timeSlots: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
-      hint: 'Yuz yuze gorusmeler yalnizca Carsamba gunleri 09:00-17:00 arasinda her saat basi planlanir.',
+      hint: 'Yüz yüze görüşmeler yalnızca Çarşamba günleri 09:00-17:00 arasında her saat başı planlanır.',
     },
   } as const;
   const today = new Date().toISOString().split('T')[0];
@@ -183,13 +183,13 @@ import Footer from '../components/sections/Footer.astro';
     timeInput.innerHTML = '';
 
     if (!meetingType || !dateInput.value) {
-      timeInput.innerHTML = '<option value="">Once tarih secin</option>';
+      timeInput.innerHTML = '<option value="">Önce tarih seçin</option>';
       timeInput.disabled = true;
       return;
     }
 
     timeInput.disabled = false;
-    timeInput.innerHTML = '<option value="">Saat secin</option>';
+    timeInput.innerHTML = '<option value="">Saat seçin</option>';
     const now = new Date();
     const selectedDate = new Date(`${dateInput.value}T00:00:00`);
     const isToday = dateInput.value === formatDateValue(now);
@@ -202,7 +202,7 @@ import Footer from '../components/sections/Footer.astro';
     });
 
     if (!availableSlots.length) {
-      timeInput.innerHTML = '<option value="">Bu tarih icin uygun saat kalmadi</option>';
+      timeInput.innerHTML = '<option value="">Bu tarih için uygun saat kalmadı</option>';
       timeInput.disabled = true;
       return;
     }
@@ -226,8 +226,8 @@ import Footer from '../components/sections/Footer.astro';
       dateInput.value = '';
       timeInput.value = '';
       timeInput.disabled = true;
-      timeInput.innerHTML = '<option value="">Uygun tarih secin</option>';
-      dateInput.setCustomValidity('Sectiginiz gorusme turu icin bu tarih uygun degil.');
+      timeInput.innerHTML = '<option value="">Uygun tarih seçin</option>';
+      dateInput.setCustomValidity('Seçtiğiniz görüşme türü için bu tarih uygun değil.');
       dateInput.reportValidity();
       return false;
     }
@@ -249,8 +249,8 @@ import Footer from '../components/sections/Footer.astro';
     if (!meetingType) {
       dateInput.disabled = true;
       timeInput.disabled = true;
-      timeInput.innerHTML = '<option value="">Once tarih secin</option>';
-      scheduleHint.textContent = 'Once gorusme turunu secin.';
+      timeInput.innerHTML = '<option value="">Önce tarih seçin</option>';
+      scheduleHint.textContent = 'Önce görüşme türünü seçin.';
       updateSubmitState();
       return;
     }
@@ -259,7 +259,7 @@ import Footer from '../components/sections/Footer.astro';
     dateInput.min = getNextAllowedDate(meetingType);
     scheduleHint.textContent = SCHEDULE_RULES[meetingType].hint;
     timeInput.disabled = true;
-    timeInput.innerHTML = '<option value="">Once tarih secin</option>';
+    timeInput.innerHTML = '<option value="">Önce tarih seçin</option>';
     updateSubmitState();
   };
 
@@ -282,17 +282,17 @@ import Footer from '../components/sections/Footer.astro';
 
     const formData = new FormData(pdfForm);
     const meetingType = getSelectedMeetingType();
-    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yuz Yuze' : 'Online';
+    const meetingTypeLabel = meetingType === 'yuzyuze' ? 'Yüz Yüze' : 'Online';
 
     formData.set('meetingType', meetingTypeLabel);
-    formData.append('_subject', `Nutrigenetik On Gorusme Talebi: ${meetingTypeLabel}`);
+    formData.append('_subject', `Nutrigenetik Ön Görüşme Talebi: ${meetingTypeLabel}`);
     formData.append('_cc', formSubmitCc);
     formData.append('_template', 'table');
     formData.append('_url', 'https://baderbeyler.com/nutrigenetik/');
     formData.append('_honey', '');
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Gonderiliyor...';
+    submitBtn.textContent = 'Gönderiliyor...';
 
     try {
       const response = await fetch(formSubmitEndpoint, {
@@ -303,22 +303,23 @@ import Footer from '../components/sections/Footer.astro';
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`FormSubmit request failed with ${response.status}`);
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result || String(result.success) !== 'true') {
+        throw new Error(result?.message || `FormSubmit request failed with ${response.status}`);
       }
 
-      submitBtn.textContent = 'Gonderildi ✓';
+      submitBtn.textContent = 'Gönderildi ✓';
       submitBtn.style.background = 'var(--clr-sage)';
       pdfForm.reset();
       applyMeetingType();
     } catch (error) {
       console.error(error);
-      submitBtn.textContent = 'Gonderilemedi';
+      submitBtn.textContent = 'Gönderilemedi';
       submitBtn.style.background = '#8f4a43';
     } finally {
       window.setTimeout(() => {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'On Gorusme Talep Et →';
+        submitBtn.textContent = 'Ön Görüşme Talep Et →';
         submitBtn.style.background = '';
       }, 2500);
     }

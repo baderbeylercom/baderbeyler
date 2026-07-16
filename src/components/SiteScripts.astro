@@ -367,8 +367,9 @@
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`FormSubmit request failed with ${response.status}`);
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result || String(result.success) !== 'true') {
+        throw new Error(result?.message || `FormSubmit request failed with ${response.status}`);
       }
 
       submitButton.textContent = 'Gönderildi ✓';

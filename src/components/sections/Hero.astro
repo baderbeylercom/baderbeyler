@@ -347,7 +347,7 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
     },
   } as const;
 
-  const formSubmitEndpoint = 'https://formsubmit.co/ajax/iletisim@baderbeyler.com';
+  const formSubmitEndpoint = 'https://formsubmit.co/ajax/randevu@baderbeyler.com';
   const formSubmitCc = 'baderbeylercom@gmail.com';
   const today = new Date().toISOString().split('T')[0];
   ogDateInput.min = today;
@@ -500,8 +500,9 @@ const heroPanelStyle = `--hero-right-panel-width:${heroContent.appearance.rightP
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`FormSubmit request failed with ${response.status}`);
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result || String(result.success) !== 'true') {
+        throw new Error(result?.message || `FormSubmit request failed with ${response.status}`);
       }
 
       ogSubmitBtn.textContent = 'Gönderildi ✓';
