@@ -4,7 +4,6 @@
   const navLinks = document.getElementById('navLinks');
   const snapSections = [...document.querySelectorAll('.snap-section')];
   const pageDots = [...document.querySelectorAll('.page-dot')];
-  const heroPerson = document.getElementById('heroPerson');
   const heroFocusPortrait = document.getElementById('heroFocusPortrait');
   const hero = document.getElementById('home');
   const root = document.documentElement;
@@ -237,8 +236,8 @@
     root.style.setProperty('--hero-cool', (1 - progress).toFixed(3));
   };
 
-  const updateHeroPerson = () => {
-    if (!heroPerson || !hero) return;
+  const updateHeroFocus = () => {
+    if (!heroFocusPortrait || !hero) return;
 
     if (isMobile) {
       return;
@@ -247,13 +246,6 @@
     const scrollY = window.scrollY;
     const heroHeight = hero.offsetHeight;
     const progress = clamp(scrollY / (heroHeight * 0.5));
-    const translateY = progress * -120;
-    const scale = 1 - progress * 0.2;
-    const opacity = 1 - progress * 1.4;
-    const rotate = progress * 3;
-
-    heroPerson.style.transform = `translateX(-50%) translateY(${translateY}px) scale(${Math.max(scale, 0.7)}) rotate(${rotate}deg)`;
-    heroPerson.style.opacity = `${Math.max(opacity, 0)}`;
 
     if (!heroFocusPortrait) return;
 
@@ -312,7 +304,7 @@
 
   const runScrollFx = () => {
     updateHeroTone();
-    updateHeroPerson();
+    updateHeroFocus();
     updateAboutParallax();
     updateStoryMotion();
   };

@@ -1,0 +1,217 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteScripts from '../components/SiteScripts.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import Footer from '../components/sections/Footer.astro';
+import { getSiteData } from '../lib/site-data';
+
+const { heroContent, aboutContent, siteConfig } = await getSiteData();
+---
+
+<BaseLayout
+  title={`Hakkında | ${siteConfig.brandName}`}
+  description="Bader Beyler'in eğitim geçmişi, nutrigenetik uzmanlığı ve danışmanlık yaklaşımı hakkında bilgi edinin."
+>
+  <Navbar />
+
+  <main class="page-shell">
+    <section class="section subpage-hero">
+      <div class="reveal hakkimda-heading">
+        <p class="section-tag">Hakkında</p>
+        <h1 class="section-title" set:html={heroContent.rightTitle}></h1>
+      </div>
+
+      <div class="hakkimda-columns reveal">
+        <div class="hakkimda-portrait">
+          <img
+            src={heroContent.focusImage}
+            alt={heroContent.focusImageAlt}
+            width="624"
+            height="786"
+            loading="eager"
+          />
+        </div>
+        <div class="hakkimda-bio">
+          <p class="hakkimda-bio-text" set:html={heroContent.rightText}></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section hakkimda-detail">
+      <div class="hakkimda-detail-inner reveal">
+        <p class="section-tag">{aboutContent.eyebrow}</p>
+        <h2 set:html={aboutContent.title}></h2>
+        {aboutContent.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+
+        <div class="hakkimda-stats">
+          {
+            aboutContent.stats.map((item) => (
+              <div>
+                <div class="stat-number">{item.value}</div>
+                <div class="stat-label">{item.label}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="hakkimda-cta reveal">
+        <a href="/#contact" class="page-action-primary">İletişime Geçin →</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <SiteScripts />
+</BaseLayout>
+
+<style>
+  .hakkimda-heading {
+    margin-bottom: 2.75rem;
+  }
+
+  .hakkimda-columns {
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) 1fr;
+    gap: 3rem;
+    align-items: center;
+    max-width: 980px;
+  }
+
+  .hakkimda-portrait {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hakkimda-portrait img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(16, 12, 10, 0.16))
+      drop-shadow(0 30px 70px rgba(16, 12, 10, 0.22));
+  }
+
+  .hakkimda-bio-text {
+    font-family: var(--font-body);
+    font-size: 1.03rem;
+    font-weight: 400;
+    line-height: 1.78;
+    color: var(--text-hero-panel-body, #2e3740);
+    max-width: none;
+    padding: 1.75rem 2rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 18px 48px rgba(44, 24, 16, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  }
+
+  .hakkimda-detail {
+    padding-top: 0;
+  }
+
+  .hakkimda-detail-inner {
+    max-width: 700px;
+  }
+
+  .hakkimda-detail-inner h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.7rem, 3vw, 2.15rem);
+    font-weight: 700;
+    color: #171313;
+    line-height: 1.18;
+    margin-bottom: 1.4rem;
+  }
+
+  .hakkimda-detail-inner h2 :global(em) {
+    font-style: italic;
+    color: var(--clr-terracotta);
+  }
+
+  .hakkimda-detail-inner p {
+    font-size: 1.05rem;
+    line-height: 1.78;
+    color: #2e231d;
+    opacity: 0.95;
+    max-width: 640px;
+  }
+
+  .hakkimda-detail-inner p + p {
+    margin-top: 1.1rem;
+  }
+
+  .hakkimda-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    max-width: 640px;
+    border-top: 1px solid rgba(44, 24, 16, 0.08);
+  }
+
+  .hakkimda-stats .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--clr-terracotta);
+    line-height: 1;
+  }
+
+  .hakkimda-stats .stat-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #43332b;
+    opacity: 0.86;
+    margin-top: 0.35rem;
+  }
+
+  .hakkimda-cta {
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    .hakkimda-columns {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .hakkimda-portrait img {
+      max-width: 240px;
+    }
+
+    .hakkimda-bio-text {
+      font-size: 0.98rem;
+      padding: 1.4rem 1.3rem;
+      text-align: left;
+    }
+
+    .hakkimda-detail-inner p,
+    .hakkimda-stats {
+      max-width: 100%;
+    }
+
+    .hakkimda-stats {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+    }
+
+    .hakkimda-stats .stat-number {
+      font-size: 1.5rem;
+    }
+
+    .hakkimda-cta {
+      margin-top: 2.25rem;
+    }
+
+    .hakkimda-cta .page-action-primary {
+      width: 100%;
+    }
+  }
+</style>

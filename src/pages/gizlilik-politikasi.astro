@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteScripts from '../components/SiteScripts.astro';
+import Navbar from '../components/sections/Navbar.astro';
+import Footer from '../components/sections/Footer.astro';
+import { getSiteData } from '../lib/site-data';
+
+const { siteConfig } = await getSiteData();
+---
+
+<BaseLayout
+  title={`Gizlilik Politikası ve KVKK Aydınlatma Metni | ${siteConfig.brandName}`}
+  description="Bader Beyler web sitesinde toplanan kişisel verilerin 6698 sayılı KVKK kapsamında işlenmesine ilişkin gizlilik politikası ve aydınlatma metni."
+>
+  <Navbar />
+
+  <main class="content-page">
+    <article class="content-shell content-article">
+      <a class="content-back" href="/">← Anasayfaya Dön</a>
+
+      <header class="content-header">
+        <p class="section-tag">Yasal Bilgilendirme</p>
+        <h1 class="section-title">Gizlilik Politikası ve KVKK Aydınlatma Metni</h1>
+        <p class="content-lead">
+          Bu metin, baderbeyler.com ("Site") üzerinden paylaştığınız kişisel verilerin 6698 sayılı Kişisel
+          Verilerin Korunması Kanunu ("KVKK") kapsamında hangi amaçlarla ve nasıl işlendiğini açıklamak
+          amacıyla hazırlanmıştır.
+        </p>
+      </header>
+
+      <div class="content-prose">
+        <h2>1. Veri Sorumlusu</h2>
+        <p>
+          KVKK uyarınca kişisel verileriniz, veri sorumlusu sıfatıyla <strong>Bader Beyler</strong> tarafından
+          bu metinde açıklanan kapsam ve amaçlarla işlenmektedir. Veri sorumlusuna aşağıdaki iletişim adresi
+          üzerinden ulaşabilirsiniz:
+        </p>
+        <p>
+          E-posta: <a href="mailto:iletisim@baderbeyler.com">iletisim@baderbeyler.com</a>
+        </p>
+
+        <h2>2. İşlenen Kişisel Veriler</h2>
+        <p>
+          Site üzerinde yer alan iletişim ve ön görüşme/randevu formlarını doldurmanız halinde, yalnızca sizin
+          gönüllü paylaşımınızla aşağıdaki kişisel verileriniz işlenir:
+        </p>
+        <ul>
+          <li>Ad soyad</li>
+          <li>E-posta adresi</li>
+          <li>Telefon numarası</li>
+          <li>Randevu tarih ve saat tercihi</li>
+          <li>Form aracılığıyla ilettiğiniz mesaj içeriği</li>
+        </ul>
+        <p>
+          Bu veriler, ilgili formu doldurup göndermeniz dışında herhangi bir otomatik yöntemle veya sizin
+          bilginiz olmadan toplanmaz.
+        </p>
+
+        <h2>3. Kişisel Verilerin İşlenme Amaçları</h2>
+        <p>
+          Paylaştığınız kişisel veriler; iletişim taleplerinizin ve sorularınızın yanıtlanması, talep etmeniz
+          halinde ön görüşme/randevu sürecinin planlanması ve bu kapsamda tarafınıza dönüş yapılması
+          amaçlarıyla sınırlı olarak işlenir.
+        </p>
+
+        <h2>4. Kişisel Verilerin Aktarılması</h2>
+        <p>
+          Form aracılığıyla ilettiğiniz bilgiler, form iletim altyapısı olarak kullanılan <strong>FormSubmit</strong>
+          servisi üzerinden e-posta adresimize ulaştırılır. Bu hizmet sağlayıcının sunucuları yurt dışında
+          bulunduğundan, form içeriğiniz e-postamıza ulaşana kadar yurt dışında konumlanan sunucular üzerinden
+          geçebilir. Ayrıca tarafımıza ulaşan e-postalar <strong>Google Workspace</strong> alt yapısı üzerinden
+          barındırılmakta ve yönetilmektedir; bu kapsamda verileriniz Google'ın yurt dışındaki sunucularında da
+          işlenebilir. Bu aktarımlar, ilgili formu doldurup göndermeniz suretiyle verdiğiniz açık rızaya
+          dayanılarak gerçekleştirilir. Verileriniz, burada belirtilenler dışında üçüncü kişilerle paylaşılmaz
+          veya ticari amaçla kullanılmaz.
+        </p>
+
+        <h2>5. Kişisel Verilerin Saklanma Süresi</h2>
+        <p>
+          Kişisel verileriniz; talebinizin karşılanması, tarafınıza dönüş yapılması ve iletişim sürecinin
+          tamamlanması için gerekli olan makul süre boyunca saklanır. Bu sürenin sonunda verileriniz talep
+          üzerine veya periyodik olarak silinir, yok edilir ya da anonim hale getirilir.
+        </p>
+
+        <h2>6. KVKK Kapsamındaki Haklarınız</h2>
+        <p>KVKK'nın 11. maddesi uyarınca veri sorumlusuna başvurarak;</p>
+        <ul>
+          <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme,</li>
+          <li>İşlenmişse buna ilişkin bilgi talep etme,</li>
+          <li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+          <li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,</li>
+          <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme,</li>
+          <li>KVKK'da öngörülen şartlar çerçevesinde silinmesini veya yok edilmesini isteme,</li>
+          <li>Düzeltme ve silme işlemlerinin verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,</li>
+          <li>
+            İşlenen verilerin münhasıran otomatik sistemlerle analiz edilmesi sonucu aleyhinize bir sonucun
+            ortaya çıkmasına itiraz etme,
+          </li>
+          <li>Kanuna aykırı işlenme nedeniyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>
+        </ul>
+        <p>
+          haklarına sahipsiniz. Bu haklarınızı kullanmak için taleplerinizi
+          <a href="mailto:iletisim@baderbeyler.com">iletisim@baderbeyler.com</a> adresine yazılı olarak
+          iletebilirsiniz. Talepleriniz, niteliğine göre en kısa sürede ve en geç KVKK'da öngörülen süreler
+          içinde sonuçlandırılır.
+        </p>
+
+        <h2>7. Çerezler</h2>
+        <p>
+          Site; ziyaretçi takibi, reklam veya analiz amacıyla çerez kullanmamaktadır. Sitenin teknik olarak
+          çalışabilmesi için tarayıcınızda yalnızca zorunlu, oturuma bağlı teknik depolama mekanizmaları
+          kullanılabilir. Bu tür teknik kullanım kişisel veri işleme niteliği taşımaz ve kimliğinizi belirlemeye
+          yönelik değildir.
+        </p>
+
+        <h2>8. Yürürlük ve Güncellemeler</h2>
+        <p>
+          Bu Gizlilik Politikası ve KVKK Aydınlatma Metni <strong>05.07.2026</strong> tarihinde yürürlüğe
+          girmiştir. Yasal düzenlemelerdeki değişiklikler veya site içeriğindeki güncellemeler doğrultusunda bu
+          metinde değişiklik yapma hakkımız saklıdır; güncel metin her zaman bu sayfada yayımlanır.
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+  <SiteScripts />
+</BaseLayout>
+
+<style>
+  .content-prose ul {
+    padding-left: 1.4rem;
+    list-style: disc;
+  }
+
+  .content-prose li {
+    margin-top: 0.55rem;
+    line-height: 1.7;
+    color: #2e231d;
+  }
+
+  .content-prose li::marker {
+    color: var(--clr-terracotta);
+  }
+
+  .content-prose a {
+    color: var(--clr-terracotta);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .content-prose strong {
+    color: var(--clr-deep);
+  }
+</style>

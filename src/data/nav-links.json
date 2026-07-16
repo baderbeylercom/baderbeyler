@@ -1,5 +1,6 @@
 {
   "links": [
+    { "href": "/hakkimda", "label": "Hakkında" },
     { "href": "/#services", "label": "Hizmetler" },
     { "href": "/#collaborations", "label": "İş Birlikleri" },
     { "href": "/bilim-dunyasinda-sesimiz", "label": "Bilim Dünyasında Sesimiz" },
